@@ -1,4 +1,4 @@
-package com.taxiproject.group6.taxiapp;
+/*package com.taxiproject.group6.taxiapp;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -113,3 +113,4 @@ public class LocationHelper implements LocationListener, GoogleApiClient.Connect
 
     }
 }
+*/

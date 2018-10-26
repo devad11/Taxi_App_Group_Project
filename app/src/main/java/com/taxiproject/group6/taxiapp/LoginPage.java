@@ -72,7 +72,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     //Login
-                    Intent i = new Intent(LoginPage.this, MapsActivity.class);
+                    Intent i = new Intent(LoginPage.this, PersonalDetails.class);
                     startActivity(i);
                 }
                 else{
