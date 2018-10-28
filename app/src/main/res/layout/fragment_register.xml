@@ -27,17 +27,17 @@
         tools:targetApi="o" />
 
     <Button
-        android:id="@+id/buttonLogIn"
+        android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="@string/login"/>
+        android:text="@string/register_user" />
 
     <TextView
-        android:id="@+id/textViewRegisterAcc"
+        android:id="@+id/textViewSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
+        android:text="@string/already_registered_sign_in_here"
         android:textAlignment="center" />
 
 </LinearLayout>
