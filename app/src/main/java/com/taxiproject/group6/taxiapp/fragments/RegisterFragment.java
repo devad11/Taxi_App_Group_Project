@@ -1,7 +1,6 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -18,42 +17,44 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
-import com.taxiproject.group6.taxiapp.activities.MapsActivity;
-import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
 
 import java.util.Objects;
 
-public class LoginFragment extends Fragment {
+public class RegisterFragment extends Fragment {
 
-    private Button buttonLogIn;
+    private Button buttonRegister;
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private TextView textViewLogin;
+    private TextView textViewSignIn;
 
-    private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        buttonLogIn = view.findViewById(R.id.buttonLogIn);
+        buttonRegister = view.findViewById(R.id.buttonRegister);
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
-        textViewLogin = view.findViewById(R.id.textViewRegisterAcc);
+        textViewSignIn = view.findViewById(R.id.textViewSignIn);
 
-        buttonLogIn.setOnClickListener(v -> userLogin());
-        textViewLogin.setOnClickListener(v -> goToRegisterPage());
+        buttonRegister.setOnClickListener(v -> registerUser());
+        textViewSignIn.setOnClickListener(v -> goToLogInPage());
 
         return view;
     }
 
-    private void userLogin(){
+    private void goToLogInPage() {
+        ((MainActivity)Objects.requireNonNull(getActivity())).setViewPager(0);
+    }
+
+    private void registerUser(){
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
@@ -68,25 +69,26 @@ public class LoginFragment extends Fragment {
             return;
         }
         ProgressDialog progressDialog = ((MainActivity)(Objects.requireNonNull(getActivity()))).getProgressDialog();
-        progressDialog.setMessage("Login...");
+        progressDialog.setMessage("Registering User...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    //Login
-                    Intent i = new Intent(getActivity(), MapsActivity.class);
-                    startActivity(i);
-                }
-                else{
-                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void goToRegisterPage(){
-        ((MainActivity)Objects.requireNonNull(getActivity())).setViewPager(1);
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.cancel();
+                        if(task.isSuccessful()){
+                            Toast.makeText(getActivity(),"Register Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                                Toast.makeText(getActivity(), "Email is already registered", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getActivity(),"Could not register. Please try again", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
     }
 }
