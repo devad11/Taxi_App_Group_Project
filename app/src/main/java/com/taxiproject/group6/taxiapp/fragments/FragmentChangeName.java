@@ -1,4 +1,4 @@
-package com.taxiproject.group6.taxiapp;
+package com.taxiproject.group6.taxiapp.fragments;
 
 
 import android.os.Bundle;

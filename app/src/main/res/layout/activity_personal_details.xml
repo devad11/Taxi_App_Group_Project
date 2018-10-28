@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PersonalDetails">
+    tools:context=".classes.PersonalDetails">
 
 
     <LinearLayout
@@ -22,7 +22,7 @@
 
         <fragment
             android:id="@+id/fragment2"
-            android:name="com.taxiproject.group6.taxiapp.FragmentChangeName"
+            android:name="com.taxiproject.group6.taxiapp.fragments.FragmentChangeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

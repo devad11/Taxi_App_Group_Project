@@ -1,8 +1,10 @@
-package com.taxiproject.group6.taxiapp;
+package com.taxiproject.group6.taxiapp.classes;
 
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.taxiproject.group6.taxiapp.R;
 
 public class PersonalDetails extends AppCompatActivity {
 
