@@ -1,19 +1,33 @@
 package com.taxiproject.group6.taxiapp.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+//import com.taxiproject.group6.taxiapp.android.Manifest;
 import com.taxiproject.group6.taxiapp.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private final int REQUEST_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+//        getUsersPermission();
     }
 
 
@@ -39,9 +54,83 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(51.826916, -8.230953);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+//        LatLng myPosition;
+//
+//        if (ContextCompat.checkSelfPermission(
+//                MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ContextCompat.checkSelfPermission(
+//                MapsActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(MapsActivity.this,
+//                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+//            ActivityCompat.requestPermissions(MapsActivity.this,
+//                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+//        }
+//        googleMap.setMyLocationEnabled(true);
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        Criteria criteria = new Criteria();
+//        String provider = locationManager.getBestProvider(criteria, true);
+//        Location location = locationManager.getLastKnownLocation(provider);
+//
+//
+//        if (location != null) {
+//            // Add a marker in Sydney and move the camera
+            LatLng sydney = new LatLng(51.826916, -8.230953);
+//            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(sydney, 17);
+//            mMap.animateCamera(yourLocation);
+//            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            getUsersPermission();
+//        }
+    }
+
+    private void getUsersPermission() {
+        if (ContextCompat.checkSelfPermission(
+                MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+                MapsActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapsActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(MapsActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+        }
+        else
+            getUsersLocation();
+    }
+
+    @SuppressLint("MissingPermission")
+    public void getUsersLocation() {
+        mMap.setMyLocationEnabled(true);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if (location != null) {
+            // Add a marker in Sydney and move the camera
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            Log.d("LonLat:", String.format("lat: %f  long: %f", latitude,  longitude));
+//            LatLng sydney = new LatLng(51.826916, -8.230953);
+            LatLng pos = new LatLng(latitude, longitude);
+
+            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(pos, 17);
+            mMap.addMarker(new MarkerOptions().position(pos).title("Marker"));
+            mMap.animateCamera(yourLocation);
+
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == REQUEST_LOCATION){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getUsersLocation();
+            }else{
+                Toast.makeText(MapsActivity.this, "Need location permissions ON", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

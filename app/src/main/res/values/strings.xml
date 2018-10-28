@@ -10,4 +10,7 @@
     <string name="already_registered_sign_in_here">Already Registered? Sign in here</string>
     <string name="login">Login</string>
     <string name="sign_up">Need to create an account? Sign up here</string>
+    <string name="pick_up_address">Pick Up Address</string>
+    <string name="destination_address">Destination Address</string>
+    <string name="book_now">Book Now</string>
 </resources>

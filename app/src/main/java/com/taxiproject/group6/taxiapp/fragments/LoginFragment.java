@@ -20,7 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
-import com.taxiproject.group6.taxiapp.classes.PersonalDetails;
+import com.taxiproject.group6.taxiapp.activities.MapsActivity;
+import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
 
 import java.util.Objects;
 
@@ -75,7 +76,7 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     //Login
-                    Intent i = new Intent(getActivity(), PersonalDetails.class);
+                    Intent i = new Intent(getActivity(), MapsActivity.class);
                     startActivity(i);
                 }
                 else{
