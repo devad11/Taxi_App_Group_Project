@@ -49,9 +49,8 @@ dependencies {
     // Used in FirebaseUIActivity.
     implementation 'com.firebaseui:firebase-ui-auth:4.2.0'
 
+    // maps and location
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
-
-    // Location
     implementation 'com.google.android.gms:play-services-location:16.0.0'
 }
 
