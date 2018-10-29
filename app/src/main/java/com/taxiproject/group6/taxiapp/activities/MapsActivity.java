@@ -1,19 +1,26 @@
 package com.taxiproject.group6.taxiapp.activities;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
+    private EditText inputSourceEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +59,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
+        inputSourceEditText = findViewById(R.id.inputSourceEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
-
     }
 
     private void initMap(){
@@ -64,27 +72,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void init(){
-
         Log.d(TAG, "init: Initialising");
-        inputSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId  == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() ==  KeyEvent.ACTION_DOWN
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    mapLocationHelper.geoLocate(MapsActivity.this, inputSearchEditText.getText().toString());
-                }
-                return false;
+        inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId  == EditorInfo.IME_ACTION_SEARCH
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || event.getAction() ==  KeyEvent.ACTION_DOWN
+                    || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                mapLocationHelper.geoLocate(MapsActivity.this, inputSearchEditText.getText().toString());
             }
+            return false;
         });
-        gpsImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "gpsImage: clicked gps image");
-                mapLocationHelper.getDeviceLocation(MapsActivity.this, permissionsGranted);
-            }
+        gpsImage.setOnClickListener(v -> {
+            Log.d(TAG, "gpsImage: clicked gps image");
+            mapLocationHelper.getDeviceLocation(MapsActivity.this, permissionsGranted);
         });
+
         hideSoftKeyBoard();
     }
 
@@ -161,4 +163,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void hideSoftKeyBoard(){
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+
+
 }
