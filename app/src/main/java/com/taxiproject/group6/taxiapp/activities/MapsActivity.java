@@ -78,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, "Map is  ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
-//        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 //        LatLng sydney = new LatLng(-100, 45);
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
