@@ -35,27 +35,26 @@
             tools:targetApi="lollipop">
 
             <ImageView
+                android:id="@+id/magnifyImage"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:id="@+id/magnifyImage"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_magnify"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/search_image"
-                android:layout_marginStart="10dp" />
+                android:src="@drawable/ic_magnify" />
 
             <EditText
                 android:id="@+id/inputSearchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/magnifyImage"
                 android:background="@null"
                 android:hint="@string/enter_address"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:layout_toEndOf="@+id/magnifyImage"
+                android:importantForAutofill="no"
                 android:imeOptions="actionSearch"/>
         </RelativeLayout>
 
@@ -69,9 +68,8 @@
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:id="@+id/gpsImage"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_gps"/>
-
+            android:src="@drawable/ic_gps"
+            android:contentDescription="@string/device_location" />
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
