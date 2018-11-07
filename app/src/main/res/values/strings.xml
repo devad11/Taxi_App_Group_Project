@@ -14,4 +14,8 @@
     <string name="enter_address">Enter Address</string>
     <string name="device_location">Device Location</string>
     <string name="personal_details">Personal Details</string>
+    <string name="choose_dest">Choose Destination</string>
+    <string name="home">Home</string>
+    <string name="work">Work</string>
+    <string name="gps_loc">Current Location</string>
 </resources>

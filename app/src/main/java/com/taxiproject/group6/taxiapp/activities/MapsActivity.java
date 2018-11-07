@@ -3,6 +3,8 @@ package com.taxiproject.group6.taxiapp.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
 //import com.taxiproject.group6.taxiapp.classes.LocationHelper;
 
 import java.io.IOException;
@@ -59,13 +62,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
-    private Button personalDetailsButton;
+    private Button personalDetailsButton, pickUpAddressButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
         personalDetailsButton = findViewById(R.id.personalDetailsButton);
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
         gpsImage = findViewById(R.id.gpsImage);
@@ -126,6 +130,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         hideSoftKeyBoard();
+
+        pickUpAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+            }
+        });
 
         personalDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
