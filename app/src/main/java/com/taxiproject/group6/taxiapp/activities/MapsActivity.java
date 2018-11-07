@@ -1,6 +1,7 @@
 package com.taxiproject.group6.taxiapp.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,12 +59,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
+    private Button personalDetailsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        personalDetailsButton = findViewById(R.id.personalDetailsButton);
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
@@ -100,15 +104,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private  void  init(){
+    private void init() {
         Log.d(TAG, "init: Initialising");
         inputSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId  == EditorInfo.IME_ACTION_SEARCH
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() ==  KeyEvent.ACTION_DOWN
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                        || event.getAction() == KeyEvent.ACTION_DOWN
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                     geoLocate();
                 }
                 return false;
@@ -122,6 +126,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         hideSoftKeyBoard();
+
+        personalDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, PersonalDetailsActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void geoLocate() {
@@ -129,12 +141,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String searchString = inputSearchEditText.getText().toString();
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = new ArrayList<>();
-        try{
+        try {
             list = geocoder.getFromLocationName(searchString, 1);
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             Log.d(TAG, "geoLocate: IOException: " + ioe.getMessage());
         }
-        if(list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
             Log.d(TAG, "Found address: " + address.toString());
 //            Toast.makeText(this, "Address: " + address.toString(), Toast.LENGTH_SHORT).show();
@@ -142,7 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void initMap(){
+    private void initMap() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -150,35 +162,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void getDeviceLocation() {
-        Log.d(TAG,"getDeviceLocation: getting devices current location.");
+        Log.d(TAG, "getDeviceLocation: getting devices current location.");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        try{
-            if(permissionsGranted){
+        try {
+            if (permissionsGranted) {
                 Task location = fusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful() && task.getResult() != null){
+                        if (task.isSuccessful() && task.getResult() != null) {
                             Log.d(TAG, "getDeviceLocation: location found");
-                            Location currentLocation =  (Location) task.getResult();
+                            Location currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates =
                                     new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
                             moveCamera(currentCoordinates, DEFAULT_ZOOM, "My Location");
-                        }else{
+                        } else {
                             Log.d(TAG, "getDeviceLocation: location NOT found");
                             Toast.makeText(MapsActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch(SecurityException se){
-            Log.d(TAG, "getDeviceLocation: SecurityException: "  +  se.getMessage());
+        } catch (SecurityException se) {
+            Log.d(TAG, "getDeviceLocation: SecurityException: " + se.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng,  float zoom, String title){
-        Log.d(TAG,"moveCamera: changing map position to:  lat: " + latLng.latitude + " lng:  " +  latLng.longitude);
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: changing map position to:  lat: " + latLng.latitude + " lng:  " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         MarkerOptions marker = new MarkerOptions()
@@ -196,8 +208,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 || ContextCompat.checkSelfPermission(this, COURSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "getUserPermissions: failed");
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-        else {
+        } else {
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0,  locationListener);
             Log.d(TAG, "getUserPermissions: granted");
             permissionsGranted = true;
@@ -209,8 +220,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult: called");
         permissionsGranted = false;
-        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE){
-            if(grantResults.length > 0){
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
                 for (int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         permissionsGranted = false;
@@ -221,13 +232,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     permissionsGranted = true;
                     initMap();
                 }
-            }else{
+            } else {
                 Toast.makeText(MapsActivity.this, "Need location permissions ON", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void hideSoftKeyBoard(){
+    private void hideSoftKeyBoard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }

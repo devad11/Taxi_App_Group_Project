@@ -13,4 +13,5 @@
     <string name="search_image">Search Image</string>
     <string name="enter_address">Enter Address</string>
     <string name="device_location">Device Location</string>
+    <string name="personal_details">Personal Details</string>
 </resources>
