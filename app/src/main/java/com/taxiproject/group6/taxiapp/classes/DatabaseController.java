@@ -20,17 +20,16 @@
 //            .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
 //            .build();
 //
-//    user.updateProfile(profileUpdates)
-//            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//        @Override
-//        public void onComplete (@NonNull Task < Void > task) {
-//            if (task.isSuccessful()) {
-//                Log.d(TAG, "User profile updated.");
-//            }
-//        }
-//    });
-//    if(user !=null)
-//
+////    user.updateProfile(profileUpdates)
+////            .addOnCompleteListener(new OnCompleteListener<Void>() {
+////        @Override
+////        public void onComplete (@NonNull Task < Void > task) {
+////            if (task.isSuccessful()) {
+////                Log.d(TAG, "User profile updated.");
+////            }
+////        }
+////    });
+//    if (user != null)
 //    {
 //        String email = user.getEmail();
 //

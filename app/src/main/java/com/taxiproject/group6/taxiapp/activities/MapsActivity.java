@@ -62,13 +62,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
-    private Button personalDetailsButton, pickUpAddressButton;
+    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        destinationAddressButton = findViewById(R.id.destinationAddressButton);
         pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
         personalDetailsButton = findViewById(R.id.personalDetailsButton);
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
@@ -132,6 +133,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         hideSoftKeyBoard();
 
         pickUpAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+            }
+        });
+
+        destinationAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
