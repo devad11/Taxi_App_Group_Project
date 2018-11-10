@@ -73,7 +73,7 @@ public class PersonalDetailsActivity extends AppCompatActivity {
             uid = user.getUid();
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReference("https://taxiapp-e3904.firebaseio.com/");
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/");
             DatabaseReference usersRef = ref.child("users");
 
             Map<String, User> users = new HashMap<>();
