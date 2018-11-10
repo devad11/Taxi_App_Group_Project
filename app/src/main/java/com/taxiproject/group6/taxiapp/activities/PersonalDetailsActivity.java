@@ -29,9 +29,13 @@ public class PersonalDetailsActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private Button changeNameButton, changeEmailButton, changePhoneButton, changePasswordButton;
-    private String uid, email, name;
-    private FirebaseUser user;
-    private DatabaseReference ref;
+    private static String uid;
+    private String email;
+    private String name;
+    private static FirebaseUser user;
+    private static DatabaseReference ref;
+    public static DatabaseReference usersRef;
+    public static Map<String, User> users;
 
 
     @Override
@@ -54,33 +58,7 @@ public class PersonalDetailsActivity extends AppCompatActivity {
         changePhoneButton.setOnClickListener(v -> showPhoneChange());
         changePasswordButton.setOnClickListener(v -> showPasswordChange());
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName("Jane Q. User")
-                .build();
-        if (user != null)
-        {
-            email = user.getEmail();
-            name = user.getDisplayName();
-
-
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            uid = user.getUid();
-
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/");
-            DatabaseReference usersRef = ref.child("users");
-
-            Map<String, User> users = new HashMap<>();
-            users.put(uid, new User("June 23, 1912", "Alan Turing"));
-
-            usersRef.setValue(users);
-        }
+        //loadToDatabase();
     }
 
     private void setUpViewPager(ViewPager vp){
@@ -128,6 +106,23 @@ public class PersonalDetailsActivity extends AppCompatActivity {
             // ...
         }
 
+    }
+
+    public static void loadToDatabase(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        {
+            uid = user.getUid();
+
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users");
+            usersRef = ref.child(uid);
+
+            users = new HashMap<>();
+            users.put("Testy cools", new User("June 23, 1912", FragmentChangeName.getUserName()));
+
+            usersRef.setValue(users);
+        }
     }
 
 }
