@@ -7,6 +7,8 @@ public class User {
         public String nickname;
         public String phone_number;
 
+        public User(){}
+
         public User(String fullName,String nickName, String phoneNumber, String dateOfBirth) {
             nickname = nickName;
             phone_number = phoneNumber;
@@ -14,19 +16,19 @@ public class User {
             date_of_birth = dateOfBirth;
         }
 
-    public String getDate_of_birth() {
+    public String getDateOfBirth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(String date_of_birth) {
+    public void setDateOfBirth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
-    public String getFull_name() {
+    public String getFullName() {
         return full_name;
     }
 
-    public void setFull_name(String full_name) {
+    public void setFullName(String full_name) {
         this.full_name = full_name;
     }
 
@@ -38,11 +40,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    public String getPhone_number() {
+    public String getPhoneNumber() {
         return phone_number;
     }
 
-    public void setPhone_number(String phone_number) {
+    public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
     }
 }

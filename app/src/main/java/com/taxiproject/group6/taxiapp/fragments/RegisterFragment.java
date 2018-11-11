@@ -83,10 +83,11 @@ public class RegisterFragment extends Fragment {
                         progressDialog.cancel();
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(),"Register Successfully", Toast.LENGTH_SHORT).show();
-                            User.setNickname(editTextNickName.getText().toString());
-                            User.setFull_name(editTextName.getText().toString());
-                            User.setDate_of_birth(editTextDOB.getText().toString());
-                            User.setPhone_number(editTextPNo.getText().toString());
+                            User newUser = new User();
+                            newUser.setNickname(editTextNickName.getText().toString());
+                            newUser.setFullName(editTextName.getText().toString());
+                            newUser.setDateOfBirth(editTextDOB.getText().toString());
+                            newUser.setPhoneNumber(editTextPNo.getText().toString());
                         }
                         else{
                             if(task.getException() instanceof FirebaseAuthUserCollisionException){
