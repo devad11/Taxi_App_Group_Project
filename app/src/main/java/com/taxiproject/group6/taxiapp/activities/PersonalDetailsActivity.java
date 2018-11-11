@@ -13,6 +13,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
 import com.taxiproject.group6.taxiapp.classes.SectionsStatePagerAdapter;
 import com.taxiproject.group6.taxiapp.classes.User;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeEmail;
