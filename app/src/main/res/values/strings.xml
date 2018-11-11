@@ -13,9 +13,17 @@
     <string name="search_image">Search Image</string>
     <string name="enter_address">Enter Address</string>
     <string name="device_location">Device Location</string>
+<<<<<<< HEAD
     <string name="gps_image_desc">GPS Image</string>
     <string name="enter_pickup_location">Enter Pick Up Location</string>
     <string name="home">Home</string>
     <string name="work">Work</string>
     <string name="new_address">New Address</string>
+=======
+    <string name="personal_details">Personal Details</string>
+    <string name="choose_dest">Choose Destination</string>
+    <string name="home">Home</string>
+    <string name="work">Work</string>
+    <string name="gps_loc">Current Location</string>
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 </resources>

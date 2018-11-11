@@ -162,6 +162,7 @@
         <Button
             android:id="@+id/bookingButton"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/book_now"
@@ -170,5 +171,15 @@
             android:layout_marginRight="10dp"
             android:elevation="10dp"
             tools:targetApi="lollipop" />
+=======
+            android:layout_height="wrap_content"
+            android:text="@string/book_now" />
+
+        <Button
+            android:id="@+id/personalDetailsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/personal_details" />
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
     </LinearLayout>
 </LinearLayout>

@@ -1,10 +1,20 @@
 package com.taxiproject.group6.taxiapp.activities;
 
 import android.Manifest;
+<<<<<<< HEAD
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+=======
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -29,7 +40,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.taxiproject.group6.taxiapp.R;
+<<<<<<< HEAD
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
+=======
+import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
+//import com.taxiproject.group6.taxiapp.classes.LocationHelper;
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 
 import java.util.Objects;
 
@@ -51,13 +67,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
+<<<<<<< HEAD
     private EditText inputSourceEditText;
+=======
+    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton;
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        destinationAddressButton = findViewById(R.id.destinationAddressButton);
+        pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
+        personalDetailsButton = findViewById(R.id.personalDetailsButton);
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
         inputSourceEditText = findViewById(R.id.inputSourceEditText);
         gpsImage = findViewById(R.id.gpsImage);
@@ -122,6 +145,124 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+<<<<<<< HEAD
+=======
+    private void init() {
+        Log.d(TAG, "init: Initialising");
+        inputSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    geoLocate();
+                }
+                return false;
+            }
+        });
+        gpsImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "gpsImage: clicked gps image");
+                getDeviceLocation();
+            }
+        });
+        hideSoftKeyBoard();
+
+        pickUpAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+            }
+        });
+
+        destinationAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+            }
+        });
+
+        personalDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, PersonalDetailsActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+    private void geoLocate() {
+        Log.d(TAG, "geoLocate: Locating");
+        String searchString = inputSearchEditText.getText().toString();
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> list = new ArrayList<>();
+        try {
+            list = geocoder.getFromLocationName(searchString, 1);
+        } catch (IOException ioe) {
+            Log.d(TAG, "geoLocate: IOException: " + ioe.getMessage());
+        }
+        if (list.size() > 0) {
+            Address address = list.get(0);
+            Log.d(TAG, "Found address: " + address.toString());
+//            Toast.makeText(this, "Address: " + address.toString(), Toast.LENGTH_SHORT).show();
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
+        }
+    }
+
+    private void initMap() {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        Objects.requireNonNull(mapFragment).getMapAsync(MapsActivity.this);
+    }
+
+    public void getDeviceLocation() {
+        Log.d(TAG, "getDeviceLocation: getting devices current location.");
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        try {
+            if (permissionsGranted) {
+                Task location = fusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Log.d(TAG, "getDeviceLocation: location found");
+                            Location currentLocation = (Location) task.getResult();
+                            LatLng currentCoordinates =
+                                    new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+                            moveCamera(currentCoordinates, DEFAULT_ZOOM, "My Location");
+                        } else {
+                            Log.d(TAG, "getDeviceLocation: location NOT found");
+                            Toast.makeText(MapsActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException se) {
+            Log.d(TAG, "getDeviceLocation: SecurityException: " + se.getMessage());
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: changing map position to:  lat: " + latLng.latitude + " lng:  " + latLng.longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        MarkerOptions marker = new MarkerOptions()
+                .position(latLng)
+                .title(title);
+
+        mMap.addMarker(marker);
+        hideSoftKeyBoard();
+    }
+
+>>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
     private void getUsersPermission() {
         Log.d(TAG, "getUserPermissions: called");
         String[] permissions = {FINE_LOCATION, COURSE_LOCATION};
@@ -129,8 +270,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 || ContextCompat.checkSelfPermission(this, COURSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "getUserPermissions: failed");
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-        else {
+        } else {
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0,  locationListener);
             Log.d(TAG, "getUserPermissions: granted");
             permissionsGranted = true;
@@ -142,8 +282,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult: called");
         permissionsGranted = false;
-        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE){
-            if(grantResults.length > 0){
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
                 for (int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         permissionsGranted = false;
@@ -154,13 +294,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     permissionsGranted = true;
                     initMap();
                 }
-            }else{
+            } else {
                 Toast.makeText(MapsActivity.this, "Need location permissions ON", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void hideSoftKeyBoard(){
+    private void hideSoftKeyBoard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
