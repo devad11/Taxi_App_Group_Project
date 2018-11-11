@@ -20,14 +20,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
+import com.taxiproject.group6.taxiapp.classes.User;
 
 import java.util.Objects;
 
 public class RegisterFragment extends Fragment {
 
     private Button buttonRegister;
-    private EditText editTextEmail;
-    private EditText editTextPassword;
+    private EditText editTextEmail, editTextPassword, editTextNickName, editTextName, editTextDOB, editTextPNo;
     private TextView textViewSignIn;
 
     private FirebaseAuth firebaseAuth;
@@ -41,6 +41,10 @@ public class RegisterFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         buttonRegister = view.findViewById(R.id.buttonRegister);
         editTextEmail = view.findViewById(R.id.editTextEmail);
+        editTextNickName = view.findViewById(R.id.editTextNickName);
+        editTextName = view.findViewById(R.id.editTextName);
+        editTextDOB = view.findViewById(R.id.editTextDOB);
+        editTextPNo = view.findViewById(R.id.editTextPNo);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         textViewSignIn = view.findViewById(R.id.textViewSignIn);
 
@@ -79,6 +83,10 @@ public class RegisterFragment extends Fragment {
                         progressDialog.cancel();
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(),"Register Successfully", Toast.LENGTH_SHORT).show();
+                            User.setNickname(editTextNickName.getText().toString());
+                            User.setFull_name(editTextName.getText().toString());
+                            User.setDate_of_birth(editTextDOB.getText().toString());
+                            User.setPhone_number(editTextPNo.getText().toString());
                         }
                         else{
                             if(task.getException() instanceof FirebaseAuthUserCollisionException){

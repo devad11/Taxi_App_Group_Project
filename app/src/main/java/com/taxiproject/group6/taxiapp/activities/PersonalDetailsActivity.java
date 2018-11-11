@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.SectionsStatePagerAdapter;
+import com.taxiproject.group6.taxiapp.classes.User;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeEmail;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeName;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePassword;
@@ -91,23 +92,6 @@ public class PersonalDetailsActivity extends AppCompatActivity {
         return progressDialog;
     }
 
-    public static class User {
-
-        public String date_of_birth;
-        public String full_name;
-        public String nickname;
-
-        public User(String dateOfBirth, String fullName) {
-            date_of_birth = dateOfBirth;
-            full_name = fullName;
-        }
-
-        public User(String dateOfBirth, String fullName, String nickname) {
-            // ...
-        }
-
-    }
-
     public static void loadToDatabase(){
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
@@ -119,7 +103,8 @@ public class PersonalDetailsActivity extends AppCompatActivity {
             usersRef = ref.child(uid);
 
             users = new HashMap<>();
-            users.put("Testy cools", new User("June 23, 1912", FragmentChangeName.getUserName()));
+            System.out.println(FragmentChangePhoneNum.getUserPhoneNumber());
+            //users.put("Testy cools", new User(FragmentChangeName.getUserName()));
 
             usersRef.setValue(users);
         }

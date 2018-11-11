@@ -18,4 +18,8 @@
     <string name="home">Home</string>
     <string name="work">Work</string>
     <string name="gps_loc">Current Location</string>
+    <string name="enter_your_nickname">Enter nickname</string>
+    <string name="enter_your_full_name">Enter Full Name</string>
+    <string name="enter_your_date_of_birth">Enter Date Of Birth</string>
+    <string name="enter_your_phone">Enter Phone Number</string>
 </resources>

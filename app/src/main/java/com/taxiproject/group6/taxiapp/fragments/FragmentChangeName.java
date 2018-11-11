@@ -38,10 +38,12 @@ public class FragmentChangeName extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragmen
 
-        editTextFirstName = (EditText) getView().findViewById(R.id.editTextFirstName);
-        editTextSurname = (EditText) getView().findViewById(R.id.editTextSurname);
-        buttonSave = (Button) getView().findViewById(R.id.buttonSave);
-        buttonCancel = (Button) getView().findViewById(R.id.buttonCancel);
+
+        View v = inflater.inflate(R.layout.fragment_change_name, container, false);
+        editTextFirstName = (EditText) v.findViewById(R.id.editTextFirstName);
+        editTextSurname = (EditText) v.findViewById(R.id.editTextSurname);
+        buttonSave = (Button) v.findViewById(R.id.buttonSave);
+        buttonCancel = (Button) v.findViewById(R.id.buttonCancel);
 
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +53,14 @@ public class FragmentChangeName extends Fragment {
                 PersonalDetailsActivity.loadToDatabase();
             }
         });
-        return inflater.inflate(R.layout.fragment_change_name, container, false);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextFirstName.getText().clear();
+                editTextSurname.getText().clear();
+            }
+        });
+        return v;
     }
 
     public static String getUserName(){
