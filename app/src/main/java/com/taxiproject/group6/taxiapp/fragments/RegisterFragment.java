@@ -1,10 +1,13 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,12 +25,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
+import com.taxiproject.group6.taxiapp.activities.MapsActivity;
+import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
 import com.taxiproject.group6.taxiapp.classes.User;
 
 import java.util.Objects;
 
+import static com.firebase.ui.auth.AuthUI.TAG;
+import static com.taxiproject.group6.taxiapp.classes.LoadToDatabase.loadToDatabase;
+
 public class RegisterFragment extends Fragment {
 
+    private static final int ERROR_DIALOG_REQUEST = 9001;
     private Button buttonRegister;
     private EditText editTextEmail, editTextPassword, editTextNickName, editTextName, editTextDOB, editTextPNo;
     private TextView textViewSignIn;
@@ -83,11 +94,27 @@ public class RegisterFragment extends Fragment {
                         progressDialog.cancel();
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(),"Register Successfully", Toast.LENGTH_SHORT).show();
-                            User newUser = new User();
+                            User newUser = LoginFragment.getUser();
                             newUser.setNickname(editTextNickName.getText().toString());
                             newUser.setFullName(editTextName.getText().toString());
                             newUser.setDateOfBirth(editTextDOB.getText().toString());
                             newUser.setPhoneNumber(editTextPNo.getText().toString());
+
+                            LoadToDatabase.loadToDatabase();
+
+                            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful() && isServiceOK()){
+                                        //Login
+                                        Intent i = new Intent(getActivity(), MapsActivity.class);
+                                        startActivity(i);
+                                    }
+                                    else{
+                                        Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
                         else{
                             if(task.getException() instanceof FirebaseAuthUserCollisionException){
@@ -99,5 +126,23 @@ public class RegisterFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private boolean isServiceOK(){
+        Log.d(TAG, "isServiceOK:  checking google  services version");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this.getActivity());
+
+        if(available == ConnectionResult.SUCCESS){
+            Log.d(TAG, "isServiceOK: Google Play is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            Log.d(TAG, "isServiceOK: error occurred but  we can fix  it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this.getActivity(), available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this.getActivity(), "You  can't make  map requests", Toast.LENGTH_SHORT).show();
+        }
+        return  false;
     }
 }

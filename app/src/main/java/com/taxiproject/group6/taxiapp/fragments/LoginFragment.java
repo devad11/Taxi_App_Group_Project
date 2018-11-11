@@ -26,6 +26,7 @@ import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
 import com.taxiproject.group6.taxiapp.activities.MapsActivity;
 import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
+import com.taxiproject.group6.taxiapp.classes.User;
 
 import java.util.Objects;
 
@@ -41,6 +42,7 @@ public class LoginFragment extends Fragment {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    public static User newUser = new User();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,5 +115,8 @@ public class LoginFragment extends Fragment {
             Toast.makeText(this.getActivity(), "You  can't make  map requests", Toast.LENGTH_SHORT).show();
         }
         return  false;
+    }
+    public static User getUser() {
+        return newUser;
     }
 }

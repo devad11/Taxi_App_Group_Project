@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
+import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
+import com.taxiproject.group6.taxiapp.classes.User;
 
 import java.util.Map;
 
@@ -50,7 +52,9 @@ public class FragmentChangeName extends Fragment {
             @Override
             public void onClick(View v) {
                 userName = editTextFirstName.getText().toString() + " " + editTextSurname.getText().toString();
-                PersonalDetailsActivity.loadToDatabase();
+                User user = LoginFragment.getUser();
+                user.setFullName(userName);
+                LoadToDatabase.loadToDatabase();
             }
         });
         buttonCancel.setOnClickListener(new View.OnClickListener() {

@@ -19,6 +19,8 @@ import com.taxiproject.group6.taxiapp.fragments.FragmentChangeEmail;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeName;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePassword;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
+import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -59,7 +61,7 @@ public class PersonalDetailsActivity extends AppCompatActivity {
         changePhoneButton.setOnClickListener(v -> showPhoneChange());
         changePasswordButton.setOnClickListener(v -> showPasswordChange());
 
-        //loadToDatabase();
+        LoadToDatabase.loadFromDatabase();
     }
 
     private void setUpViewPager(ViewPager vp){
@@ -92,23 +94,7 @@ public class PersonalDetailsActivity extends AppCompatActivity {
         return progressDialog;
     }
 
-    public static void loadToDatabase(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null)
-        {
-            uid = user.getUid();
 
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users");
-            usersRef = ref.child(uid);
-
-            users = new HashMap<>();
-            System.out.println(FragmentChangePhoneNum.getUserPhoneNumber());
-            //users.put("Testy cools", new User(FragmentChangeName.getUserName()));
-
-            usersRef.setValue(users);
-        }
-    }
 
 }
 
