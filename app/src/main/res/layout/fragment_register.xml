@@ -3,14 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.LoginFragment"
-    android:orientation="vertical">
+    android:layout_margin="5dp"
+    android:gravity="top|center"
+    android:orientation="vertical"
+    android:paddingTop="5dp"
+    tools:context=".fragments.LoginFragment">
+
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/enter_your_nickname"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/editTextFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/first_name"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/editTextLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/last_name"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="5dp"
         android:hint="@string/enter_your_email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
@@ -20,7 +53,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="5dp"
         android:hint="@string/enter_your_password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
@@ -30,23 +63,37 @@
         android:id="@+id/editTextConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="5dp"
         android:hint="@string/confirm_password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
+        tools:targetApi="o" />
+
+    <TextView
+        android:id="@+id/textViewDateOfBirth"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/back"
+        android:gravity="center|start"
+        android:hint="@string/date"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:textSize="20sp"
         tools:targetApi="o" />
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="5dp"
         android:text="@string/register_user" />
 
     <TextView
         android:id="@+id/textViewSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="@string/already_registered_sign_in_here"
         android:textAlignment="center" />
 

@@ -1,12 +1,15 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -16,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ import com.taxiproject.group6.taxiapp.activities.MapsActivity;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.User;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import static com.firebase.ui.auth.AuthUI.TAG;
@@ -41,9 +46,11 @@ public class RegisterFragment extends Fragment {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private Button buttonRegister;
-    private EditText editTextEmail, editTextPassword, editTextConfirmPassword;
-    private TextView textViewSignIn;
+    private EditText editTextEmail, editTextPassword, editTextConfirmPassword
+            , editTextFirstName, editTextLastName;
+    private TextView textViewSignIn, textViewDateOfBirth;
     private boolean passwordsMatch;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
 
     private FirebaseAuth firebaseAuth;
 
@@ -58,6 +65,10 @@ public class RegisterFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
+        editTextFirstName = view.findViewById(R.id.editTextFirstName);
+        editTextLastName = view.findViewById(R.id.editTextLastName);
+        textViewDateOfBirth = view.findViewById(R.id.textViewDateOfBirth);
+
         textViewSignIn = view.findViewById(R.id.textViewSignIn);
 
         passwordsMatch = false;
@@ -93,9 +104,38 @@ public class RegisterFragment extends Fragment {
 
         buttonRegister.setOnClickListener(v -> registerUser());
         textViewSignIn.setOnClickListener(v -> goToLogInPage());
-
-
+        textViewDateOfBirth.setOnClickListener(v -> showDatePicker());
+//        getDateFromDialog();
+        dateSetListener = (v, year, month, dayOfMonth) -> {
+            month = month + 1;
+            String date = dayOfMonth + "/" + month + "/" + year;
+            textViewDateOfBirth.setText(date);
+        };
         return view;
+    }
+
+    public void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                Objects.requireNonNull(getContext()),
+                R.style.DatePickerStyle,
+                dateSetListener,
+                year, month, day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0Xaa000000));
+
+        dialog.show();
+    }
+
+    public void getDateFromDialog(){
+        dateSetListener = (view, year, month, dayOfMonth) -> {
+            month = month + 1;
+            String date = dayOfMonth + "/" + month + "/" + year;
+            textViewDateOfBirth.setText(date);
+        };
     }
 
     private void goToLogInPage() {
