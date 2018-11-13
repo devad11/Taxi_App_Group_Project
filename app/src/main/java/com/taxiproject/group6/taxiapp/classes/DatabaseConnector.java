@@ -39,10 +39,10 @@ public class DatabaseConnector {
             usersRef = ref.child(uid);
 //            user = LoginFragment.getUser();
             users = user.toMap();
-//            users.put(user.getNickName(), user);
+//            users.put(user.getUserName(), user);
 
             usersRef.setValue(users);
-//            ref.child(user.getNickName()).setValue(users);
+//            ref.child(user.getUserName()).setValue(users);
         }
     }
 
@@ -54,16 +54,16 @@ public class DatabaseConnector {
 
 //        newUser.setFullName(firebaseUser.getDisplayName());
 //        newUser.setDateOfBirth();
-//        newUser.setNickName(firebaseUser.getDisplayName());
+//        newUser.setUserName(firebaseUser.getDisplayName());
 //        newUser.setPhoneNumber(firebaseUser.getPhoneNumber());
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                newUser = dataSnapshot.getValue(User.class);
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    newUser = singleSnapshot.getValue(User.class);
-                }
+                newUser = dataSnapshot.getValue(User.class);
+//                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+//                    newUser = singleSnapshot.getValue(User.class);
+//                }
             }
 
             @Override
@@ -74,12 +74,12 @@ public class DatabaseConnector {
         return newUser;
     }
 
-    public static void updateDetails(String nickName,String node, String name){
+    public static void updateDetails(String childName, String name){
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = firebaseUser.getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid);
-        ref.child(nickName).child(node).setValue(name);
+        ref.child(childName).setValue(name);
 
     }
 }

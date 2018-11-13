@@ -54,8 +54,8 @@ public class FragmentChangeName extends Fragment {
                 Log.d("USER:::::", user.toString());
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                DatabaseConnector.updateDetails(user.getNickName(), "firstName", firstName);
-                DatabaseConnector.updateDetails(user.getNickName(), "lastName", lastName);
+                DatabaseConnector.updateDetails( "firstName", firstName);
+                DatabaseConnector.updateDetails( "lastName", lastName);
 //                DatabaseConnector.loadToDatabase();
             }
         });

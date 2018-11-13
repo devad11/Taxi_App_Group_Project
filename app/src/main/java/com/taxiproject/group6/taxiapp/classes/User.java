@@ -8,18 +8,21 @@ public class User {
     private String uid;
     private String firstName;
     private String lastName;
-    private String nickName;
+    private String userName;
     private String emailAddress;
     private String dateOfBirth;
     private String phoneNumber;
 
     public User(){}
 
-    public User(String firstName,String nickName, String phoneNumber, String dateOfBirth) {
-        this.nickName = nickName;
-        this.phoneNumber = phoneNumber;
+    public User(String uid, String firstName, String lastName, String userName, String emailAddress, String dateOfBirth, String phoneNumber) {
+        this.uid = uid;
         this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.emailAddress = emailAddress;
         this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
     }
 
     //--------------------------
@@ -37,8 +40,8 @@ public class User {
         return lastName;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getUserName() {
+        return userName;
     }
 
     public String getPhoneNumber() {
@@ -67,8 +70,8 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -87,7 +90,7 @@ public class User {
     //      METHODS
     //-------------------------
     public String toString(){
-            return String.format("USER: %s %s %s %s ", this.firstName, this.nickName, this.dateOfBirth, this.phoneNumber);
+            return String.format("USER: %s %s %s %s ", this.firstName, this.userName, this.dateOfBirth, this.phoneNumber);
     }
 
     public Map<String, Object> toMap() {
@@ -96,7 +99,7 @@ public class User {
         result.put("firstName", this.firstName);
         result.put("lastName", this.lastName);
         result.put("email", this.emailAddress);
-        result.put("nickName", this.nickName);
+        result.put("userName", this.userName);
         result.put("phoneNumber", this.phoneNumber);
         result.put("dateOfBirth", this.dateOfBirth);
 
