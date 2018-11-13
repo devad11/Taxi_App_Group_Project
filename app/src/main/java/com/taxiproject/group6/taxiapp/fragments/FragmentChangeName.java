@@ -1,7 +1,6 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,15 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
 import com.taxiproject.group6.taxiapp.R;
-import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
-import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.User;
-
-import java.util.Map;
 
 
 /**
@@ -27,6 +21,7 @@ import java.util.Map;
 public class FragmentChangeName extends Fragment {
 
     private static String userName;
+    private String lastName;
     private EditText editTextFirstName, editTextSurname;
     private Button buttonSave, buttonCancel;
 
@@ -52,13 +47,16 @@ public class FragmentChangeName extends Fragment {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userName = editTextFirstName.getText().toString() + " " + editTextSurname.getText().toString();
+                String firstName = editTextFirstName.getText().toString();
+                String lastName = editTextSurname.getText().toString();
 //                User user = LoginFragment.getUser();
-                User user = LoadToDatabase.loadFromDatabase();
+                User user = DatabaseConnector.loadFromDatabase();
                 Log.d("USER:::::", user.toString());
-                user.setFullName(userName);
-                LoadToDatabase.updateDetails(user.getNickName(), "fullName", userName);
-//                LoadToDatabase.loadToDatabase();
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                DatabaseConnector.updateDetails(user.getNickName(), "firstName", firstName);
+                DatabaseConnector.updateDetails(user.getNickName(), "lastName", lastName);
+//                DatabaseConnector.loadToDatabase();
             }
         });
         buttonCancel.setOnClickListener(new View.OnClickListener() {

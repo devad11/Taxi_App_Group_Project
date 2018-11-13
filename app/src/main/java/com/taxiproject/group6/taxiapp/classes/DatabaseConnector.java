@@ -18,14 +18,14 @@ import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoadToDatabase {
+public class DatabaseConnector {
 
     private static String uid;
     private static FirebaseUser firebaseUser;
     private static DatabaseReference ref;
-    public static DatabaseReference usersRef;
-    public static Map<String, User> users;
-    static User newUser = new User();
+    private static DatabaseReference usersRef;
+    private static Map<String, Object> users;
+    private static User newUser = new User();
 
     public static void loadToDatabase(User user){
 
@@ -36,14 +36,13 @@ public class LoadToDatabase {
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users");
-            //usersRef = ref.child(uid);
+            usersRef = ref.child(uid);
 //            user = LoginFragment.getUser();
-            users = new HashMap<>();
-            System.out.println(FragmentChangePhoneNum.getUserPhoneNumber());
-            users.put(user.getNickName(), user);
+            users = user.toMap();
+//            users.put(user.getNickName(), user);
 
-//            usersRef.setValue(users);
-            ref.child(user.getNickName()).setValue(users);
+            usersRef.setValue(users);
+//            ref.child(user.getNickName()).setValue(users);
         }
     }
 
@@ -51,7 +50,7 @@ public class LoadToDatabase {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = firebaseUser.getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" );
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid) ;
 
 //        newUser.setFullName(firebaseUser.getDisplayName());
 //        newUser.setDateOfBirth();
@@ -79,7 +78,7 @@ public class LoadToDatabase {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = firebaseUser.getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/");
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid);
         ref.child(nickName).child(node).setValue(name);
 
     }

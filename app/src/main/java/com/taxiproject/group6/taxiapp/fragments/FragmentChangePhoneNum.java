@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.taxiproject.group6.taxiapp.R;
-import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
-import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
 import com.taxiproject.group6.taxiapp.classes.User;
 
 
@@ -45,8 +43,8 @@ public class FragmentChangePhoneNum extends Fragment {
             public void onClick(View v) {
                 phNum = editTextPhone.getText().toString();
                 User user = LoginFragment.getUser();
-                user.setFullName(phNum);
-//                LoadToDatabase.loadToDatabase();
+//                user.setFullName(phNum);
+//                DatabaseConnector.loadToDatabase();
             }
         });
         buttonCancelPhone.setOnClickListener(new View.OnClickListener() {

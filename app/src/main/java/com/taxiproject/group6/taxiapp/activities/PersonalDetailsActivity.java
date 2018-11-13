@@ -7,22 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.taxiproject.group6.taxiapp.R;
-import com.taxiproject.group6.taxiapp.classes.LoadToDatabase;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.SectionsStatePagerAdapter;
 import com.taxiproject.group6.taxiapp.classes.User;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeEmail;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeName;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePassword;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
-import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -62,7 +57,7 @@ public class PersonalDetailsActivity extends AppCompatActivity {
         changePhoneButton.setOnClickListener(v -> showPhoneChange());
         changePasswordButton.setOnClickListener(v -> showPasswordChange());
 
-        LoadToDatabase.loadFromDatabase();
+        DatabaseConnector.loadFromDatabase();
     }
 
     private void setUpViewPager(ViewPager vp){

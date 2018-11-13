@@ -22,4 +22,5 @@
     <string name="enter_your_full_name">Enter Full Name</string>
     <string name="enter_your_date_of_birth">Enter Date Of Birth</string>
     <string name="enter_your_phone">Enter Phone Number</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
