@@ -2,49 +2,49 @@ package com.taxiproject.group6.taxiapp.classes;
 
 public class User {
 
-        public String date_of_birth;
-        public String full_name;
-        public String nickname;
-        public String phone_number;
+        public String dateOfBirth;
+        public String fullName;
+        public String nickName;
+        public String phoneNumber;
 
         public User(){}
 
         public User(String fullName,String nickName, String phoneNumber, String dateOfBirth) {
-            nickname = nickName;
-            phone_number = phoneNumber;
-            full_name = fullName;
-            date_of_birth = dateOfBirth;
+            this.nickName = nickName;
+            this.phoneNumber = phoneNumber;
+            this.fullName = fullName;
+            this.dateOfBirth = dateOfBirth;
         }
 
     public String getDateOfBirth() {
-        return date_of_birth;
+        return dateOfBirth;
     }
 
-    public void setDateOfBirth(String date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getFullName() {
-        return full_name;
+        return fullName;
     }
 
-    public void setFullName(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPhoneNumber() {
-        return phone_number;
+        return phoneNumber;
     }
 
-    public void setPhoneNumber(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

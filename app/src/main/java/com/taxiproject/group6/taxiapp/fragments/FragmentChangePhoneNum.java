@@ -46,7 +46,7 @@ public class FragmentChangePhoneNum extends Fragment {
                 phNum = editTextPhone.getText().toString();
                 User user = LoginFragment.getUser();
                 user.setFullName(phNum);
-                LoadToDatabase.loadToDatabase();
+//                LoadToDatabase.loadToDatabase();
             }
         });
         buttonCancelPhone.setOnClickListener(new View.OnClickListener() {

@@ -1,7 +1,11 @@
 package com.taxiproject.group6.taxiapp.classes;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,41 +21,45 @@ import java.util.Map;
 public class LoadToDatabase {
 
     private static String uid;
-    private static FirebaseUser user;
+    private static FirebaseUser firebaseUser;
     private static DatabaseReference ref;
     public static DatabaseReference usersRef;
     public static Map<String, User> users;
     static User newUser = new User();
 
-    public static void loadToDatabase(){
+    public static void loadToDatabase(User user){
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null)
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
         {
-            uid = user.getUid();
+            uid = firebaseUser.getUid();
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users");
-            usersRef = ref.child(uid);
-            User user = LoginFragment.getUser();
+            //usersRef = ref.child(uid);
+//            user = LoginFragment.getUser();
             users = new HashMap<>();
             System.out.println(FragmentChangePhoneNum.getUserPhoneNumber());
-            users.put(user.getNickname(), user);
+            users.put(user.getNickName(), user);
 
-            usersRef.setValue(users);
+//            usersRef.setValue(users);
+            ref.child(user.getNickName()).setValue(users);
         }
     }
 
     public static User loadFromDatabase(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        uid = user.getUid();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid);
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" );
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                newUser = dataSnapshot.getValue(User.class);
+//                newUser = dataSnapshot.getValue(User.class);
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    newUser = singleSnapshot.getValue(User.class);
+                }
             }
 
             @Override
@@ -60,5 +68,14 @@ public class LoadToDatabase {
             }
         });
         return newUser;
+    }
+
+    public static void updateDetails(String nickName,String node, String name){
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/");
+        ref.child(nickName).child(node).setValue(name);
+
     }
 }

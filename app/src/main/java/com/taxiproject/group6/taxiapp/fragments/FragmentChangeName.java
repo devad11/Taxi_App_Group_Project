@@ -52,9 +52,11 @@ public class FragmentChangeName extends Fragment {
             @Override
             public void onClick(View v) {
                 userName = editTextFirstName.getText().toString() + " " + editTextSurname.getText().toString();
-                User user = LoginFragment.getUser();
+//                User user = LoginFragment.getUser();
+                User user = LoadToDatabase.loadFromDatabase();
                 user.setFullName(userName);
-                LoadToDatabase.loadToDatabase();
+                LoadToDatabase.updateDetails(user.getNickName(), "fullName", userName);
+//                LoadToDatabase.loadToDatabase();
             }
         });
         buttonCancel.setOnClickListener(new View.OnClickListener() {

@@ -94,19 +94,20 @@ public class RegisterFragment extends Fragment {
                         progressDialog.cancel();
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(),"Register Successfully", Toast.LENGTH_SHORT).show();
-                            User newUser = LoginFragment.getUser();
-                            newUser.setNickname(editTextNickName.getText().toString());
+                            User newUser = new User();
+                            newUser.setNickName(editTextNickName.getText().toString());
                             newUser.setFullName(editTextName.getText().toString());
                             newUser.setDateOfBirth(editTextDOB.getText().toString());
                             newUser.setPhoneNumber(editTextPNo.getText().toString());
 
-                            LoadToDatabase.loadToDatabase();
+
 
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful() && isServiceOK()){
                                         //Login
+                                        LoadToDatabase.loadToDatabase(newUser);
                                         Intent i = new Intent(getActivity(), MapsActivity.class);
                                         startActivity(i);
                                     }

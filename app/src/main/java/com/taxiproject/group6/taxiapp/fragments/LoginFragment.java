@@ -22,6 +22,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
 import com.taxiproject.group6.taxiapp.activities.MapsActivity;
@@ -42,7 +48,7 @@ public class LoginFragment extends Fragment {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    public static User newUser = new User();
+    public static User newUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,6 +91,7 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful() && isServiceOK()){
                     //Login
+                    newUser = loadFromDatabase();
                     Intent i = new Intent(getActivity(), MapsActivity.class);
                     startActivity(i);
                 }
@@ -117,6 +124,27 @@ public class LoginFragment extends Fragment {
         return  false;
     }
     public static User getUser() {
+        return newUser;
+    }
+
+
+    public static User loadFromDatabase(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                newUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
         return newUser;
     }
 }
