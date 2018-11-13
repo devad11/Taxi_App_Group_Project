@@ -47,4 +47,8 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String toString(){
+            return String.format("USER: %s %s %s %s ", this.fullName, this.nickName, this.dateOfBirth, this.phoneNumber);
+    }
 }

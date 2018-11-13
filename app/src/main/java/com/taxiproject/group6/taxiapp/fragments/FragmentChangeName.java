@@ -4,6 +4,7 @@ package com.taxiproject.group6.taxiapp.fragments;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class FragmentChangeName extends Fragment {
                 userName = editTextFirstName.getText().toString() + " " + editTextSurname.getText().toString();
 //                User user = LoginFragment.getUser();
                 User user = LoadToDatabase.loadFromDatabase();
+                Log.d("USER:::::", user.toString());
                 user.setFullName(userName);
                 LoadToDatabase.updateDetails(user.getNickName(), "fullName", userName);
 //                LoadToDatabase.loadToDatabase();

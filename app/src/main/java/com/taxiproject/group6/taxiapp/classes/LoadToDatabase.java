@@ -53,6 +53,11 @@ public class LoadToDatabase {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" );
 
+//        newUser.setFullName(firebaseUser.getDisplayName());
+//        newUser.setDateOfBirth();
+//        newUser.setNickName(firebaseUser.getDisplayName());
+//        newUser.setPhoneNumber(firebaseUser.getPhoneNumber());
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
