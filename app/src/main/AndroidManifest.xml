@@ -49,7 +49,8 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".activities.PersonalDetailsActivity" />
         <activity android:name=".activities.AddressActivity" />
-        <activity android:name=".classes.PickerDialogObject"></activity>
+        <activity android:name=".classes.PickerDialogObject" />
+        <activity android:name=".activities.UserDetailsActivity"></activity>
     </application>
 
 </manifest>
