@@ -1,5 +1,7 @@
 package com.taxiproject.group6.taxiapp.classes;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,6 +91,7 @@ public class User {
     //-------------------------
     //      METHODS
     //-------------------------
+    @NonNull
     public String toString(){
             return String.format("USER: %s %s %s %s ", this.firstName, this.userName, this.dateOfBirth, this.phoneNumber);
     }

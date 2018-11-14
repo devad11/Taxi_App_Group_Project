@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">taxiApp</string>
     <string name="title_activity_maps">Map</string>
-    <string name="enter_your_email">Enter your email</string>
-    <string name="enter_your_password">Enter your password</string>
+    <string name="enter_your_email">Email</string>
+    <string name="enter_your_password">Password</string>
     <string name="register_user">Register User</string>
     <string name="already_registered_sign_in_here">Already Registered? Sign in here</string>
     <string name="login">Login</string>
@@ -21,13 +21,14 @@
     <string name="enter_your_nickname">User Name</string>
     <string name="enter_your_full_name">Enter Full Name</string>
     <string name="enter_your_date_of_birth">Enter Date Of Birth</string>
-    <string name="enter_your_phone">Enter Phone Number</string>
+    <string name="enter_your_phone">Phone Number</string>
     <string name="last_name">Last Name</string>
     <string name="first_name">First Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="date">dd/mm/yyyy</string>
-    <string name="title_activity_user_details">UserDetailsActivity</string>
-    <string name="edit_info">Edit Info</string>
-    <string name="test">test</string>
+    <string name="edit_label">Edit</string>
+    <string name="invisible_space" >" "</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
 </resources>
