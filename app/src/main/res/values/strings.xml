@@ -31,4 +31,15 @@
     <string name="invisible_space" >" "</string>
     <string name="save">Save</string>
     <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="database_user_name">userName</string>
+    <string name="database_first_name">firstName</string>
+    <string name="database_last_name">lastName</string>
+    <string name="database_uid">uid</string>
+    <string name="database_phone_number">phoneNumber</string>
+    <string name="database_email">email</string>
+    <string name="database_date_of_birth">dateOfBirth</string>
+
+
 </resources>

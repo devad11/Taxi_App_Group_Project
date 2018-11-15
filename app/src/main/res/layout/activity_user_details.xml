@@ -54,7 +54,9 @@
                     android:text="@string/edit_label"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:onClick="userNameEditButtonPressed"
+                    android:tag="@string/database_user_name"/>
             </LinearLayout>
 
             <LinearLayout
@@ -81,7 +83,8 @@
                     android:text="@string/edit_label"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:tag="@string/database_first_name"/>
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +111,8 @@
                     android:text="@string/edit_label"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:tag="@string/database_last_name"/>
             </LinearLayout>
 
             <LinearLayout
@@ -135,7 +139,8 @@
                     android:text="@string/edit_label"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:tag="@string/database_phone_number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -149,14 +154,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/save"/>
+                    android:text="@string/save"
+                    android:onClick="saveButtonPressed"/>
 
                 <Button
-                    android:id="@+id/backButton"
+                    android:id="@+id/cancelButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/back"/>
+                    android:text="@string/cancel"
+                    android:onClick="cancelButtonPressed" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
