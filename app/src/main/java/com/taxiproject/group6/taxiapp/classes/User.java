@@ -14,6 +14,8 @@ public class User {
     private String emailAddress;
     private String dateOfBirth;
     private String phoneNumber;
+    private Map<String, Object> result;
+
 
     public User(){}
 
@@ -97,7 +99,7 @@ public class User {
     }
 
     public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
+        result = new HashMap<>();
         result.put("uid", uid);
         result.put("firstName", this.firstName);
         result.put("lastName", this.lastName);
@@ -107,5 +109,27 @@ public class User {
         result.put("dateOfBirth", this.dateOfBirth);
 
         return result;
+    }
+
+    public void setByFieldTag(String tag, String value){
+        switch (tag){
+            case "userName":
+                this.userName = value;
+                break;
+            case "firstName": this.firstName = value;
+                break;
+            case "lastName": this.lastName = value;
+                break;
+            case "phoneNumber": this.phoneNumber = value;
+                break;
+            case "uid": this.uid = value;
+                break;
+            case "email": this.emailAddress = value;
+                break;
+            case "dateOfBirth": this.dateOfBirth = value;
+                break;
+        }
+//        result.put(tag, value);
+        result = this.toMap();
     }
 }
