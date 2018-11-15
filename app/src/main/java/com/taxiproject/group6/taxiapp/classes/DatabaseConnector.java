@@ -82,4 +82,13 @@ public class DatabaseConnector {
         ref.child(childName).setValue(name);
 
     }
+
+    public static void updateAllDetails(User user){
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + uid);
+        ref.updateChildren(user.toMap());
+
+    }
 }

@@ -37,13 +37,13 @@
 
                 <EditText
                     android:id="@+id/userNameEditText"
-                    android:enabled="false"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:hint="@string/invisible_space"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
+                    android:enabled="false"
                     tools:targetApi="o" />
 
                 <Button
@@ -55,7 +55,7 @@
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     style="?android:attr/borderlessButtonStyle"
-                    android:onClick="userNameEditButtonPressed"
+                    android:onClick="editButtonPressed"
                     android:tag="@string/database_user_name"/>
             </LinearLayout>
 
@@ -68,15 +68,18 @@
                 android:background="@drawable/white_border">
 
                 <EditText
+                    android:id="@+id/firstNameEditText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:hint="@string/invisible_space"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
+                    android:enabled="false"
                     tools:targetApi="o" />
 
                 <Button
+                    android:id="@+id/firstNameButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -84,6 +87,7 @@
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     style="?android:attr/borderlessButtonStyle"
+                    android:onClick="editButtonPressed"
                     android:tag="@string/database_first_name"/>
             </LinearLayout>
 
@@ -96,15 +100,18 @@
                 android:background="@drawable/white_border">
 
                 <EditText
+                    android:id="@+id/lastNameEditText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:hint="@string/invisible_space"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
+                    android:enabled="false"
                     tools:targetApi="o" />
 
                 <Button
+                    android:id="@+id/lastNameButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -112,6 +119,7 @@
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     style="?android:attr/borderlessButtonStyle"
+                    android:onClick="editButtonPressed"
                     android:tag="@string/database_last_name"/>
             </LinearLayout>
 
@@ -124,15 +132,18 @@
                 android:background="@drawable/white_border">
 
                 <EditText
+                    android:id="@+id/phoneNumberEditText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:hint="@string/invisible_space"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="phone"
+                    android:enabled="false"
                     tools:targetApi="o" />
 
                 <Button
+                    android:id="@+id/phoneNumberButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -140,6 +151,7 @@
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     style="?android:attr/borderlessButtonStyle"
+                    android:onClick="editButtonPressed"
                     android:tag="@string/database_phone_number"/>
             </LinearLayout>
 
@@ -154,8 +166,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/save"
-                    android:onClick="saveButtonPressed"/>
+                    android:text="@string/confirm"
+                    android:onClick="confirmButtonPressed"/>
 
                 <Button
                     android:id="@+id/cancelButton"

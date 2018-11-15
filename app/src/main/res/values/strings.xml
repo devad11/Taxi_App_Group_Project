@@ -27,11 +27,13 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="date">dd/mm/yyyy</string>
-    <string name="edit_label">Edit</string>
+    <string name="edit_label">edit</string>
     <string name="invisible_space" >" "</string>
     <string name="save">Save</string>
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
+    <string name="apply_label">apply</string>
+    <string name="confirm">Confirm</string>
 
     <string name="database_user_name">userName</string>
     <string name="database_first_name">firstName</string>

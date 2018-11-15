@@ -35,6 +35,12 @@ public class UserDetailsActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         userNameButton = findViewById(R.id.userNameButton);
         userNameEditText = findViewById(R.id.userNameEditText);
+        firstNameButton = findViewById(R.id.firstNameButton);
+        firstNameEditText = findViewById(R.id.firstNameEditText);
+        lastNameButton = findViewById(R.id.lastNameButton);
+        lastNameEditText = findViewById(R.id.lastNameEditText);
+        phoneNumberButton = findViewById(R.id.phoneNumberButton);
+        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
 
 
         loadDataIntoTextFields();
@@ -44,7 +50,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         userNameEditText.setText(user.getUserName());
     }
 
-    public void saveButtonPressed(View view) {
+    public void confirmButtonPressed(View view) {
+        DatabaseConnector.updateAllDetails(user);
     }
 
     public void backButtonPressed(View view) {
@@ -54,8 +61,27 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void userNameEditButtonPressed(View view) {
+    public void editButtonPressed(View view) {
+
         user.setUserName(buttonPressed(userNameButton, userNameEditText));
+//        DatabaseConnector.updateDetails(userNameButton.getTag().toString(), user.getUserName());
+//        userNameButton.setEnabled(true);
+
+//        else if(!firstNameButton.isEnabled()){
+//            user.setFirstName(buttonPressed(firstNameButton, firstNameEditText));
+//            DatabaseConnector.updateDetails(firstNameButton.getTag().toString(), user.getFirstName());
+//            firstNameButton.setEnabled(true);
+//        }
+//        else if(!lastNameButton.isEnabled()){
+//            user.setLastName(buttonPressed(lastNameButton, lastNameEditText));
+//            DatabaseConnector.updateDetails(lastNameButton.getTag().toString(), user.getLastName());
+//            lastNameButton.setEnabled(true);
+//        }
+//        else if(!phoneNumberButton.isEnabled()){
+//            user.setPhoneNumber(buttonPressed(phoneNumberButton, phoneNumberEditText));
+//            DatabaseConnector.updateDetails(phoneNumberButton.getTag().toString(), user.getPhoneNumber());
+//            phoneNumberButton.setEnabled(true);
+//        }
     }
 
     public void cancelButtonPressed(View view) {
@@ -65,10 +91,11 @@ public class UserDetailsActivity extends AppCompatActivity {
         String str = editText.getText().toString();
         if(!editText.isEnabled()){
             editText.setEnabled(true);
-            button.setText(R.string.save);
+            editText.requestFocus();
+            button.setText(R.string.apply_label);
         }else{
             editText.setEnabled(false);
-            button.setText(R.string.save);
+            button.setText(R.string.edit_label);
             str = editText.getText().toString();
         }
         return str;
