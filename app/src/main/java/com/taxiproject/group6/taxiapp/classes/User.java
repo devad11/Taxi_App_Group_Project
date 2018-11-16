@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class User {
 
-    private String uid;
     private String firstName;
     private String lastName;
     private String userName;
@@ -19,8 +18,7 @@ public class User {
 
     public User(){}
 
-    public User(String uid, String firstName, String lastName, String userName, String emailAddress, String dateOfBirth, String phoneNumber) {
-        this.uid = uid;
+    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -32,8 +30,12 @@ public class User {
     //--------------------------
     //      GETTERS
     //--------------------------
-    public String getDateOfBirth() {
-        return dateOfBirth;
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     public String getFirstName() {
@@ -44,27 +46,23 @@ public class User {
         return lastName;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
     //--------------------------
     //      SETTERS
     //--------------------------
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public void setFirstName(String firstName) {
@@ -75,21 +73,15 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
+
 
     //-------------------------
     //      METHODS
@@ -101,7 +93,6 @@ public class User {
 
     public Map<String, Object> toMap() {
         result = new HashMap<>();
-        result.put("uid", uid);
         result.put("firstName", this.firstName);
         result.put("lastName", this.lastName);
         result.put("email", this.emailAddress);
@@ -122,8 +113,6 @@ public class User {
             case "lastName": this.lastName = value;
                 break;
             case "phoneNumber": this.phoneNumber = value;
-                break;
-            case "uid": this.uid = value;
                 break;
             case "email": this.emailAddress = value;
                 break;

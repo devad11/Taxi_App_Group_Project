@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -19,16 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.taxiproject.group6.taxiapp.R;
@@ -46,8 +40,7 @@ public class RegisterFragment extends Fragment {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private Button buttonRegister;
-    private EditText editTextEmail, editTextPassword, editTextConfirmPassword
-            , editTextFirstName, editTextLastName, editTextUserName, editTextPhoneNumber;
+    private EditText editTextEmail, editTextPassword, editTextConfirmPassword, editTextUserName, editTextPhoneNumber;
     private TextView textViewSignIn, textViewDateOfBirth;
     private boolean passwordsMatch;
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -65,8 +58,6 @@ public class RegisterFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
-        editTextFirstName = view.findViewById(R.id.editTextFirstName);
-        editTextLastName = view.findViewById(R.id.editTextLastName);
         editTextUserName = view.findViewById(R.id.editTextUserName);
         textViewDateOfBirth = view.findViewById(R.id.textViewDateOfBirth);
         editTextPhoneNumber = view.findViewById(R.id.editTextPhoneNumber);
@@ -127,7 +118,7 @@ public class RegisterFragment extends Fragment {
                 R.style.DatePickerStyle,
                 dateSetListener,
                 year, month, day);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0Xaa000000));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(0Xaa000000));
 
         dialog.show();
     }
@@ -178,15 +169,13 @@ public class RegisterFragment extends Fragment {
                         progressDialog.cancel();
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
-                            String uid = firebaseAuth.getUid();
 
-                            User newUser = new User(uid, firstName, lastName, userName, email, dob, phoneNumber);
+                            User newUser = new User(firstName, lastName, userName, dob, phoneNumber, email);
                             DatabaseConnector.loadToDatabase(newUser);
 
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful() && isServiceOK()) {
                                     //Login
-                                    DatabaseConnector.loadToDatabase(newUser);
                                     Intent i = new Intent(getActivity(), MapsActivity.class);
                                     getActivity().finish();
                                     startActivity(i);
