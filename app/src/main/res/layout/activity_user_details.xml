@@ -40,9 +40,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:hint="@string/invisible_space"
+                    android:hint="@string/user_name"
                     android:importantForAutofill="no"
                     android:inputType="text"
+                    android:textColor="@drawable/edit_text_colour"
                     android:enabled="false"
                     tools:targetApi="o" />
 
@@ -72,10 +73,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:hint="@string/invisible_space"
+                    android:hint="@string/first_name"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:enabled="false"
+                    android:textColor="@drawable/edit_text_colour"
                     tools:targetApi="o" />
 
                 <Button
@@ -104,9 +106,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:hint="@string/invisible_space"
+                    android:hint="@string/last_name"
                     android:importantForAutofill="no"
                     android:inputType="text"
+                    android:textColor="@drawable/edit_text_colour"
                     android:enabled="false"
                     tools:targetApi="o" />
 
@@ -136,9 +139,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:hint="@string/invisible_space"
+                    android:hint="@string/enter_your_phone"
                     android:importantForAutofill="no"
                     android:inputType="phone"
+                    android:textColor="@drawable/edit_text_colour"
                     android:enabled="false"
                     tools:targetApi="o" />
 

@@ -1,5 +1,6 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -87,6 +88,7 @@ public class LoginFragment extends Fragment {
                     //Login
                     newUser = DatabaseConnector.loadFromDatabase();
                     Intent i = new Intent(getActivity(), MapsActivity.class);
+                    getActivity().finish();
                     startActivity(i);
                 }
                 else{

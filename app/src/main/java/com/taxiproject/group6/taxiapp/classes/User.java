@@ -55,6 +55,7 @@ public class User {
     public String getUid() {
         return uid;
     }
+
     public String getEmailAddress() {
         return emailAddress;
     }

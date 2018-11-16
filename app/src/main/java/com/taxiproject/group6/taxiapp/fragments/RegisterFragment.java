@@ -174,36 +174,31 @@ public class RegisterFragment extends Fragment {
 
         if(passwordsMatch) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            progressDialog.cancel();
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
-                                String uid = firebaseAuth.getUid();
+                    .addOnCompleteListener(task -> {
+                        progressDialog.cancel();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
+                            String uid = firebaseAuth.getUid();
 
-                                User newUser = new User(uid, firstName, lastName, userName, email, dob, phoneNumber);
-                                DatabaseConnector.loadToDatabase(newUser);
+                            User newUser = new User(uid, firstName, lastName, userName, email, dob, phoneNumber);
+                            DatabaseConnector.loadToDatabase(newUser);
 
-                                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful() && isServiceOK()) {
-                                            //Login
-                                            DatabaseConnector.loadToDatabase(newUser);
-                                            Intent i = new Intent(getActivity(), MapsActivity.class);
-                                            startActivity(i);
-                                        } else {
-                                            Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            } else {
-                                if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                    Toast.makeText(getActivity(), "Email is already registered", Toast.LENGTH_SHORT).show();
+                            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful() && isServiceOK()) {
+                                    //Login
+                                    DatabaseConnector.loadToDatabase(newUser);
+                                    Intent i = new Intent(getActivity(), MapsActivity.class);
+                                    getActivity().finish();
+                                    startActivity(i);
                                 } else {
-                                    Toast.makeText(getActivity(), "Could not register. Please try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), Objects.requireNonNull(task1.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
+                            });
+                        } else {
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(getActivity(), "Email is already registered", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Could not register. Please try again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
