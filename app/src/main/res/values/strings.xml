@@ -42,6 +42,7 @@
     <string name="database_phone_number">phoneNumber</string>
     <string name="database_email">email</string>
     <string name="database_date_of_birth">dateOfBirth</string>
+    <string name="change_email">Change Email</string>
 
 
 </resources>
