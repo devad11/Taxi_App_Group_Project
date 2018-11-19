@@ -43,6 +43,7 @@
     <string name="database_email">email</string>
     <string name="database_date_of_birth">dateOfBirth</string>
     <string name="change_email">Change Email</string>
+    <string name="change_password">Change Password</string>
 
 
 </resources>

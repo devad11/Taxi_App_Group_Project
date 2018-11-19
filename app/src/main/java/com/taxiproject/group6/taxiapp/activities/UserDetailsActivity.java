@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +28,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, phoneNumberEditText;
     private User user;
     private boolean changed;
-    private Button changeEmailAddressButton;
+    private Button changeEmailAddressButton, changePasswordButton;
     private static final String TAG = "UserDetailsActivity";
 
     @Override
@@ -38,6 +39,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         changed = false;
         user = DatabaseConnector.loadFromDatabase();
 
+        changePasswordButton = findViewById(R.id.changePasswordButton);
         changeEmailAddressButton = findViewById(R.id.changeEmailAddressButton);
         userNameEditText = findViewById(R.id.userNameEditText);
         firstNameEditText = findViewById(R.id.firstNameEditText);
@@ -75,6 +77,38 @@ public class UserDetailsActivity extends AppCompatActivity {
                             });
                 }
                 });
+            mBuilder.setNegativeButton("Cancel", null);
+
+            mBuilder.setView(mView);
+            AlertDialog dialog =mBuilder.create();
+            dialog.show();
+        });
+
+        changePasswordButton.setOnClickListener(v -> {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation,null);
+            EditText oldPassword = (EditText) mView.findViewById(R.id.oldPassword);
+            EditText newPassword = (EditText) mView.findViewById(R.id.newPassword);
+            EditText confirm_password = (EditText) mView.findViewById(R.id.confirm_password);
+            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int id) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (newPassword.getText().toString().equals(confirm_password.getText().toString())){
+                        user.updatePassword(newPassword.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User password updated.");
+                                        }
+                                    }
+                                });
+                    }
+                    else{
+                        Toast.makeText(UserDetailsActivity.this, "New password and confirm password must match", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             mBuilder.setNegativeButton("Cancel", null);
 
             mBuilder.setView(mView);

@@ -167,6 +167,13 @@
                 android:onClick="confirmButtonPressed"
                 android:text="@string/change_email" />
 
+            <Button
+                android:id="@+id/changePasswordButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="confirmButtonPressed"
+                android:text="@string/change_password" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
