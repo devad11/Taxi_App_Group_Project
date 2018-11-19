@@ -52,15 +52,15 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         changeEmailAddressButton.setOnClickListener(v -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_confirmation,null);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_confirmation, null);
             EditText new_email = (EditText) mView.findViewById(R.id.new_email);
             EditText confirm_password = (EditText) mView.findViewById(R.id.confirm_password);
-            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener(){
+            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     AuthCredential credential = EmailAuthProvider
-                            .getCredential(user.getEmail(),confirm_password.getText().toString());
+                            .getCredential(user.getEmail(), confirm_password.getText().toString());
 
                     // Prompt the user to re-provide their sign-in credentials
                     user.reauthenticate(credential)
@@ -68,32 +68,45 @@ public class UserDetailsActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Log.d(TAG, "User re-authenticated.");
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         updateUserEmail(user, new_email.getText().toString());
+                                        Toast.makeText(UserDetailsActivity.this, "Email updated", Toast.LENGTH_SHORT).show();
+
                                     } else {
-                                        // Password is incorrect
+                                        Toast.makeText(UserDetailsActivity.this, "Wrong password", Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });
                 }
-                });
-            mBuilder.setNegativeButton("Cancel", null);
+            });
+            mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
             mBuilder.setView(mView);
-            AlertDialog dialog =mBuilder.create();
+            AlertDialog dialog = mBuilder.create();
             dialog.show();
         });
 
         changePasswordButton.setOnClickListener(v -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation,null);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation, null);
             EditText oldPassword = (EditText) mView.findViewById(R.id.oldPassword);
             EditText newPassword = (EditText) mView.findViewById(R.id.newPassword);
             EditText confirm_password = (EditText) mView.findViewById(R.id.confirm_password);
-            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener(){
+            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (newPassword.getText().toString().equals(confirm_password.getText().toString())){
+                    AuthCredential credential = EmailAuthProvider
+                            .getCredential(user.getEmail(), confirm_password.getText().toString());
+
+                    // Prompt the user to re-provide their sign-in credentials
+                    user.reauthenticate(credential);
+                    if (newPassword.getText().toString().equals(confirm_password.getText().toString())) {
                         user.updatePassword(newPassword.getText().toString())
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -103,16 +116,27 @@ public class UserDetailsActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                    }
-                    else{
+                        Toast.makeText(UserDetailsActivity.this, "Password updated", Toast.LENGTH_SHORT).show();
+
+                    } else {
                         Toast.makeText(UserDetailsActivity.this, "New password and confirm password must match", Toast.LENGTH_SHORT).show();
                     }
+
+//                                    else {
+//                                        Toast.makeText(UserDetailsActivity.this, "Wrong old password", Toast.LENGTH_SHORT).show();
+//                                    }
                 }
             });
-            mBuilder.setNegativeButton("Cancel", null);
 
+            mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
             mBuilder.setView(mView);
-            AlertDialog dialog =mBuilder.create();
+            AlertDialog dialog = mBuilder.create();
             dialog.show();
         });
     }
@@ -129,7 +153,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 });
     }
 
-    private void init(){
+    private void init() {
         userNameEditText.setText(user.getUserName());
         firstNameEditText.setText(user.getFirstName());
         lastNameEditText.setText(user.getLastName());
@@ -137,7 +161,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     public void confirmButtonPressed(View view) {
-        if(changed)
+        if (changed)
             DatabaseConnector.updateAllDetails(user);
         closeActivity();
     }
@@ -147,7 +171,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
 
-    public void closeActivity(){
+    public void closeActivity() {
         this.finish();
     }
 
@@ -155,16 +179,21 @@ public class UserDetailsActivity extends AppCompatActivity {
         String tag = view.getTag().toString();
         Log.d("TAG----------", tag);
         EditText et;
-        switch (tag){
-            case "userName": et = userNameEditText;
+        switch (tag) {
+            case "userName":
+                et = userNameEditText;
                 break;
-            case "firstName": et = firstNameEditText;
+            case "firstName":
+                et = firstNameEditText;
                 break;
-            case "lastName": et = lastNameEditText;
+            case "lastName":
+                et = lastNameEditText;
                 break;
-            case "phoneNumber": et = phoneNumberEditText;
+            case "phoneNumber":
+                et = phoneNumberEditText;
                 break;
-            default: et = null;
+            default:
+                et = null;
                 break;
         }
         if (et != null)
@@ -172,12 +201,12 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void buttonPressed(Button button, EditText editText){
-        if(!editText.isEnabled()){
+    private void buttonPressed(Button button, EditText editText) {
+        if (!editText.isEnabled()) {
             editText.setEnabled(true);
             editText.requestFocus();
             button.setText(R.string.apply_label);
-        }else{
+        } else {
             editText.setEnabled(false);
             button.setText(R.string.edit_label);
             String str = editText.getText().toString();
