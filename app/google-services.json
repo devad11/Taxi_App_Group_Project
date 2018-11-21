@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "820575748111-q79tnqn098c5bqu3uabte37fer0fq0vv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taxiproject.group6.taxiapp",
+            "certificate_hash": "525505ace3dc930c9999c4be8b301a23484c9127"
+          }
+        },
+        {
           "client_id": "820575748111-cbkinulrh6s2f0gktr2ngj0akquii8l8.apps.googleusercontent.com",
           "client_type": 3
         }

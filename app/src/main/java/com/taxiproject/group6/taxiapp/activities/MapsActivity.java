@@ -1,12 +1,6 @@
 package com.taxiproject.group6.taxiapp.activities;
 
 import android.Manifest;
-<<<<<<< HEAD
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-=======
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,39 +8,40 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
->>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+//import com.taxiproject.group6.taxiapp.android.Manifest;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.taxiproject.group6.taxiapp.R;
-<<<<<<< HEAD
-import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
-=======
 import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
 //import com.taxiproject.group6.taxiapp.classes.LocationHelper;
->>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -54,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     //    private final int REQUEST_LOCATION = 1;
 //    private LocationManager  locationManager;
-    private MapLocationHelper mapLocationHelper;
+//    private LocationHelper locationHelper;
     private boolean permissionsGranted = false;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -67,11 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText inputSearchEditText;
     private ImageView gpsImage;
-<<<<<<< HEAD
-    private EditText inputSourceEditText;
-=======
     private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton;
->>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,35 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
         personalDetailsButton = findViewById(R.id.personalDetailsButton);
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
-        inputSourceEditText = findViewById(R.id.inputSourceEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
-    }
 
-    private void initMap(){
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        Objects.requireNonNull(mapFragment).getMapAsync(MapsActivity.this);
-    }
-
-    private void init(){
-        Log.d(TAG, "init: Initialising");
-        inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId  == EditorInfo.IME_ACTION_SEARCH
-                    || actionId == EditorInfo.IME_ACTION_DONE
-                    || event.getAction() ==  KeyEvent.ACTION_DOWN
-                    || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                mapLocationHelper.geoLocate(MapsActivity.this, inputSearchEditText.getText().toString());
-            }
-            return false;
-        });
-        gpsImage.setOnClickListener(v -> {
-            Log.d(TAG, "gpsImage: clicked gps image");
-            mapLocationHelper.getDeviceLocation(MapsActivity.this, permissionsGranted);
-        });
-
-        hideSoftKeyBoard();
     }
 
     /**
@@ -131,8 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         if (permissionsGranted) {
-            mapLocationHelper = new MapLocationHelper(mMap);
-            mapLocationHelper.getDeviceLocation(MapsActivity.this, this.permissionsGranted);
+            getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -145,8 +109,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-<<<<<<< HEAD
-=======
     private void init() {
         Log.d(TAG, "init: Initialising");
         inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
@@ -247,7 +209,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         hideSoftKeyBoard();
     }
 
->>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
     private void getUsersPermission() {
         Log.d(TAG, "getUserPermissions: called");
         String[] permissions = {FINE_LOCATION, COURSE_LOCATION};
@@ -288,6 +249,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void hideSoftKeyBoard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
-
-
 }
