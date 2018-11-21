@@ -149,51 +149,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 =======
     private void init() {
         Log.d(TAG, "init: Initialising");
-        inputSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                    geoLocate();
-                }
-                return false;
+        inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || event.getAction() == KeyEvent.ACTION_DOWN
+                    || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                geoLocate();
             }
+            return false;
         });
-        gpsImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "gpsImage: clicked gps image");
-                getDeviceLocation();
-            }
+        gpsImage.setOnClickListener(v -> {
+            Log.d(TAG, "gpsImage: clicked gps image");
+            getDeviceLocation();
         });
         hideSoftKeyBoard();
 
-        pickUpAddressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
-                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                customDialog.show();
-            }
+        pickUpAddressButton.setOnClickListener(v -> {
+            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            customDialog.show();
         });
 
-        destinationAddressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
-                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                customDialog.show();
-            }
+        destinationAddressButton.setOnClickListener(v -> {
+            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            customDialog.show();
         });
 
-        personalDetailsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MapsActivity.this, PersonalDetailsActivity.class);
-                startActivity(i);
-            }
+        personalDetailsButton.setOnClickListener(v -> {
+            Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
+            startActivity(i);
         });
     }
 

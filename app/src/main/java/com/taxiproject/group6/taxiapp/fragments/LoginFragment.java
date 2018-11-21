@@ -1,5 +1,6 @@
 package com.taxiproject.group6.taxiapp.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,7 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
 import com.taxiproject.group6.taxiapp.activities.MapsActivity;
-import com.taxiproject.group6.taxiapp.activities.PersonalDetailsActivity;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
+import com.taxiproject.group6.taxiapp.classes.User;
 
 import java.util.Objects;
 
@@ -41,6 +43,7 @@ public class LoginFragment extends Fragment {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    public static User newUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +86,9 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful() && isServiceOK()){
                     //Login
+                    newUser = DatabaseConnector.loadFromDatabase();
                     Intent i = new Intent(getActivity(), MapsActivity.class);
+                    getActivity().finish();
                     startActivity(i);
                 }
                 else{
@@ -114,4 +119,8 @@ public class LoginFragment extends Fragment {
         }
         return  false;
     }
+    public static User getUser() {
+        return newUser;
+    }
+
 }

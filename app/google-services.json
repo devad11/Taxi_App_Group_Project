@@ -8,50 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:820575748111:android:de14724b66a59d66",
-        "android_client_info": {
-          "package_name": "com.example.john.taxiapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "820575748111-8qblvaf9mev6ekuh29sat0slgjptq7oj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.john.taxiapp",
-            "certificate_hash": "525505ace3dc930c9999c4be8b301a23484c9127"
-          }
-        },
-        {
-          "client_id": "820575748111-cbkinulrh6s2f0gktr2ngj0akquii8l8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBLGi17iMrpDTgBHivRS1YR49MKbwbOrjw"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "820575748111-cbkinulrh6s2f0gktr2ngj0akquii8l8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:820575748111:android:8ffd6e84bd64bbab",
         "android_client_info": {
           "package_name": "com.taxiproject.group6.taxiapp"

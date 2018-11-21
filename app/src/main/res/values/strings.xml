@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">taxiApp</string>
     <string name="title_activity_maps">Map</string>
-    <string name="enter_your_email">Enter your email</string>
-    <string name="enter_your_password">Enter your password</string>
+    <string name="enter_your_email">Email</string>
+    <string name="enter_your_password">Password</string>
     <string name="register_user">Register User</string>
     <string name="already_registered_sign_in_here">Already Registered? Sign in here</string>
     <string name="login">Login</string>
@@ -13,17 +13,37 @@
     <string name="search_image">Search Image</string>
     <string name="enter_address">Enter Address</string>
     <string name="device_location">Device Location</string>
-<<<<<<< HEAD
-    <string name="gps_image_desc">GPS Image</string>
-    <string name="enter_pickup_location">Enter Pick Up Location</string>
-    <string name="home">Home</string>
-    <string name="work">Work</string>
-    <string name="new_address">New Address</string>
-=======
     <string name="personal_details">Personal Details</string>
     <string name="choose_dest">Choose Destination</string>
     <string name="home">Home</string>
     <string name="work">Work</string>
     <string name="gps_loc">Current Location</string>
->>>>>>> 866006ab468e4d4e8b4af11fdbe59d80b3060693
+    <string name="user_name">User Name</string>
+    <string name="enter_your_full_name">Enter Full Name</string>
+    <string name="enter_your_date_of_birth">Enter Date Of Birth</string>
+    <string name="enter_your_phone">Phone Number</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date">dd/mm/yyyy</string>
+    <string name="edit_label">edit</string>
+    <string name="invisible_space" >" "</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="apply_label">apply</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="database_user_name">userName</string>
+    <string name="database_first_name">firstName</string>
+    <string name="database_last_name">lastName</string>
+    <string name="database_uid">uid</string>
+    <string name="database_phone_number">phoneNumber</string>
+    <string name="database_email">email</string>
+    <string name="database_date_of_birth">dateOfBirth</string>
+    <string name="change_email">Change Email</string>
+    <string name="change_password">Change Password</string>
+
+
 </resources>

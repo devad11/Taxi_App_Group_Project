@@ -16,17 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Phone Number"
-            android:inputType="textPersonName" />
+            android:hint="Phone Number" />
 
         <Button
-            android:id="@+id/buttonSave"
+            android:id="@+id/buttonSavePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save" />
 
         <Button
-            android:id="@+id/buttonCancel"
+            android:id="@+id/buttonCancelPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cancel" />
