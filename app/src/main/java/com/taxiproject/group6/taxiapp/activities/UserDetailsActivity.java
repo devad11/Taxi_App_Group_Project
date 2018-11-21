@@ -30,7 +30,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         lastNameEditText = findViewById(R.id.lastNameEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
 
-        Log.d("USERNAME:onCreate():", user.getUserName());
+//        Log.d("USERNAME:onCreate():", user.getUserName());
 
         init();
     }

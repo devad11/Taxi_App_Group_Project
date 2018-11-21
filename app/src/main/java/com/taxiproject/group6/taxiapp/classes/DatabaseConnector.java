@@ -43,7 +43,8 @@ public class DatabaseConnector {
     }
 
     public static User loadFromDatabase(){
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + databaseHeader) ;

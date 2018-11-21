@@ -10,7 +10,6 @@ public class User {
     private String firstName;
     private String lastName;
     private String userName;
-    private String emailAddress;
     private String dateOfBirth;
     private String phoneNumber;
     private Map<String, Object> result;
@@ -18,11 +17,10 @@ public class User {
 
     public User(){}
 
-    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String emailAddress) {
+    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.emailAddress = emailAddress;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
     }
@@ -32,10 +30,6 @@ public class User {
     //--------------------------
     public String getUserName() {
         return userName;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
     }
 
     public String getFirstName() {
@@ -59,10 +53,6 @@ public class User {
     //--------------------------
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
     }
 
     public void setFirstName(String firstName) {
@@ -95,7 +85,6 @@ public class User {
         result = new HashMap<>();
         result.put("firstName", this.firstName);
         result.put("lastName", this.lastName);
-        result.put("email", this.emailAddress);
         result.put("userName", this.userName);
         result.put("phoneNumber", this.phoneNumber);
         result.put("dateOfBirth", this.dateOfBirth);
@@ -113,8 +102,6 @@ public class User {
             case "lastName": this.lastName = value;
                 break;
             case "phoneNumber": this.phoneNumber = value;
-                break;
-            case "email": this.emailAddress = value;
                 break;
             case "dateOfBirth": this.dateOfBirth = value;
                 break;

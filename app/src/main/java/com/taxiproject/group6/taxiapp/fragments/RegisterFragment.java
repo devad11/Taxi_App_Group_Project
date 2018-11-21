@@ -40,7 +40,8 @@ public class RegisterFragment extends Fragment {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private Button buttonRegister;
-    private EditText editTextEmail, editTextPassword, editTextConfirmPassword, editTextUserName, editTextPhoneNumber;
+    private EditText editTextEmail, editTextPassword, editTextConfirmPassword, editTextUserName,
+            editTextPhoneNumber, editTextFirstName, editTextLastName;
     private TextView textViewSignIn, textViewDateOfBirth;
     private boolean passwordsMatch;
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -61,6 +62,8 @@ public class RegisterFragment extends Fragment {
         editTextUserName = view.findViewById(R.id.editTextUserName);
         textViewDateOfBirth = view.findViewById(R.id.textViewDateOfBirth);
         editTextPhoneNumber = view.findViewById(R.id.editTextPhoneNumber);
+        editTextFirstName = view.findViewById(R.id.editTextFirstName);
+        editTextLastName = view.findViewById(R.id.editTextLastName);
 
         textViewSignIn = view.findViewById(R.id.textViewSignIn);
 
@@ -139,8 +142,8 @@ public class RegisterFragment extends Fragment {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String userName = editTextUserName.getText().toString().trim();
-        String firstName = editTextUserName.getText().toString().trim();
-        String lastName = editTextUserName.getText().toString().trim();
+        String firstName = editTextFirstName.getText().toString().trim();
+        String lastName = editTextLastName.getText().toString().trim();
         String dob = textViewDateOfBirth.getText().toString();
         String phoneNumber = editTextPhoneNumber.getText().toString();
 
@@ -170,12 +173,13 @@ public class RegisterFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
 
-                            User newUser = new User(firstName, lastName, userName, dob, phoneNumber, email);
-                            DatabaseConnector.loadToDatabase(newUser);
+                            final User[] newUser = {new User(firstName, lastName, userName, dob, phoneNumber)};
+                            DatabaseConnector.loadToDatabase(newUser[0]);
 
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful() && isServiceOK()) {
                                     //Login
+                                    newUser[0] = DatabaseConnector.loadFromDatabase();
                                     Intent i = new Intent(getActivity(), MapsActivity.class);
                                     getActivity().finish();
                                     startActivity(i);
