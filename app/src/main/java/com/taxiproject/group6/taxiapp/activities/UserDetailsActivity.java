@@ -50,105 +50,50 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         init();
 
-        changeEmailAddressButton.setOnClickListener(v -> {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_confirmation, null);
-            EditText new_email = (EditText) mView.findViewById(R.id.new_email);
-            EditText confirm_password = (EditText) mView.findViewById(R.id.confirm_password);
-            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                    AuthCredential credential = EmailAuthProvider
-                            .getCredential(user.getEmail(), confirm_password.getText().toString());
-
-                    // Prompt the user to re-provide their sign-in credentials
-                    user.reauthenticate(credential)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Log.d(TAG, "User re-authenticated.");
-                                    if (task.isSuccessful()) {
-                                        updateUserEmail(user, new_email.getText().toString());
-                                        Toast.makeText(UserDetailsActivity.this, "Email updated", Toast.LENGTH_SHORT).show();
-
-                                    } else {
-                                        Toast.makeText(UserDetailsActivity.this, "Wrong password", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                }
-                            });
-                }
-            });
-            mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.show();
-        });
+        changeEmailAddressButton.setOnClickListener(v ->
+            changeEmailButtonPressed());
 
         changePasswordButton.setOnClickListener(v -> {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation, null);
-            EditText oldPassword = (EditText) mView.findViewById(R.id.oldPassword);
-            EditText newPassword = (EditText) mView.findViewById(R.id.newPassword);
-            EditText confirm_password = (EditText) mView.findViewById(R.id.confirm_password);
-            mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    AuthCredential credential = EmailAuthProvider
-                            .getCredential(user.getEmail(), confirm_password.getText().toString());
-
-                    // Prompt the user to re-provide their sign-in credentials
-                    user.reauthenticate(credential);
-                    if (newPassword.getText().toString().equals(confirm_password.getText().toString())) {
-                        user.updatePassword(newPassword.getText().toString())
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "User password updated.");
-                                        }
-                                    }
-                                });
-                        Toast.makeText(UserDetailsActivity.this, "Password updated", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(UserDetailsActivity.this, "New password and confirm password must match", Toast.LENGTH_SHORT).show();
-                    }
-
-//                                    else {
-//                                        Toast.makeText(UserDetailsActivity.this, "Wrong old password", Toast.LENGTH_SHORT).show();
-//                                    }
-                }
-            });
-
-            mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.show();
+            changePasswordButtonPressed();
         });
+    }
+
+    private void changeEmailButtonPressed() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_confirmation, null);
+        EditText new_email = mView.findViewById(R.id.new_email);
+        EditText confirm_password = mView.findViewById(R.id.confirm_password);
+        mBuilder.setPositiveButton("Confirm", (dialog, id) -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(user.getEmail(), confirm_password.getText().toString());
+
+            // Prompt the user to re-provide their sign-in credentials
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(task -> {
+                        Log.d(TAG, "User re-authenticated.");
+                        if (task.isSuccessful()) {
+                            updateUserEmail(user, new_email.getText().toString());
+                            Toast.makeText(UserDetailsActivity.this, "Email updated", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(UserDetailsActivity.this, "Wrong password", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        });
+        mBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     private void updateUserEmail(FirebaseUser user, String email) {
         user.updateEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User email address updated.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User email address updated.");
                     }
                 });
     }
@@ -158,6 +103,46 @@ public class UserDetailsActivity extends AppCompatActivity {
         firstNameEditText.setText(user.getFirstName());
         lastNameEditText.setText(user.getLastName());
         phoneNumberEditText.setText(user.getPhoneNumber());
+    }
+
+    public void changePasswordButtonPressed(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserDetailsActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation, null);
+        EditText oldPassword = mView.findViewById(R.id.oldPassword);
+        EditText newPassword = mView.findViewById(R.id.newPassword);
+        EditText confirm_password = mView.findViewById(R.id.confirm_password);
+        mBuilder.setPositiveButton("Confirm", (dialog, id) -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(user.getEmail(), confirm_password.getText().toString());
+
+            // Prompt the user to re-provide their sign-in credentials
+            user.reauthenticate(credential);
+            if (newPassword.getText().toString().equals(confirm_password.getText().toString())) {
+                user.updatePassword(newPassword.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User password updated.");
+                                }
+                            }
+                        });
+                Toast.makeText(UserDetailsActivity.this, "Password updated", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(UserDetailsActivity.this, "New password and confirm password must match", Toast.LENGTH_SHORT).show();
+            }
+
+//                                    else {
+//                                        Toast.makeText(UserDetailsActivity.this, "Wrong old password", Toast.LENGTH_SHORT).show();
+//                                    }
+        });
+
+        mBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     public void confirmButtonPressed(View view) {
