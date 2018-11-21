@@ -54,7 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 17;
     private static final LatLngBounds LAT_LNG_BOUNDS =
-            new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
+            new LatLngBounds(new LatLng(51.384959, -10.269509), new LatLng(52.452138, -7.84153));
 
     private AutoCompleteTextView inputSearchEditText;
     private ImageView gpsImage;
