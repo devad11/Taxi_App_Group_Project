@@ -1,7 +1,5 @@
 package com.taxiproject.group6.taxiapp.activities;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,9 +50,15 @@ public class UserDetailsActivity extends AppCompatActivity {
         changeEmailAddressButton.setOnClickListener(v ->
             changeEmailButtonPressed());
 
-        changePasswordButton.setOnClickListener(v -> {
-            changePasswordButtonPressed();
-        });
+        changePasswordButton.setOnClickListener(v ->
+            changePasswordButtonPressed());
+    }
+
+    private void init(){
+        userNameEditText.setText(user.getUserName());
+        firstNameEditText.setText(user.getFirstName());
+        lastNameEditText.setText(user.getLastName());
+        phoneNumberEditText.setText(user.getPhoneNumber());
     }
 
     private void changeEmailButtonPressed() {
@@ -96,13 +99,6 @@ public class UserDetailsActivity extends AppCompatActivity {
                         Log.d(TAG, "User email address updated.");
                     }
                 });
-    }
-
-    private void init(){
-        userNameEditText.setText(user.getUserName());
-        firstNameEditText.setText(user.getFirstName());
-        lastNameEditText.setText(user.getLastName());
-        phoneNumberEditText.setText(user.getPhoneNumber());
     }
 
     public void changePasswordButtonPressed(){
