@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -15,36 +12,33 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-//import com.taxiproject.group6.taxiapp.android.Manifest;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
-//import com.taxiproject.group6.taxiapp.classes.LocationHelper;
+import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     //    private final int REQUEST_LOCATION = 1;
@@ -53,16 +47,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean permissionsGranted = false;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
-
+    private MapLocationHelper mapLocationHelper;
     private static final String TAG = "MapsActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 17;
+    private static final LatLngBounds LAT_LNG_BOUNDS =
+            new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
 
-    private EditText inputSearchEditText;
+    private AutoCompleteTextView inputSearchEditText;
     private ImageView gpsImage;
     private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton;
+    private PlaceAutocompleteAdapter placeAutocompleteAdapter;
+    private GoogleApiClient googleApiClient;
+    private GeoDataClient geoDataClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +74,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         inputSearchEditText = findViewById(R.id.inputSearchEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
+
+    }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -92,12 +97,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d(TAG, "initializing map");
         Toast.makeText(this, "Map is  ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-
+        mapLocationHelper = new MapLocationHelper(mMap);
 //        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         if (permissionsGranted) {
-            getDeviceLocation();
+//            getDeviceLocation();
 
+            mapLocationHelper.getDeviceLocation(this, permissionsGranted);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -111,18 +117,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void init() {
         Log.d(TAG, "init: Initialising");
+
+//        geoDataClient = Places.getGeoDataClient(this, null);
+
+        googleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
+        placeAutocompleteAdapter = new PlaceAutocompleteAdapter(
+                this, googleApiClient, LAT_LNG_BOUNDS, null);
+
+        inputSearchEditText.setAdapter(placeAutocompleteAdapter);
         inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                geoLocate();
+                String searchString = inputSearchEditText.getText().toString();
+                mapLocationHelper.geoLocate(this, searchString);
             }
             return false;
         });
         gpsImage.setOnClickListener(v -> {
             Log.d(TAG, "gpsImage: clicked gps image");
-            getDeviceLocation();
+            mapLocationHelper.getDeviceLocation(this, permissionsGranted);
         });
         hideSoftKeyBoard();
 
@@ -144,69 +165,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    private void geoLocate() {
-        Log.d(TAG, "geoLocate: Locating");
-        String searchString = inputSearchEditText.getText().toString();
-        Geocoder geocoder = new Geocoder(MapsActivity.this);
-        List<Address> list = new ArrayList<>();
-        try {
-            list = geocoder.getFromLocationName(searchString, 1);
-        } catch (IOException ioe) {
-            Log.d(TAG, "geoLocate: IOException: " + ioe.getMessage());
-        }
-        if (list.size() > 0) {
-            Address address = list.get(0);
-            Log.d(TAG, "Found address: " + address.toString());
-//            Toast.makeText(this, "Address: " + address.toString(), Toast.LENGTH_SHORT).show();
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
-        }
-    }
-
     private void initMap() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(MapsActivity.this);
-    }
-
-    public void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting devices current location.");
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        try {
-            if (permissionsGranted) {
-                Task location = fusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            Log.d(TAG, "getDeviceLocation: location found");
-                            Location currentLocation = (Location) task.getResult();
-                            LatLng currentCoordinates =
-                                    new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-                            moveCamera(currentCoordinates, DEFAULT_ZOOM, "My Location");
-                        } else {
-                            Log.d(TAG, "getDeviceLocation: location NOT found");
-                            Toast.makeText(MapsActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException se) {
-            Log.d(TAG, "getDeviceLocation: SecurityException: " + se.getMessage());
-        }
-    }
-
-    private void moveCamera(LatLng latLng, float zoom, String title) {
-        Log.d(TAG, "moveCamera: changing map position to:  lat: " + latLng.latitude + " lng:  " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        MarkerOptions marker = new MarkerOptions()
-                .position(latLng)
-                .title(title);
-
-        mMap.addMarker(marker);
-        hideSoftKeyBoard();
     }
 
     private void getUsersPermission() {
@@ -249,4 +212,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void hideSoftKeyBoard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+
 }

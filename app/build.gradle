@@ -54,6 +54,7 @@ dependencies {
     // maps and location
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
 
     implementation 'com.google.firebase:firebase-database:16.0.5'
 }

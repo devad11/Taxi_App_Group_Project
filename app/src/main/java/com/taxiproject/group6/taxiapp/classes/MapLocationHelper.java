@@ -22,7 +22,7 @@ import java.util.List;
 public class MapLocationHelper {
 
     private static final String TAG = "MapLocationHelper";
-    private static final float DEFAULT_ZOOM = 17;
+    private static final float DEFAULT_ZOOM = 15;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
