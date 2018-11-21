@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/book_now" />
-
+<!--comment for merge-->
         <Button
             android:id="@+id/personalDetailsButton"
             android:layout_width="match_parent"
