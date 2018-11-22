@@ -5,15 +5,15 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Destination {
+public class Address {
     private String destinationName;
     private String lat;
     private String lng;
     private Map<String, Object> result;
 
-    public Destination(){}
+    public Address(){}
 
-    public Destination(String destinationName, String lat, String lng) {
+    public Address(String destinationName, String lat, String lng) {
         this.destinationName = destinationName;
         this.lat = lat;
         this.lng = lng;
@@ -54,7 +54,7 @@ public class Destination {
     //-------------------------
     @NonNull
     public String toString(){
-        return String.format("Destination: %s %s %s ", this.destinationName, this.lat, this.lng);
+        return String.format("Address: %s %s %s ", this.destinationName, this.lat, this.lng);
     }
 
     public Map<String, Object> toMap() {

@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,13 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.taxiproject.group6.taxiapp.R;
-import com.taxiproject.group6.taxiapp.activities.MapsActivity;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.taxiproject.group6.taxiapp.fragments.LoginFragment.newUser;
 
 public class PickerDialogObject extends Dialog{
 
@@ -37,7 +31,7 @@ public class PickerDialogObject extends Dialog{
     private static DatabaseReference ref;
     private static DatabaseReference usersRef;
     private static Map<String, Object> destinations;
-    private static Destination newDestination = new Destination();
+    private static Address newAddress = new Address();
 
     public PickerDialogObject(Activity activity) {
         super(activity);
@@ -47,11 +41,11 @@ public class PickerDialogObject extends Dialog{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picker_dialog);
-        Destination myDestination = new Destination("TEST","12121212","65656565");
-        loadToDatabase(myDestination);
+        Address myAddress = new Address("TEST","12121212","65656565");
+        loadToDatabase(myAddress);
         loadFromDatabase();
         System.out.println("?????????????????????????????????????????????????????????????????????????????????");
-        System.out.println(Destination.class.toString());
+        System.out.println(Address.class.toString());
 
 //        listView = (ListView) findViewById(R.id.listView);
 //
@@ -75,7 +69,7 @@ public class PickerDialogObject extends Dialog{
 //        ref.addListenerForSingleValueEvent(eventListener);
     }
 
-    public static void loadToDatabase(Destination destination){
+    public static void loadToDatabase(Address address){
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = Objects.requireNonNull(firebaseUser).getUid();
@@ -84,14 +78,14 @@ public class PickerDialogObject extends Dialog{
             uid = firebaseUser.getUid();
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users" + uid + "Destination");
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users" + uid + "Address");
             usersRef = ref.child(uid);
-            destinations = destination.toMap();
+            destinations = address.toMap();
             usersRef.setValue(destinations);
         }
     }
 
-    public static Destination loadFromDatabase(){
+    public static Address loadFromDatabase(){
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = Objects.requireNonNull(firebaseUser).getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -100,7 +94,7 @@ public class PickerDialogObject extends Dialog{
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                newDestination = dataSnapshot.getValue(Destination.class);
+                newAddress = dataSnapshot.getValue(Address.class);
             }
 
             @Override
@@ -108,6 +102,6 @@ public class PickerDialogObject extends Dialog{
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        return newDestination;
+        return newAddress;
     }
 }
