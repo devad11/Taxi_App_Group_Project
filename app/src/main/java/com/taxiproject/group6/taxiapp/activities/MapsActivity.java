@@ -12,19 +12,24 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +40,7 @@ import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
+import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
 
 import java.util.Objects;
 
@@ -62,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
+    private PlaceInfo placeInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
+
+        inputSearchEditText.setOnItemClickListener(autoCompleteClickListener);
 
         placeAutocompleteAdapter = new PlaceAutocompleteAdapter(
                 this, googleApiClient, LAT_LNG_BOUNDS, null);
@@ -213,4 +222,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    /*
+            ----------------------  google places api autocomplete suggestions -----------------------
+     */
+
+    private AdapterView.OnItemClickListener autoCompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final AutocompletePrediction ITEM = placeAutocompleteAdapter.getItem(position);
+            final String PLACE_ID = Objects.requireNonNull(ITEM).getPlaceId();
+
+            PendingResult<PlaceBuffer> placeRes = Places.GeoDataApi.getPlaceById(googleApiClient, PLACE_ID);
+            placeRes.setResultCallback(updatePlaceDetailsCallback);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> updatePlaceDetailsCallback = places -> {
+        if(!places.getStatus().isSuccess()){
+            Log.d(TAG, "onResult: Place query not successfully completed " + places.getStatus().toString());
+            places.release();
+            return;
+        }
+        final Place place = places.get(0);
+
+        placeInfo = new PlaceInfo();
+
+        try {
+            placeInfo.setName(place.getName().toString());
+            placeInfo.setLatLng(place.getLatLng());
+            placeInfo.setRating(place.getRating());
+            placeInfo.setId(place.getId());
+            placeInfo.setAddress(place.getAddress().toString());
+            placeInfo.setPhoneNo(place.getPhoneNumber().toString());
+            placeInfo.setWebsiteUri(place.getWebsiteUri());
+        }catch (NullPointerException npe){
+            Log.d(TAG, "PlaceInfo: null param");
+        }
+        Log.d(TAG, "onResult: place details: " + placeInfo.toString());
+
+        mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo.getName());
+
+        places.release();
+    };
 }
