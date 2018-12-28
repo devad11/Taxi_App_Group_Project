@@ -84,8 +84,8 @@ public class PickerDialogObject extends Dialog{
             uid = firebaseUser.getUid();
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users" + uid + "Destination");
-            usersRef = ref.child(uid);
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users" + uid + "Destinations");
+            usersRef = ref.child("TEST");
             destinations = destination.toMap();
             usersRef.setValue(destinations);
         }
