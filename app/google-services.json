@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "820575748111",
-    "firebase_url": "https://taxiapp-e3904.firebaseio.com",
-    "project_id": "taxiapp-e3904",
-    "storage_bucket": "taxiapp-e3904.appspot.com"
+    "project_number": "632612279186",
+    "firebase_url": "https://taxiproject-c4194.firebaseio.com",
+    "project_id": "taxiproject-c4194",
+    "storage_bucket": "taxiproject-c4194.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:820575748111:android:8ffd6e84bd64bbab",
+        "mobilesdk_app_id": "1:632612279186:android:8ffd6e84bd64bbab",
         "android_client_info": {
           "package_name": "com.taxiproject.group6.taxiapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "820575748111-kmvs6nvnq9sui3m7o8r9o79j5jbf3tsc.apps.googleusercontent.com",
+          "client_id": "632612279186-9lmchgvivpipfmsts22e88s2vlpvs7pc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.taxiproject.group6.taxiapp",
@@ -23,29 +23,13 @@
           }
         },
         {
-          "client_id": "820575748111-e9abtoott1tvkecqce84594ovha6idne.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.taxiproject.group6.taxiapp",
-            "certificate_hash": "59071abbfe26f14db6ad96b0dc94e3385830403f"
-          }
-        },
-        {
-          "client_id": "820575748111-q79tnqn098c5bqu3uabte37fer0fq0vv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.taxiproject.group6.taxiapp",
-            "certificate_hash": "525505ace3dc930c9999c4be8b301a23484c9127"
-          }
-        },
-        {
-          "client_id": "820575748111-cbkinulrh6s2f0gktr2ngj0akquii8l8.apps.googleusercontent.com",
+          "client_id": "632612279186-vm49sn40t3nnp9u0iugrjphom5trjpic.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBLGi17iMrpDTgBHivRS1YR49MKbwbOrjw"
+          "current_key": "AIzaSyA6dAieWjhmgcWruSOSpNpjyVAuXvkehDA"
         }
       ],
       "services": {
@@ -56,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "820575748111-cbkinulrh6s2f0gktr2ngj0akquii8l8.apps.googleusercontent.com",
+              "client_id": "632612279186-vm49sn40t3nnp9u0iugrjphom5trjpic.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
