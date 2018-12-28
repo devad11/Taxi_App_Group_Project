@@ -17,8 +17,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -36,6 +38,7 @@ public class LoginFragment extends Fragment {
     private static final String TAG = "LoginFragment";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    private SignInButton signInGoogle;
     private Button buttonLogIn;
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -51,6 +54,8 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        signInGoogle = (SignInButton) view.findViewById(R.id.sign_in_google);
+
         firebaseAuth = FirebaseAuth.getInstance();
         buttonLogIn = view.findViewById(R.id.buttonLogIn);
         editTextEmail = view.findViewById(R.id.editTextEmail);
@@ -60,6 +65,11 @@ public class LoginFragment extends Fragment {
         buttonLogIn.setOnClickListener(v -> userLogin());
         textViewLogin.setOnClickListener(v -> goToRegisterPage());
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        
         return view;
     }
 
