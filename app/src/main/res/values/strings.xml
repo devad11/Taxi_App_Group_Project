@@ -45,6 +45,9 @@
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
     <string name="gps_image">gps image</string>
+    <string name="facebook_app_id">1040936159431572</string>
+    <string name="fb_login_protocol_scheme">fb1040936159431572</string>
+
 
 
 </resources>

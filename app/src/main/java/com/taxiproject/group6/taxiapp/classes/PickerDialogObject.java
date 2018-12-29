@@ -2,6 +2,7 @@ package com.taxiproject.group6.taxiapp.classes;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,9 @@ public class PickerDialogObject extends Dialog{
     private static DatabaseReference usersRef;
     private static Map<String, Object> destinations;
     private static Address newAddress = new Address();
+
+//    public PickerDialogObject(){
+//    }
 
     public PickerDialogObject(Activity activity) {
         super(activity);

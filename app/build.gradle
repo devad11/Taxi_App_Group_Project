@@ -52,6 +52,9 @@ dependencies {
     // Used in FirebaseUIActivity.
     implementation 'com.firebaseui:firebase-ui-auth:4.2.0'
 
+    //facebook
+    implementation 'com.facebook.android:facebook-login:[4,5)'
+
     // maps and location
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
