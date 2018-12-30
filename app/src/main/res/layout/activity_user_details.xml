@@ -160,6 +160,72 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/cardNoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_border"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <EditText
+                    android:id="@+id/cardNoEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:enabled="false"
+                    android:hint="@string/enter_card_no"
+                    android:importantForAutofill="no"
+                    android:textColor="@drawable/edit_text_colour"
+                    tools:targetApi="o" />
+
+                <Button
+                    android:id="@+id/cardNoButton"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="editButtonPressed"
+                    android:tag="@string/database_card_no"
+                    android:text="@string/edit_label"
+                    android:textColor="@color/blue"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/expiryDateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_border"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <EditText
+                    android:id="@+id/expiryDateEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:enabled="false"
+                    android:hint="@string/enter_expiry_date"
+                    android:importantForAutofill="no"
+                    android:textColor="@drawable/edit_text_colour"
+                    tools:targetApi="o" />
+
+                <Button
+                    android:id="@+id/expiryDateButton"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="editButtonPressed"
+                    android:tag="@string/database_expiry_date"
+                    android:text="@string/edit_label"
+                    android:textColor="@color/blue"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/changeEmailAddressButton"
                 android:layout_width="match_parent"

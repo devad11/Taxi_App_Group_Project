@@ -84,6 +84,26 @@
             android:inputType="phone"
             tools:targetApi="o" />
 
+        <EditText
+            android:id="@+id/cardNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/enter_card_no"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            tools:targetApi="o" />
+
+        <EditText
+            android:id="@+id/expiryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/enter_expiry_date"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            tools:targetApi="o" />
+
         <TextView
             android:id="@+id/textViewDateOfBirth"
             android:layout_width="match_parent"

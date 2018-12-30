@@ -47,7 +47,10 @@
     <string name="gps_image">gps image</string>
     <string name="facebook_app_id">1040936159431572</string>
     <string name="fb_login_protocol_scheme">fb1040936159431572</string>
-
+    <string name="enter_card_no">Card Number</string>
+    <string name="database_card_no">cardNo</string>
+    <string name="enter_expiry_date">Expiry Date</string>
+    <string name="database_expiry_date">expiryDate</string>
 
 
 </resources>

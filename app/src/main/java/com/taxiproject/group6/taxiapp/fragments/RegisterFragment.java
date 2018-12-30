@@ -41,7 +41,7 @@ public class RegisterFragment extends Fragment {
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private Button buttonRegister;
     private EditText editTextEmail, editTextPassword, editTextConfirmPassword, editTextUserName,
-            editTextPhoneNumber, editTextFirstName, editTextLastName;
+            editTextPhoneNumber, editTextFirstName, editTextLastName, editTextCardNo, editTextExpiryDate;
     private TextView textViewSignIn, textViewDateOfBirth;
     private boolean passwordsMatch;
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -64,6 +64,8 @@ public class RegisterFragment extends Fragment {
         editTextPhoneNumber = view.findViewById(R.id.editTextPhoneNumber);
         editTextFirstName = view.findViewById(R.id.editTextFirstName);
         editTextLastName = view.findViewById(R.id.editTextLastName);
+        editTextCardNo = view.findViewById(R.id.cardNo);
+        editTextExpiryDate = view.findViewById(R.id.expiryDate);
 
         textViewSignIn = view.findViewById(R.id.textViewSignIn);
 
@@ -146,6 +148,8 @@ public class RegisterFragment extends Fragment {
         String lastName = editTextLastName.getText().toString().trim();
         String dob = textViewDateOfBirth.getText().toString();
         String phoneNumber = editTextPhoneNumber.getText().toString();
+        String cardNo = editTextCardNo.getText().toString();
+        String expiryDate = editTextExpiryDate.getText().toString();
 
         if(TextUtils.isEmpty(email)){
             //no email
@@ -173,7 +177,7 @@ public class RegisterFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
 
-                            final User[] newUser = {new User(firstName, lastName, userName, dob, phoneNumber)};
+                            final User[] newUser = {new User(firstName, lastName, userName, dob, phoneNumber, cardNo, expiryDate)};
                             DatabaseConnector.loadToDatabase(newUser[0]);
 
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task1 -> {

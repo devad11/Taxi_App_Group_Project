@@ -12,17 +12,21 @@ public class User {
     private String userName;
     private String dateOfBirth;
     private String phoneNumber;
+    private String cardNo;
+    private String expiryDate;
     private Map<String, Object> result;
 
 
     public User(){}
 
-    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber) {
+    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
+        this.cardNo = cardNo;
+        this.expiryDate = expiryDate;
     }
 
     //--------------------------
@@ -48,6 +52,14 @@ public class User {
         return dateOfBirth;
     }
 
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
     //--------------------------
     //      SETTERS
     //--------------------------
@@ -71,7 +83,13 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
 
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     //-------------------------
     //      METHODS
@@ -88,6 +106,8 @@ public class User {
         result.put("userName", this.userName);
         result.put("phoneNumber", this.phoneNumber);
         result.put("dateOfBirth", this.dateOfBirth);
+        result.put("cardNo", this.cardNo);
+        result.put("expiryDate", this.expiryDate);
 
         return result;
     }
@@ -104,6 +124,10 @@ public class User {
             case "phoneNumber": this.phoneNumber = value;
                 break;
             case "dateOfBirth": this.dateOfBirth = value;
+                break;
+            case "cardNo": this.cardNo = value;
+                break;
+            case "expiryDate": this.expiryDate = value;
                 break;
         }
 //        result.put(tag, value);

@@ -22,7 +22,7 @@ import com.taxiproject.group6.taxiapp.classes.User;
 
 public class UserDetailsActivity extends AppCompatActivity {
 
-    private EditText userNameEditText, firstNameEditText, lastNameEditText, phoneNumberEditText;
+    private EditText userNameEditText, firstNameEditText, lastNameEditText, phoneNumberEditText, cardNoEditText, expiryDateEditText;
     private User user;
     private boolean changed;
     private Button changeEmailAddressButton, changePasswordButton;
@@ -42,6 +42,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        cardNoEditText = findViewById(R.id.cardNoEditText);
+        expiryDateEditText = findViewById(R.id.expiryDateEditText);
 
 //        Log.d("USERNAME:onCreate():", user.getUserName());
 
@@ -168,6 +170,10 @@ public class UserDetailsActivity extends AppCompatActivity {
             case "lastName": et = lastNameEditText;
                 break;
             case "phoneNumber": et = phoneNumberEditText;
+                break;
+            case "cardNo": et = cardNoEditText;
+                break;
+            case "expiryDate": et = expiryDateEditText;
                 break;
             default: et = null;
                 break;
