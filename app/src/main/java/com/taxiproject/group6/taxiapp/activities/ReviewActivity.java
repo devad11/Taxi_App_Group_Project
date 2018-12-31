@@ -36,7 +36,7 @@ public class ReviewActivity extends AppCompatActivity {
         reviewSendButton = (Button) findViewById(R.id.reviewSendButton);
 
         reviewSendButton.setOnClickListener(v -> {
-            notificationHelper = new NotificationHelper(getApplicationContext());
+            notificationHelper = new NotificationHelper(this);
             userReview = reviewEditText.getText().toString();
             DatabaseConnector.reviewToDatabase(userRate, userReview);
             NotificationCompat.Builder builder = notificationHelper.secondaryNotification(userRate, userReview);
@@ -45,6 +45,7 @@ public class ReviewActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        userRate = ("" + 5);
         mySeekBar.setProgress(4);
 
         mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
