@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
@@ -58,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private AutoCompleteTextView inputSearchEditText;
     private ImageView gpsImage;
-    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton;
+    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton, logoutButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
@@ -68,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        logoutButton = findViewById(R.id.logoutButton);
         destinationAddressButton = findViewById(R.id.destinationAddressButton);
         pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
         personalDetailsButton = findViewById(R.id.personalDetailsButton);
@@ -75,6 +77,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
 
+
+        logoutButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(MapsActivity.this, MainActivity.class);
+            startActivity(i);
+        });
     }
 
 

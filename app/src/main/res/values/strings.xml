@@ -51,6 +51,7 @@
     <string name="database_card_no">cardNo</string>
     <string name="enter_expiry_date">Expiry Date</string>
     <string name="database_expiry_date">expiryDate</string>
+    <string name="logout">Logout</string>
 
 
 </resources>
