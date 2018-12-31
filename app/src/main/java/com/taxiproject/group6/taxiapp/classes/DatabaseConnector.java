@@ -28,6 +28,21 @@ public class DatabaseConnector {
     private static Map<String, Object> users;
     private static User newUser = new User();
 
+    public static void reviewToDatabase(String rate, String review){
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
+        {
+            databaseHeader = firebaseUser.getUid();
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
+            usersRef = ref.child(databaseHeader + "/rate");
+            usersRef.setValue(rate);
+            usersRef = ref.child(databaseHeader + "/review");
+            usersRef.setValue(review);
+        }
+    }
+
     public static void loadToDatabase(User user){
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

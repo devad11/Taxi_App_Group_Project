@@ -8,15 +8,19 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.firebase.DataCollectionDefaultChange;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 
 public class ReviewActivity extends AppCompatActivity {
 
-    SeekBar mySeekBar;
-    EditText reviewEditText;
-    TextView rateTextView;
-    Button reviewSendButton;
+    private SeekBar mySeekBar;
+    private EditText reviewEditText;
+    private TextView rateTextView;
+    private Button reviewSendButton;
+    private String userReview, userRate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class ReviewActivity extends AppCompatActivity {
         reviewSendButton = (Button) findViewById(R.id.reviewSendButton);
 
         reviewSendButton.setOnClickListener(v -> {
+            DatabaseConnector.reviewToDatabase(userRate, reviewEditText.getText().toString());
             Intent i = new Intent(ReviewActivity.this, MapsActivity.class);
             startActivity(i);
         });
@@ -39,6 +44,7 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rateTextView.setText("" + (progress + 1));
+                userRate = ("" + (progress + 1));
             }
 
             @Override

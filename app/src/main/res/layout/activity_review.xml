@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="61dp"
         android:gravity="center"
         android:text="@string/review"
         android:textSize="24sp" />
@@ -33,7 +33,7 @@
     <TextView
         android:id="@+id/rateTextView"
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:text="@string/base_rate"
         android:textColor="@color/blue"
@@ -43,7 +43,7 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:gravity="center"
         android:text="@string/user_review"
         android:textSize="18sp" />
@@ -52,7 +52,9 @@
         android:id="@+id/reviewEditText"
         android:layout_width="match_parent"
         android:layout_height="194dp"
-        android:background="@drawable/back" />
+        android:background="@drawable/back"
+        android:gravity="top"
+        android:hint="Enter review:" />
 
     <Button
         android:id="@+id/reviewSendButton"
