@@ -2,6 +2,7 @@ package com.taxiproject.group6.taxiapp.classes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DatabaseConnector {
+
+    private static final String TAG = "DatabaseConnector";
 
     private static String databaseHeader;
     private static FirebaseUser firebaseUser;
@@ -78,6 +81,8 @@ public class DatabaseConnector {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+        Log.d(TAG, newUser.toString());
         return newUser;
     }
 
