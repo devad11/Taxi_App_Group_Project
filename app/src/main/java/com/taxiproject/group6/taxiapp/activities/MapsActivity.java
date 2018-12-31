@@ -63,7 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final LatLngBounds LAT_LNG_BOUNDS =
             new LatLngBounds(new LatLng(51.384959, -10.269509), new LatLng(52.452138, -7.84153));
 
-    private AutoCompleteTextView inputSearchEditText;
+//    private AutoCompleteTextView inputSearchEditText, pickUpEditText, destinationEditText;
+    private AutoCompleteTextView pickUpEditText, destinationEditText;
     private ImageView gpsImage;
     private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton, logoutButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
@@ -77,10 +78,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         logoutButton = findViewById(R.id.logoutButton);
-        destinationAddressButton = findViewById(R.id.destinationAddressButton);
-        pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
+//        destinationAddressButton = findViewById(R.id.destinationAddressButton);
+//        pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
         personalDetailsButton = findViewById(R.id.personalDetailsButton);
-        inputSearchEditText = findViewById(R.id.inputSearchEditText);
+//        inputSearchEditText = findViewById(R.id.inputSearchEditText);
+        pickUpEditText = findViewById(R.id.pickupEditText);
+        destinationEditText = findViewById(R.id.destinationEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
 
@@ -142,38 +145,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
-        inputSearchEditText.setOnItemClickListener(autoCompleteClickListener);
+        pickUpEditText.setOnItemClickListener(autoCompleteClickListener);
+        destinationEditText.setOnItemClickListener(autoCompleteClickListener);
 
         placeAutocompleteAdapter = new PlaceAutocompleteAdapter(
                 this, googleApiClient, LAT_LNG_BOUNDS, null);
 
-        inputSearchEditText.setAdapter(placeAutocompleteAdapter);
-        inputSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
+        pickUpEditText.setAdapter(placeAutocompleteAdapter);
+        pickUpEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                String searchString = inputSearchEditText.getText().toString();
+                String searchString = pickUpEditText.getText().toString();
                 mapLocationHelper.geoLocate(this, searchString);
             }
             return false;
         });
+
+        destinationEditText.setAdapter(placeAutocompleteAdapter);
+        destinationEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || event.getAction() == KeyEvent.ACTION_DOWN
+                    || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                String searchString = destinationEditText.getText().toString();
+                mapLocationHelper.geoLocate(this, searchString);
+            }
+            return false;
+        });
+
         gpsImage.setOnClickListener(v -> {
             Log.d(TAG, "gpsImage: clicked gps image");
             mapLocationHelper.getDeviceLocation(this, permissionsGranted);
         });
         hideSoftKeyBoard();
 
-        pickUpAddressButton.setOnClickListener(v -> {
-            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
-            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            customDialog.show();
-        });
-
-        destinationAddressButton.setOnClickListener(v -> {
-            Intent i = new Intent(MapsActivity.this, ReviewActivity.class);
-            startActivity(i);
-        });
+//        pickUpAddressButton.setOnClickListener(v -> {
+//            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+//            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//            customDialog.show();
+//        });
+//
+//        destinationAddressButton.setOnClickListener(v -> {
+//            Intent i = new Intent(MapsActivity.this, ReviewActivity.class);
+//            startActivity(i);
+//        });
 
         personalDetailsButton.setOnClickListener(v -> {
             Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
