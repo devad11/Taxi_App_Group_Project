@@ -162,9 +162,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         destinationAddressButton.setOnClickListener(v -> {
-            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
-            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            customDialog.show();
+            Intent i = new Intent(MapsActivity.this, ReviewActivity.class);
+            startActivity(i);
         });
 
         personalDetailsButton.setOnClickListener(v -> {

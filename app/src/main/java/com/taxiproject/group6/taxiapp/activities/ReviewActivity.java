@@ -38,7 +38,7 @@ public class ReviewActivity extends AppCompatActivity {
         mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                rateTextView.setText(progress + 1);
+                rateTextView.setText("" + (progress + 1));
             }
 
             @Override
