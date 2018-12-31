@@ -177,8 +177,11 @@ public class RegisterFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Register Successfully", Toast.LENGTH_SHORT).show();
 
-                            final User[] newUser = {new User(firstName, lastName, userName, dob, phoneNumber, cardNo, expiryDate)};
-                            DatabaseConnector.loadToDatabase(newUser[0]);
+                            final User[] newUser;
+                            try {
+                                newUser = new User[]{new User(firstName, lastName, userName, dob, phoneNumber, cardNo, expiryDate)};
+                                DatabaseConnector.loadToDatabase(newUser[0]);
+
 
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful() && isServiceOK()) {
@@ -191,6 +194,9 @@ public class RegisterFragment extends Fragment {
                                     Toast.makeText(getActivity(), Objects.requireNonNull(task1.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                 Toast.makeText(getActivity(), "Email is already registered", Toast.LENGTH_SHORT).show();

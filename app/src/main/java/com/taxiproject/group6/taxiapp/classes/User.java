@@ -32,13 +32,13 @@ public class User {
 
     public User(){}
 
-    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) {
+    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) throws Exception {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-        this.cardNo = cardNo;
+        this.cardNo = encryptCardNo(cardNo);
         this.expiryDate = expiryDate;
     }
 
@@ -96,15 +96,19 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setCardNo(String cardNo) throws Exception {
+    public void setCardNo(String dateOfBirth) {
+        this.cardNo = cardNo;
+    }
+
+    public String encryptCardNo(String cardNo) throws Exception {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         if (user != null) {
             uid = user.getUid();
         }
-        String res = encrypt(uid, cardNo);
+        String res = encrypt("sdfgdfgs", cardNo);
 
-        this.cardNo = res;
+        return res;
     }
 
     private String encrypt(String s, String cardNo) throws Exception {
