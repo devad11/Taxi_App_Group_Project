@@ -15,6 +15,8 @@ import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
 import com.taxiproject.group6.taxiapp.fragments.LoginFragment;
 import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,15 +32,16 @@ public class DatabaseConnector {
 
     public static void reviewToDatabase(String rate, String review){
 
+        Date currentTime = Calendar.getInstance().getTime();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null)
         {
             databaseHeader = firebaseUser.getUid();
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
-            usersRef = ref.child(databaseHeader + "/rate");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/rate");
             usersRef.setValue(rate);
-            usersRef = ref.child(databaseHeader + "/review");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/review");
             usersRef.setValue(review);
         }
     }
