@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
+import com.taxiproject.group6.taxiapp.classes.Encryption;
 import com.taxiproject.group6.taxiapp.classes.User;
 
 public class UserDetailsActivity extends AppCompatActivity {
@@ -61,6 +62,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         firstNameEditText.setText(user.getFirstName());
         lastNameEditText.setText(user.getLastName());
         phoneNumberEditText.setText(user.getPhoneNumber());
+        cardNoEditText.setText(Encryption.decryptCardNumber(user.getCardNo()));
+        expiryDateEditText.setText(user.getExpiryDate());
     }
 
     private void changeEmailButtonPressed() {

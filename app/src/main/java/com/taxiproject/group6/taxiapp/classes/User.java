@@ -1,17 +1,9 @@
 package com.taxiproject.group6.taxiapp.classes;
 
 import android.support.annotation.NonNull;
-import android.util.Base64;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 
 public class User {
 
@@ -24,21 +16,15 @@ public class User {
     private String expiryDate;
     private Map<String, Object> result;
 
-    private String AES = "AES";
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
-    private String uid;
-
-
     public User(){}
 
-    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) throws Exception {
+    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-        this.cardNo = encryptCardNo(cardNo);
+        this.cardNo = Encryption.encryptCardNumber(cardNo);
         this.expiryDate = expiryDate;
     }
 
@@ -96,37 +82,8 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setCardNo(String dateOfBirth) {
-        this.cardNo = cardNo;
-    }
-
-    public String encryptCardNo(String cardNo) throws Exception {
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            uid = user.getUid();
-        }
-        String res = encrypt("sdfgdfgs", cardNo);
-
-        return res;
-    }
-
-    private String encrypt(String s, String cardNo) throws Exception {
-        SecretKeySpec key = generateKey(s);
-        Cipher c = Cipher.getInstance(AES);
-        c.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encVal = c.doFinal(cardNo.getBytes());
-        String encryptedValule = Base64.encodeToString(encVal, Base64.DEFAULT);
-        return encryptedValule;
-    }
-
-    private SecretKeySpec generateKey(String password) throws Exception {
-        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] bytes = password.getBytes("UTF-8");
-        digest.update(bytes, 0, bytes.length);
-        byte[] key = digest.digest();
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        return secretKeySpec;
+    public void setCardNo(String cardNo) {
+        this.cardNo = Encryption.encryptCardNumber(cardNo);
     }
 
     public void setExpiryDate(String expiryDate) {
@@ -148,7 +105,7 @@ public class User {
         result.put("userName", this.userName);
         result.put("phoneNumber", this.phoneNumber);
         result.put("dateOfBirth", this.dateOfBirth);
-        result.put("cardNo", this.cardNo);
+        result.put("cardNo", Encryption.encryptCardNumber(this.cardNo));
         result.put("expiryDate", this.expiryDate);
 
         return result;
@@ -167,7 +124,7 @@ public class User {
                 break;
             case "dateOfBirth": this.dateOfBirth = value;
                 break;
-            case "cardNo": this.cardNo = value;
+            case "cardNo": this.cardNo = Encryption.encryptCardNumber(value);
                 break;
             case "expiryDate": this.expiryDate = value;
                 break;
@@ -175,4 +132,5 @@ public class User {
 //        result.put(tag, value);
         result = this.toMap();
     }
+
 }

@@ -132,6 +132,18 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dismissProgressDialog();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dismissProgressDialog();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -257,7 +269,7 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getActivity(),"Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
-        ProgressDialog progressDialog = ((MainActivity)(Objects.requireNonNull(getActivity()))).getProgressDialog();
+        progressDialog = ((MainActivity)(Objects.requireNonNull(getActivity()))).getProgressDialog();
         progressDialog.setMessage("Login...");
         progressDialog.show();
 
@@ -303,4 +315,8 @@ public class LoginFragment extends Fragment {
         return newUser;
     }
 
+    private void dismissProgressDialog(){
+        if(this.progressDialog != null)
+            this.progressDialog.dismiss();
+    }
 }
