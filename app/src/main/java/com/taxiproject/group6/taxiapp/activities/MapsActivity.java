@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
@@ -59,16 +60,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private AutoCompleteTextView inputSearchEditText;
     private ImageView gpsImage;
-    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton, logoutButton;
+    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton, bookingButton, logoutButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
+
+    private String locLat, locLng, destLat, destLng, cost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        //////////////////dummy data/////////////////////////////
+        locLat = "52.239944";
+        locLng = "-8.7064314";
+        destLat = "59.235684";
+        destLng = "-8.6064321";
+        cost = "12.0";
+
+        bookingButton = findViewById(R.id.bookingButton);
         logoutButton = findViewById(R.id.logoutButton);
         destinationAddressButton = findViewById(R.id.destinationAddressButton);
         pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
@@ -169,6 +180,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         personalDetailsButton.setOnClickListener(v -> {
             Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
             startActivity(i);
+        });
+        bookingButton.setOnClickListener(v -> {
+            DatabaseConnector.sendBooking(locLat, locLng, destLat, destLng, cost);
         });
     }
 

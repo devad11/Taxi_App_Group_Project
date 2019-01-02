@@ -30,6 +30,29 @@ public class DatabaseConnector {
     private static Map<String, Object> users;
     private static User newUser = new User();
 
+
+    public static void sendBooking(String locLat, String locLng, String destLat, String destLng, String cost){
+
+        Date currentTime = Calendar.getInstance().getTime();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
+        {
+            databaseHeader = firebaseUser.getUid();
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLat");
+            usersRef.setValue(locLat);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLng");
+            usersRef.setValue(locLng);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLat");
+            usersRef.setValue(destLat);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLng");
+            usersRef.setValue(destLng);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/cost");
+            usersRef.setValue(cost);
+        }
+    }
+
     public static void reviewToDatabase(String rate, String review){
 
         Date currentTime = Calendar.getInstance().getTime();
