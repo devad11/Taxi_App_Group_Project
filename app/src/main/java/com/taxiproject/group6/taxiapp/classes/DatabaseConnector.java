@@ -16,6 +16,7 @@ import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
 import com.taxiproject.group6.taxiapp.fragments.LoginFragment;
 import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +33,41 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
+
+
+    public static void sendBooking(String locLat, String locLng, String destLat, String destLng, String cost){
+
+        Date currentTime = Calendar.getInstance().getTime();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
+        {
+            databaseHeader = firebaseUser.getUid();
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings");
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/time");
+            usersRef.setValue(formatTime.format(currentTime));
+            SimpleDateFormat formatDate = new SimpleDateFormat("MM");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/date");
+            usersRef.setValue(formatDate.format(currentTime));
+            SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/year");
+            usersRef.setValue(formatYear.format(currentTime));
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLat");
+            usersRef.setValue(locLat);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLng");
+            usersRef.setValue(locLng);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLat");
+            usersRef.setValue(destLat);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLng");
+            usersRef.setValue(destLng);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/cost");
+            usersRef.setValue(cost);
+            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/user");
+            usersRef.setValue(databaseHeader);
+
+        }
+    }
 
     public static void reviewToDatabase(String rate, String review){
 
