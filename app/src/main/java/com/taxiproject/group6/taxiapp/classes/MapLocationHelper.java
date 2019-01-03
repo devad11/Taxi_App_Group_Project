@@ -11,7 +11,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
@@ -25,6 +27,7 @@ public class MapLocationHelper {
     private static final float DEFAULT_ZOOM = 15;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private Marker pickUpMarker, destinationMarker;
 
     public MapLocationHelper(GoogleMap mMap) {
         this.mMap = mMap;
@@ -80,12 +83,31 @@ public class MapLocationHelper {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         if(!placeInfo.getName().equalsIgnoreCase("my location")) {
-            mMap.clear();
-            MarkerOptions marker = new MarkerOptions()
-                    .position(latLng)
-                    .title(placeInfo.getName());
+            if(placeInfo.getPosition().equalsIgnoreCase("pickup")) {
+                if(pickUpMarker != null)
+                    pickUpMarker.setPosition(latLng);
+                MarkerOptions marker = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeInfo.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-            mMap.addMarker(marker);
+                pickUpMarker = mMap.addMarker(marker);
+            }else if(placeInfo.getPosition().equalsIgnoreCase("destination")){
+                if(destinationMarker != null)
+                    destinationMarker.setPosition(latLng);
+
+                MarkerOptions marker = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeInfo.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));;
+
+                destinationMarker = mMap.addMarker(marker);
+            }else if(placeInfo.getPosition().equalsIgnoreCase("null")){
+                Log.d(TAG, "placeInfo position == null");
+            }
+
+
         }
     }
+
 }

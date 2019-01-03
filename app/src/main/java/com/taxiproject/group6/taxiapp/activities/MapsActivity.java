@@ -67,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeoDataClient geoDataClient;
     private PlaceInfo placeInfo;
 
-    private String locLat, locLng, destLat, destLng, cost;
+    private String locLat, locLng, destLat, destLng, cost, position;
 
 
 
@@ -86,6 +86,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         destinationEditText = findViewById(R.id.destinationEditText);
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
+
+        pickUpEditText.setTag("PickUp");
+        destinationEditText.setTag("Destination");
 
 ////////////////////dummy data//////////////////////////////////
         locLat = "52.239944";
@@ -168,6 +171,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                 String searchString = pickUpEditText.getText().toString();
+                this.placeInfo.setPosition("PickUp");
+                position = "PickUp";
+                Log.d(TAG, "POSITION:" + position);
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
             }
             return false;
@@ -180,6 +186,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                 String searchString = destinationEditText.getText().toString();
+                this.placeInfo.setPosition("Destination");
+                position = "Destination";
+                Log.d(TAG, "POSITION:" + position);
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
             }
             return false;
@@ -269,6 +278,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final Place place = places.get(0);
 
         placeInfo = new PlaceInfo();
+        Log.d(TAG, "---------POSITION:" + position);
+
+        position = getCurrentFocus().getTag().toString();
 
         try {
             placeInfo.setName(place.getName().toString());
@@ -278,6 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             placeInfo.setAddress(place.getAddress().toString());
             placeInfo.setPhoneNo(place.getPhoneNumber().toString());
             placeInfo.setWebsiteUri(place.getWebsiteUri());
+            placeInfo.setPosition(position);
         }catch (NullPointerException npe){
             Log.d(TAG, "PlaceInfo: null param");
         }

@@ -13,6 +13,7 @@ public class PlaceInfo {
     private float rating;
     private Uri websiteUri;
     private LatLng latLng;
+    private String position;
 
     public PlaceInfo() {
     }
@@ -82,6 +83,14 @@ public class PlaceInfo {
 
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     @Override
