@@ -70,16 +70,16 @@ public class PersonalDetailsActivity extends AppCompatActivity {
     }
 
     private void showNameChange(){
-        ((PersonalDetailsActivity)Objects.requireNonNull(PersonalDetailsActivity.this)).setViewPager(1);
+        PersonalDetailsActivity.this.setViewPager(1);
     }
     private void showEmailChange(){
-        ((PersonalDetailsActivity)Objects.requireNonNull(PersonalDetailsActivity.this)).setViewPager(0);
+        PersonalDetailsActivity.this.setViewPager(0);
     }
     private void showPhoneChange(){
-        ((PersonalDetailsActivity)Objects.requireNonNull(PersonalDetailsActivity.this)).setViewPager(3);
+        PersonalDetailsActivity.this.setViewPager(3);
     }
     private void showPasswordChange(){
-        ((PersonalDetailsActivity)Objects.requireNonNull(PersonalDetailsActivity.this)).setViewPager(2);
+        PersonalDetailsActivity.this.setViewPager(2);
     }
 
     public void setViewPager(int fragmentNo){
