@@ -67,6 +67,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeoDataClient geoDataClient;
     private PlaceInfo placeInfo;
 
+    private String locLat, locLng, destLat, destLng, cost;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +87,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         gpsImage = findViewById(R.id.gpsImage);
         getUsersPermission();
 
+////////////////////dummy data//////////////////////////////////
+        locLat = "52.239944";
+        locLng = "-8.7064314";
+        destLat = "59.235684";
+        destLng = "-8.6064321";
+        cost = "12.0";
 
         logoutButton.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -89,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         bookingButton.setOnClickListener(v -> {
-//            DatabaseConnector.sendBooking();
+            DatabaseConnector.sendBooking(locLat, locLng, destLat, destLng, cost);
         });
     }
 
