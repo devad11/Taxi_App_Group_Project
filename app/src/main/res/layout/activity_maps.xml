@@ -23,10 +23,48 @@
             android:layout_height="match_parent"
             tools:context=".activities.MapsActivity"/>
 
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/relLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:elevation="10dp"-->
+            <!--android:background="@drawable/white_border"-->
+            <!--tools:targetApi="lollipop">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="15dp"-->
+                <!--android:id="@+id/magnifyImage"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:src="@drawable/ic_magnify"-->
+                <!--android:contentDescription="@string/search_image"-->
+                <!--android:layout_marginStart="10dp" />-->
+
+            <!--<AutoCompleteTextView-->
+                <!--android:id="@+id/inputSearchEditText"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_toRightOf="@+id/magnifyImage"-->
+                <!--android:background="@null"-->
+                <!--android:hint="@string/enter_address"-->
+                <!--android:inputType="text"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="15sp"-->
+                <!--android:layout_toEndOf="@+id/magnifyImage"-->
+                <!--android:imeOptions="actionSearch"-->
+                <!--android:importantForAutofill="no" tools:targetApi="o" />-->
+        <!--</RelativeLayout>-->
+
         <ImageView
             android:id="@+id/gpsImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_below="@+id/relLayout"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
@@ -36,24 +74,24 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_gps" />
 
-        <ImageView
-            android:id="@+id/personalDetailsButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu"
-            android:contentDescription="@string/personal_details" />
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
+
+        <!--<Button-->
+            <!--android:id="@+id/pickUpAddressButton"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/pick_up_address" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/destinationAddressButton"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/destination_address" />-->
 
         <RelativeLayout
             android:id="@+id/pickupRelLayout"
@@ -83,7 +121,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/magnifyImagePickup"
                 android:background="@null"
-                android:hint="@string/enter_pickup_address"
+                android:hint="@string/enter_address"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -120,7 +158,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/magnifyImageDestination"
                 android:background="@null"
-                android:hint="@string/enter_destination_address"
+                android:hint="@string/enter_address"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -134,6 +172,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/book_now" />
+        <!--comment for merge-->
+        <Button
+            android:id="@+id/personalDetailsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/personal_details" />
 
         <Button
             android:id="@+id/logoutButton"

@@ -30,7 +30,7 @@ public class MapLocationHelper {
         this.mMap = mMap;
     }
 
-    public void geoLocate(Activity activity, String searchString, PlaceInfo placeInfo) {
+    public void geoLocate(Activity activity, String searchString) {
         Log.d(TAG, "geoLocate: Locating");
 //        String searchString = inputSearchEditText.getText().toString();
         Geocoder geocoder = new Geocoder(activity);
@@ -44,7 +44,7 @@ public class MapLocationHelper {
             Address address = list.get(0);
             Log.d(TAG, "Found address: " + address.toString());
 //            Toast.makeText(activity, "Address: " + address.toString(), Toast.LENGTH_SHORT).show();
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, placeInfo);
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
         }
     }
 
@@ -61,9 +61,7 @@ public class MapLocationHelper {
                         LatLng currentCoordinates =
                                 new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-                        PlaceInfo placeInfo = new PlaceInfo();
-                        placeInfo.setName("My Location");
-                        moveCamera(currentCoordinates, DEFAULT_ZOOM, placeInfo);
+                        moveCamera(currentCoordinates, DEFAULT_ZOOM, "My Location");
                     }else{
                         Log.d(TAG, "getDeviceLocation: location NOT found");
                         Toast.makeText(activity, "Unable to get current location", Toast.LENGTH_SHORT).show();
@@ -75,17 +73,15 @@ public class MapLocationHelper {
         }
     }
 
-    public void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
+    public void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG,"moveCamera: changing map position to:  lat: " + latLng.latitude + " lng:  " +  latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if(!placeInfo.getName().equalsIgnoreCase("my location")) {
-            mMap.clear();
-            MarkerOptions marker = new MarkerOptions()
-                    .position(latLng)
-                    .title(placeInfo.getName());
+        mMap.clear();
+        MarkerOptions marker = new MarkerOptions()
+                .position(latLng)
+                .title(title);
 
-            mMap.addMarker(marker);
-        }
+        mMap.addMarker(marker);
     }
 }

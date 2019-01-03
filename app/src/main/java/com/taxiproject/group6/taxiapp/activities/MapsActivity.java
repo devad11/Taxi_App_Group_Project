@@ -3,6 +3,8 @@ package com.taxiproject.group6.taxiapp.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -37,6 +39,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
+import com.taxiproject.group6.taxiapp.classes.PickerDialogObject;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
 
@@ -45,6 +48,9 @@ import java.util.Objects;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
+    //    private final int REQUEST_LOCATION = 1;
+//    private LocationManager  locationManager;
+//    private LocationHelper locationHelper;
     private boolean permissionsGranted = false;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -59,8 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //    private AutoCompleteTextView inputSearchEditText, pickUpEditText, destinationEditText;
     private AutoCompleteTextView pickUpEditText, destinationEditText;
-    private ImageView gpsImage, personalDetailsImage;
-    private Button logoutButton;
+    private ImageView gpsImage;
+    private Button personalDetailsButton, pickUpAddressButton, destinationAddressButton, logoutButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
@@ -72,7 +78,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         logoutButton = findViewById(R.id.logoutButton);
-        personalDetailsImage = findViewById(R.id.personalDetailsButton);
+//        destinationAddressButton = findViewById(R.id.destinationAddressButton);
+//        pickUpAddressButton = findViewById(R.id.pickUpAddressButton);
+        personalDetailsButton = findViewById(R.id.personalDetailsButton);
 //        inputSearchEditText = findViewById(R.id.inputSearchEditText);
         pickUpEditText = findViewById(R.id.pickupEditText);
         destinationEditText = findViewById(R.id.destinationEditText);
@@ -150,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                 String searchString = pickUpEditText.getText().toString();
-                mapLocationHelper.geoLocate(this, searchString, placeInfo);
+                mapLocationHelper.geoLocate(this, searchString);
             }
             return false;
         });
@@ -162,7 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                 String searchString = destinationEditText.getText().toString();
-                mapLocationHelper.geoLocate(this, searchString, placeInfo);
+                mapLocationHelper.geoLocate(this, searchString);
             }
             return false;
         });
@@ -173,7 +181,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         hideSoftKeyBoard();
 
-        personalDetailsImage.setOnClickListener(v -> {
+//        pickUpAddressButton.setOnClickListener(v -> {
+//            PickerDialogObject customDialog = new PickerDialogObject(MapsActivity.this);
+//            customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//            customDialog.show();
+//        });
+//
+//        destinationAddressButton.setOnClickListener(v -> {
+//            Intent i = new Intent(MapsActivity.this, ReviewActivity.class);
+//            startActivity(i);
+//        });
+
+        personalDetailsButton.setOnClickListener(v -> {
             Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
             startActivity(i);
         });
@@ -265,7 +284,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Log.d(TAG, "onResult: place details: " + placeInfo.toString());
 
-        mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo);
+        mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo.getName());
 
         places.release();
     };
