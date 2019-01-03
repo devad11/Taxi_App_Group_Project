@@ -57,6 +57,8 @@
     <string name="base_rate">5</string>
     <string name="user_review">Leave Review:</string>
     <string name="send">Send</string>
+    <string name="enter_destination_address">Enter Destination Address</string>
+    <string name="enter_pickup_address">Enter Pickup Address</string>
 
 
 </resources>

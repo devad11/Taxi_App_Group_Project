@@ -18,13 +18,14 @@ public class User {
 
     public User(){}
 
-    public User(String firstName, String lastName, String userName, String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) {
+    public User(String firstName, String lastName, String userName,
+                String dateOfBirth, String phoneNumber, String cardNo, String expiryDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-        this.cardNo = Encryption.encryptCardNumber(cardNo);
+        this.cardNo = cardNo;
         this.expiryDate = expiryDate;
     }
 
@@ -83,7 +84,7 @@ public class User {
     }
 
     public void setCardNo(String cardNo) {
-        this.cardNo = Encryption.encryptCardNumber(cardNo);
+        this.cardNo = Encryption.decryptCardNumber(cardNo);
     }
 
     public void setExpiryDate(String expiryDate) {
