@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
+import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
@@ -60,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //    private AutoCompleteTextView inputSearchEditText, pickUpEditText, destinationEditText;
     private AutoCompleteTextView pickUpEditText, destinationEditText;
     private ImageView gpsImage, personalDetailsImage;
-    private Button logoutButton;
+    private Button logoutButton, bookingButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
@@ -71,6 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        bookingButton = findViewById(R.id.bookingButton);
         logoutButton = findViewById(R.id.logoutButton);
         personalDetailsImage = findViewById(R.id.personalDetailsButton);
 //        inputSearchEditText = findViewById(R.id.inputSearchEditText);
@@ -84,6 +86,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(MapsActivity.this, MainActivity.class);
             startActivity(i);
+        });
+
+        bookingButton.setOnClickListener(v -> {
+//            DatabaseConnector.sendBooking();
         });
     }
 
