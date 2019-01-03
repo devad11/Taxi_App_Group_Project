@@ -7,6 +7,11 @@ import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,13 +26,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapLocationHelper {
+public class MapLocationHelper  {
 
     private static final String TAG = "MapLocationHelper";
     private static final float DEFAULT_ZOOM = 15;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker pickUpMarker, destinationMarker;
+    private LatLng pickUpLatLng, destinationLatLng;
 
     public MapLocationHelper(GoogleMap mMap) {
         this.mMap = mMap;
@@ -84,30 +90,51 @@ public class MapLocationHelper {
 
         if(!placeInfo.getName().equalsIgnoreCase("my location")) {
             if(placeInfo.getPosition().equalsIgnoreCase("pickup")) {
-                if(pickUpMarker != null)
+                if(pickUpMarker != null) {
                     pickUpMarker.setPosition(latLng);
-                MarkerOptions marker = new MarkerOptions()
-                        .position(latLng)
-                        .title(placeInfo.getName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    pickUpLatLng = latLng;
+                }else {
+                    MarkerOptions marker = new MarkerOptions()
+                            .position(latLng)
+                            .title(placeInfo.getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-                pickUpMarker = mMap.addMarker(marker);
+                    pickUpMarker = mMap.addMarker(marker);
+                }
+//                getRouterToMarker(pickUpLatLng);
             }else if(placeInfo.getPosition().equalsIgnoreCase("destination")){
-                if(destinationMarker != null)
+                if(destinationMarker != null) {
                     destinationMarker.setPosition(latLng);
+                    destinationLatLng = latLng;
+                }
+                else {
+                    MarkerOptions marker = new MarkerOptions()
+                            .position(latLng)
+                            .title(placeInfo.getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
-                MarkerOptions marker = new MarkerOptions()
-                        .position(latLng)
-                        .title(placeInfo.getName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));;
+                    destinationMarker = mMap.addMarker(marker);
+                }
 
-                destinationMarker = mMap.addMarker(marker);
             }else if(placeInfo.getPosition().equalsIgnoreCase("null")){
                 Log.d(TAG, "placeInfo position == null");
             }
-
-
         }
     }
 
+    public LatLng getPickUpLatLng() {
+        return pickUpLatLng;
+    }
+
+    public void setPickUpLatLng(LatLng pickUpLatLng) {
+        this.pickUpLatLng = pickUpLatLng;
+    }
+
+    public LatLng getDestinationLatLng() {
+        return destinationLatLng;
+    }
+
+    public void setDestinationLatLng(LatLng destinationLatLng) {
+        this.destinationLatLng = destinationLatLng;
+    }
 }

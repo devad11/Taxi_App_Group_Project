@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -34,6 +39,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
@@ -41,9 +48,11 @@ import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, RoutingListener {
 
     private GoogleMap mMap;
     private boolean permissionsGranted = false;
@@ -66,9 +75,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
     private PlaceInfo placeInfo;
+    private LatLng pickUpLatLng, destinationLatLng;
 
     private String locLat, locLng, destLat, destLng, cost, position;
 
+    private List<Polyline> polyLines;
+    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
 
 
 
@@ -90,6 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pickUpEditText.setTag("PickUp");
         destinationEditText.setTag("Destination");
 
+        polyLines = new ArrayList<>();
 ////////////////////dummy data//////////////////////////////////
         locLat = "52.239944";
         locLng = "-8.7064314";
@@ -175,6 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 position = "PickUp";
                 Log.d(TAG, "POSITION:" + position);
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
+                pickUpLatLng = mapLocationHelper.getPickUpLatLng();
             }
             return false;
         });
@@ -190,6 +204,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 position = "Destination";
                 Log.d(TAG, "POSITION:" + position);
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
+                destinationLatLng = mapLocationHelper.getDestinationLatLng();
+                getRouterToMarker();
             }
             return false;
         });
@@ -254,8 +270,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-        /*
-            ----------------------  google places api autocomplete suggestions -----------------------
+    /*
+        -----------------   Routing Listener Methods -------------------------
+        Draws a polyline to show the direction
+     */
+
+    private void getRouterToMarker() {
+        erasePolyLines();
+        if(destinationLatLng != null && pickUpLatLng != null) {
+            Routing routing = new Routing.Builder()
+                    .travelMode(AbstractRouting.TravelMode.DRIVING)
+                    .withListener(this)
+                    .alternativeRoutes(false)
+                    .waypoints(pickUpLatLng, destinationLatLng)
+                    .build();
+            routing.execute();
+        }
+    }
+
+
+    @Override
+    public void onRoutingFailure(RouteException e) {
+        if(e != null) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+        if(polyLines.size()>0) {
+            for (Polyline poly : polyLines) {
+                poly.remove();
+            }
+        }
+
+        polyLines = new ArrayList<>();
+        //add route(s) to the map.
+        for (int i = 0; i <route.size(); i++) {
+
+            //In case of more than 5 alternative routes
+            int colorIndex = i % COLORS.length;
+
+            PolylineOptions polyOptions = new PolylineOptions();
+            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.width(10 + i * 3);
+            polyOptions.addAll(route.get(i).getPoints());
+            Polyline polyline = mMap.addPolyline(polyOptions);
+            polyLines.add(polyline);
+
+            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+
+    }
+
+    // to erase the polyLines if ride is cancelled
+    private void erasePolyLines(){
+        if(polyLines != null) {
+            for (Polyline line : polyLines) {
+                line.remove();
+            }
+            polyLines.clear();
+        }
+    }
+
+    /*
+        ----------------------  google places api autocomplete suggestions -----------------------
      */
 
     private AdapterView.OnItemClickListener autoCompleteClickListener = new AdapterView.OnItemClickListener() {
@@ -296,7 +386,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Log.d(TAG, "onResult: place details: " + placeInfo.toString());
 
+
+
         mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo);
+
+        if(mapLocationHelper.getDestinationLatLng() != null)
+            destinationLatLng = mapLocationHelper.getDestinationLatLng();
+        else if(mapLocationHelper.getPickUpLatLng() != null)
+            pickUpLatLng = mapLocationHelper.getPickUpLatLng();
+
+//        getRouterToMarker();
 
         places.release();
     };
