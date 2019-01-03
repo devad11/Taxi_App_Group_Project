@@ -44,26 +44,27 @@ public class DatabaseConnector {
             databaseHeader = firebaseUser.getUid();
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings");
+            SimpleDateFormat formatId = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/time");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/time");
             usersRef.setValue(formatTime.format(currentTime));
             SimpleDateFormat formatDate = new SimpleDateFormat("MM");
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/date");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/date");
             usersRef.setValue(formatDate.format(currentTime));
             SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/year");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/year");
             usersRef.setValue(formatYear.format(currentTime));
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLat");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLat");
             usersRef.setValue(locLat);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/locLng");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLng");
             usersRef.setValue(locLng);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLat");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLat");
             usersRef.setValue(destLat);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/destLng");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLng");
             usersRef.setValue(destLng);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/cost");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/cost");
             usersRef.setValue(cost);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/user");
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
             usersRef.setValue(databaseHeader);
 
         }
