@@ -48,7 +48,7 @@ public class DatabaseConnector {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                headers.add(dataSnapshot.toString());
+                headers.add(dataSnapshot.getValue().toString());
                 System.out.println(headers);
 
             }
