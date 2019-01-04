@@ -35,7 +35,7 @@ public class DatabaseConnector {
     private static User newUser = new User();
 
 
-    public static void sendBooking(String locLat, String locLng, String destLat, String destLng, String cost){
+    public static void sendBooking(JourneyDetails journeyDetails){
 
         Date currentTime = Calendar.getInstance().getTime();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -55,15 +55,15 @@ public class DatabaseConnector {
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/year");
             usersRef.setValue(formatYear.format(currentTime));
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLat");
-            usersRef.setValue(locLat);
+            usersRef.setValue(journeyDetails.getStart().getLatLng().latitude);
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLng");
-            usersRef.setValue(locLng);
+            usersRef.setValue(journeyDetails.getStart().getLatLng().longitude);
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLat");
-            usersRef.setValue(destLat);
+            usersRef.setValue(journeyDetails.getEnd().getLatLng().latitude);
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLng");
-            usersRef.setValue(destLng);
+            usersRef.setValue(journeyDetails.getEnd().getLatLng().longitude);
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/cost");
-            usersRef.setValue(cost);
+            usersRef.setValue(journeyDetails.getCost());
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
             usersRef.setValue(databaseHeader);
 

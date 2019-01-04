@@ -42,13 +42,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.paypal.android.sdk.payments.PaymentActivity;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
+import com.taxiproject.group6.taxiapp.classes.JourneyDetails;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -76,16 +78,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
     private GeoDataClient geoDataClient;
     private PlaceInfo placeInfo;
-    private LatLng pickUpLatLng, destinationLatLng;
+//    private LatLng pickUpLatLng, destinationLatLng;
 
     private String locLat, locLng, destLat, destLng, cost, position;
 
     private List<Polyline> polyLines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
 
-    private double distance;
-    private int duration;
-
+    private final double MIN_FARE = 5.00;
+    private JourneyDetails journeyDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pickUpEditText.setTag("PickUp");
         destinationEditText.setTag("Destination");
 
+        journeyDetails = new JourneyDetails();
         polyLines = new ArrayList<>();
 ////////////////////dummy data//////////////////////////////////
         locLat = "52.239944";
@@ -119,9 +121,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         bookingButton.setOnClickListener(v -> {
-            DatabaseConnector.sendBooking(locLat, locLng, destLat, destLng, cost);
-            Intent intent = new Intent(this, PaypalActivity.class);
-            startActivity(intent);
+            if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null
+                    && journeyDetails.getCost() >= MIN_FARE) {
+                DatabaseConnector.sendBooking(journeyDetails);
+                Intent intent = new Intent(this, PaypalActivity.class);
+                intent.putExtra("Cost", journeyDetails.getCost());
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "Please select both the pickup and destination"
+                        , Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -192,7 +201,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 position = "PickUp";
 
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
-                pickUpLatLng = mapLocationHelper.getPickUpLatLng();
+                journeyDetails.setStart(placeInfo);
             }
             return false;
         });
@@ -208,7 +217,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 position = "Destination";
 
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
-                destinationLatLng = mapLocationHelper.getDestinationLatLng();
+                journeyDetails.setEnd(placeInfo);
                 getRouterToMarker();
             }
             return false;
@@ -281,8 +290,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getRouterToMarker() {
         erasePolyLines();
-        if(destinationLatLng != null && pickUpLatLng != null) {
-            String url = mapLocationHelper.makeURL(pickUpLatLng, destinationLatLng);
+        if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null) {
+//            String url = mapLocationHelper.makeURL(pickUpLatLng, destinationLatLng);
 
             String api ="AIzaSyBGgab4P7_F83Q5NsWG2top64dmpSyBfbc";
             Routing routing = new Routing.Builder()
@@ -290,7 +299,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(false)
-                    .waypoints(pickUpLatLng, destinationLatLng)
+                    .waypoints(journeyDetails.getStart().getLatLng(), journeyDetails.getEnd().getLatLng())
                     .build();
             routing.execute();
         }
@@ -320,7 +329,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         polyLines = new ArrayList<>();
-        //add route(s) to the map.
+        //add route to the map.
         for (int i = 0; i <route.size(); i++) {
 
             //In case of more than 5 alternative routes
@@ -332,10 +341,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polyLines.add(polyline);
-            distance = route.get(i).getDistanceValue();
-            duration = route.get(i).getDurationValue();
-            Log.d(TAG, "Distance between points: " + distance + " Duration: " + duration/60);
-            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ distance +": duration - "+ duration ,Toast.LENGTH_SHORT).show();
+
+            journeyDetails.setDistanceKm(route.get(i).getDistanceValue()/1000.0);
+            journeyDetails.setDuration(route.get(i).getDurationValue()/60);
+            journeyDetails.setCost(calculateFare());
+
+            Log.d(TAG, "Distance between points: " + journeyDetails.getDistanceKm()
+                    + " Duration: " + journeyDetails.getDuration() + " Cost: " + journeyDetails.getCost());
+            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distanceKm - "+ journeyDetails.getDistanceKm()
+                    +": duration - "+ journeyDetails.getDuration() + " Cost: " + journeyDetails.getCost() ,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -396,17 +410,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Log.d(TAG, "onResult: place details: " + placeInfo.toString());
 
-
-
         mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo);
 
         if(position.equalsIgnoreCase("destination"))
-            destinationLatLng = placeInfo.getLatLng();
+            journeyDetails.setEnd(placeInfo);
         else if(position.equalsIgnoreCase("pickup"))
-            pickUpLatLng = placeInfo.getLatLng();
+            journeyDetails.setStart(placeInfo);
 
         getRouterToMarker();
         places.release();
     };
+
+    public double calculateFare(){
+        double fare = journeyDetails.getDistanceKm() *1.0;
+        if(fare <= MIN_FARE)
+            fare = MIN_FARE;
+        BigDecimal bd = new BigDecimal(fare);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -31,9 +32,9 @@ public class PaypalActivity extends AppCompatActivity {
             .clientId(ConfigPaypal.PAYPAL_CLIENT_ID);
 
     private Button btnPayNow;
-    private EditText edtAmount;
+    private TextView amountTextView;
 
-    private String amount = "";
+    private double cost;
 
     @Override
     protected void onDestroy() {
@@ -50,20 +51,18 @@ public class PaypalActivity extends AppCompatActivity {
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
 
-        btnPayNow = (Button) findViewById(R.id.btnPayNow);
-        edtAmount = (EditText) findViewById(R.id.edtAmount);
+        cost = getIntent().getDoubleExtra("Cost", 0);
 
-        btnPayNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                processPayment();
-            }
-        });
+        btnPayNow = findViewById(R.id.btnPayNow);
+        amountTextView = findViewById(R.id.edtAmount);
+
+        String costString = "€" + cost;
+        amountTextView.setText(costString);
+        btnPayNow.setOnClickListener(v -> processPayment());
     }
 
     private void processPayment() {
-        amount = edtAmount.getText().toString();
-        PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)), "EUR",
+        PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(cost), "EUR",
                 "Payment", PayPalPayment.PAYMENT_INTENT_SALE);
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
@@ -82,7 +81,7 @@ public class PaypalActivity extends AppCompatActivity {
                         String paymentDetails = confirmation.toJSONObject().toString(4);
                         startActivity(new Intent(this, PaymentDetails.class)
                                 .putExtra("PaymentDetails", paymentDetails)
-                                .putExtra("PaymentAmount", amount)
+                                .putExtra("PaymentAmount", Double.toString(cost))
                         );
                     }
                     catch (JSONException e ){
