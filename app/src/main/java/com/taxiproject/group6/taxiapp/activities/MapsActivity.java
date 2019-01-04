@@ -84,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
 
     private double distance;
-
+    private int duration;
 
 
     @Override
@@ -190,7 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String searchString = pickUpEditText.getText().toString();
                 this.placeInfo.setPosition("PickUp");
                 position = "PickUp";
-                Log.d(TAG, "POSITION:" + position);
+
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
                 pickUpLatLng = mapLocationHelper.getPickUpLatLng();
             }
@@ -206,12 +206,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String searchString = destinationEditText.getText().toString();
                 this.placeInfo.setPosition("Destination");
                 position = "Destination";
-                Log.d(TAG, "POSITION:" + position);
+
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
                 destinationLatLng = mapLocationHelper.getDestinationLatLng();
                 getRouterToMarker();
-                distance = mapLocationHelper.getDistance(pickUpLatLng, destinationLatLng);
-                Log.d(TAG, "Distance between points: " + distance);
             }
             return false;
         });
@@ -334,8 +332,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polyLines.add(polyline);
-
-            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+            distance = route.get(i).getDistanceValue();
+            duration = route.get(i).getDurationValue();
+            Log.d(TAG, "Distance between points: " + distance + " Duration: " + duration/60);
+            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ distance +": duration - "+ duration ,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -406,8 +406,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             pickUpLatLng = placeInfo.getLatLng();
 
         getRouterToMarker();
-        distance = mapLocationHelper.getDistance(pickUpLatLng, destinationLatLng);
-        Log.d(TAG, "Distance between points: " + distance);
         places.release();
     };
 
