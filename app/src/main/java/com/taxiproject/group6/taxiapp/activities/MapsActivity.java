@@ -83,6 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Polyline> polyLines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
 
+    private double distance;
 
 
 
@@ -209,6 +210,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mapLocationHelper.geoLocate(this, searchString, placeInfo);
                 destinationLatLng = mapLocationHelper.getDestinationLatLng();
                 getRouterToMarker();
+                distance = mapLocationHelper.getDistance(pickUpLatLng, destinationLatLng);
+                Log.d(TAG, "Distance between points: " + distance);
             }
             return false;
         });
@@ -281,7 +284,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getRouterToMarker() {
         erasePolyLines();
         if(destinationLatLng != null && pickUpLatLng != null) {
+            String url = mapLocationHelper.makeURL(pickUpLatLng, destinationLatLng);
+
+            String api ="AIzaSyBGgab4P7_F83Q5NsWG2top64dmpSyBfbc";
             Routing routing = new Routing.Builder()
+                    .key(api)
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(false)
@@ -393,13 +400,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo);
 
-        if(mapLocationHelper.getDestinationLatLng() != null)
-            destinationLatLng = mapLocationHelper.getDestinationLatLng();
-        else if(mapLocationHelper.getPickUpLatLng() != null)
-            pickUpLatLng = mapLocationHelper.getPickUpLatLng();
+        if(position.equalsIgnoreCase("destination"))
+            destinationLatLng = placeInfo.getLatLng();
+        else if(position.equalsIgnoreCase("pickup"))
+            pickUpLatLng = placeInfo.getLatLng();
 
-//        getRouterToMarker();
-
+        getRouterToMarker();
+        distance = mapLocationHelper.getDistance(pickUpLatLng, destinationLatLng);
+        Log.d(TAG, "Distance between points: " + distance);
         places.release();
     };
 

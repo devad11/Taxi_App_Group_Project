@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,5 +137,33 @@ public class MapLocationHelper  {
 
     public void setDestinationLatLng(LatLng destinationLatLng) {
         this.destinationLatLng = destinationLatLng;
+    }
+
+    public double getDistance(LatLng from, LatLng to){
+        if(from == null || to == null)
+            return 0;
+        return SphericalUtil.computeDistanceBetween(from, to);
+    }
+
+    public String makeURL (LatLng from, LatLng to){
+        double fromLat = from.latitude;
+        double fromLog = from.longitude;
+        double toLat = to.latitude;
+        double toLog = to.longitude;
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
+        urlString.append("?origin=");// from
+        urlString.append(Double.toString(fromLat));
+        urlString.append(",");
+        urlString
+                .append(Double.toString( fromLog));
+        urlString.append("&destination=");// to
+        urlString
+                .append(Double.toString( toLat));
+        urlString.append(",");
+        urlString.append(Double.toString(toLog));
+        urlString.append("&sensor=false&mode=driving&alternatives=true");
+        urlString.append("&key=AIzaSyBGgab4P7_F83Q5NsWG2top64dmpSyBfbc");
+        return urlString.toString();
     }
 }
