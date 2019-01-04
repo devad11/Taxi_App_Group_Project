@@ -80,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PlaceInfo placeInfo;
 //    private LatLng pickUpLatLng, destinationLatLng;
 
-    private String locLat, locLng, destLat, destLng, cost, position;
+    private String position;
 
     private List<Polyline> polyLines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
@@ -107,12 +107,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         journeyDetails = new JourneyDetails();
         polyLines = new ArrayList<>();
-////////////////////dummy data//////////////////////////////////
-        locLat = "52.239944";
-        locLng = "-8.7064314";
-        destLat = "59.235684";
-        destLng = "-8.6064321";
-        cost = "12.0";
 
         logoutButton.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
