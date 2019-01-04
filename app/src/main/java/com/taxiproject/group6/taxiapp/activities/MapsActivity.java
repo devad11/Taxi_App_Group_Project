@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.paypal.android.sdk.payments.PaymentActivity;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
@@ -118,6 +119,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         bookingButton.setOnClickListener(v -> {
             DatabaseConnector.sendBooking(locLat, locLng, destLat, destLng, cost);
+            Intent intent = new Intent(this, PaypalActivity.class);
+            startActivity(intent);
         });
     }
 

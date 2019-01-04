@@ -75,7 +75,10 @@
         <activity android:name=".activities.AddressActivity" />
         <activity android:name=".classes.PickerDialogObject" />
         <activity android:name=".activities.UserDetailsActivity" />
-        <activity android:name=".activities.ReviewActivity"></activity>
+        <activity android:name=".activities.ReviewActivity" />
+        <activity android:name=".activities.FirebaseChatActivity" />
+        <activity android:name=".activities.PaypalActivity" />
+        <activity android:name=".activities.PaymentDetails"></activity>
     </application>
 
 </manifest>
