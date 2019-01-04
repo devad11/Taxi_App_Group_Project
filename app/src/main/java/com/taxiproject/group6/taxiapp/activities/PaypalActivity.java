@@ -1,5 +1,6 @@
 package com.taxiproject.group6.taxiapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.audiofx.DynamicsProcessing;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -78,13 +80,22 @@ public class PaypalActivity extends AppCompatActivity {
                 if(confirmation != null){
                     try{
                         String paymentDetails = confirmation.toJSONObject().toString(4);
-                        startActivity(new Intent(this, PaymentDetails.class));
+                        startActivity(new Intent(this, PaymentDetails.class)
+                                .putExtra("PaymentDetails", paymentDetails)
+                                .putExtra("PaymentAmount", amount)
+                        );
                     }
                     catch (JSONException e ){
                         e.printStackTrace();
                     }
                 }
             }
+            else if (requestCode == Activity.RESULT_CANCELED){
+                Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == PaymentActivity.RESULT_EXTRAS_INVALID){
+            Toast.makeText(this,"Invalid", Toast.LENGTH_SHORT).show();
         }
     }
 }
