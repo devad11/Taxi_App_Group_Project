@@ -13,14 +13,16 @@ import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
     private FirebaseDatabase db;
     private DatabaseReference ref;
     private ListView myListView;
-    private ArrayList<String> header = new ArrayList<>();
+    //private ArrayList<String> header = new ArrayList<>();
     private Button btnRefresh;
+    private static List<String> headers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class HistoryActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseConnector.toHistory();
+                headers = DatabaseConnector.toHistory();
             }
         });
 
