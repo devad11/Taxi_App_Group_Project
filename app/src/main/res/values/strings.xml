@@ -60,6 +60,7 @@
     <string name="enter_destination_address">Enter Destination Address</string>
     <string name="enter_pickup_address">Enter Pickup Address</string>
     <string name="pay_now">Pay Now</string>
+    <string name="history">History</string>
 
 
 </resources>

@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -33,7 +34,32 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
+    private static List<String> headers;
 
+
+    public static List<String> toHistory(){
+
+        if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings/") ;
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                headers.add(dataSnapshot.toString());
+                System.out.println(headers);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        return headers;
+    }
 
     public static void sendBooking(JourneyDetails journeyDetails){
 
@@ -66,6 +92,10 @@ public class DatabaseConnector {
             usersRef.setValue(journeyDetails.getCost());
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
             usersRef.setValue(databaseHeader);
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locName");
+            usersRef.setValue(journeyDetails.getPlaceFrom());
+            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destName");
+            usersRef.setValue(journeyDetails.getPlaceTo());
 
         }
     }

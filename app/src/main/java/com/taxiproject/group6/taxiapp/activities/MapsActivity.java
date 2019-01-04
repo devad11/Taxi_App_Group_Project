@@ -115,6 +115,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         bookingButton.setOnClickListener(v -> {
+            journeyDetails.setPlaceFrom(pickUpEditText.getText().toString());
+            journeyDetails.setPlaceTo(destinationEditText.getText().toString());
             if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null
                     && journeyDetails.getCost() >= MIN_FARE) {
                 DatabaseConnector.sendBooking(journeyDetails);

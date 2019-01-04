@@ -262,6 +262,12 @@
                     android:text="@string/cancel"
                     android:onClick="cancelButtonPressed"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/historyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/history" />
         </LinearLayout>
     </ScrollView>
 

@@ -7,6 +7,8 @@ public class JourneyDetails {
     private double cost;
     private double distanceKm;
     private int duration;
+    private String placeFrom;
+    private String placeTo;
 
     public PlaceInfo getStart() {
         return start;
@@ -46,6 +48,22 @@ public class JourneyDetails {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public String getPlaceFrom() {
+        return placeFrom;
+    }
+
+    public void setPlaceFrom(String placeFrom) {
+        this.placeFrom = placeFrom;
+    }
+
+    public String getPlaceTo() {
+        return placeTo;
+    }
+
+    public void setPlaceTo(String placeTo) {
+        this.placeTo = placeTo;
     }
 
     @Override

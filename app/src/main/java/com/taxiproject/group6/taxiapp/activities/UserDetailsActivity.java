@@ -1,5 +1,6 @@
 package com.taxiproject.group6.taxiapp.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private EditText userNameEditText, firstNameEditText, lastNameEditText, phoneNumberEditText, cardNoEditText, expiryDateEditText;
     private User user;
     private boolean changed;
-    private Button changeEmailAddressButton, changePasswordButton;
+    private Button changeEmailAddressButton, changePasswordButton, historyButton;
     private static final String TAG = "UserDetailsActivity";
 
     @Override
@@ -37,6 +38,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         changed = false;
         user = DatabaseConnector.loadFromDatabase();
 
+        historyButton = findViewById(R.id.historyButton);
         changePasswordButton = findViewById(R.id.changePasswordButton);
         changeEmailAddressButton = findViewById(R.id.changeEmailAddressButton);
         userNameEditText = findViewById(R.id.userNameEditText);
@@ -55,6 +57,15 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         changePasswordButton.setOnClickListener(v ->
             changePasswordButtonPressed());
+
+        historyButton.setOnClickListener(v ->
+                toHistory());
+
+    }
+
+    private void toHistory() {
+        Intent intent = new Intent(this, HistoryActivity.class);
+        startActivity(intent);
     }
 
     private void init(){
