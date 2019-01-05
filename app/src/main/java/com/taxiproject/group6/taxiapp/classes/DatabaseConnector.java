@@ -189,15 +189,25 @@ public class DatabaseConnector {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.child("user").getValue() != null) {
-//                    String test = dataSnapshot.child("user").getValue().toString();
-//                    System.out.println(test);
-//
-//                String locName = dataSnapshot.child("locName").getValue().toString();
-//                String destName = dataSnapshot.child("destName").getValue().toString();
-//                String cost = dataSnapshot.child("cost").getValue().toString();
+                String locName = "";
+                String destName = "";
+                String cost = "";
+                if(dataSnapshot.child("locName").getValue() != null) {
+                    locName = (dataSnapshot.child("locName").getValue().toString());
+                }
 
-                System.out.println(dataSnapshot.getValue());
+                if(dataSnapshot.child("destName").getValue() != null) {
+                    destName = (dataSnapshot.child("destName").getValue().toString());
+                }
+
+                if(dataSnapshot.child("cost").getValue() != null) {
+                    cost = (dataSnapshot.child("cost").getValue().toString());
+                }
+
+                String[] data = {locName, destName, cost};
+
+                HistoryActivity.loadToList(data);
+
             }
 
             @Override

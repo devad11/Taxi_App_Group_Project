@@ -15,6 +15,7 @@ import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +24,9 @@ public class HistoryActivity extends AppCompatActivity {
     private static String uid;
     private static FirebaseUser firebaseUser;
     private ListView myListView;
-    //private ArrayList<String> header = new ArrayList<>();
+    private static ArrayList<String> data = new ArrayList<>();
+    private static ArrayList<String> time = new ArrayList<>();
+    private static ArrayList<String> total = new ArrayList<>();
     private Button btnRefresh;
     private static List<String> headers = new ArrayList<>();
 
@@ -33,6 +36,8 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         btnRefresh = (Button) findViewById(R.id.btnRefresh);
+        myListView = (ListView) findViewById(R.id.myListView);
+
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = Objects.requireNonNull(firebaseUser).getUid();
@@ -41,11 +46,22 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 headers = DatabaseConnector.toHistory();
-
-
+                if (data.size() > 0) {
+                    for (int i = 0; i < time.size(); i++) {
+                       String[] dataAndTime = {data.get(i), time.get(i)};
+                       total.addAll(Arrays.asList(dataAndTime));
+                    }
+                    System.out.println(total);
+                    toListView(total);
+                }
             }
         });
 
+    }
+
+    private void toListView(ArrayList<String> total) {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,total);
+        myListView.setAdapter(arrayAdapter);
     }
 
     public static void update(List<String> keys){
@@ -61,7 +77,9 @@ public class HistoryActivity extends AppCompatActivity {
         for (int i = 0; i < headers.size(); i++) {
             String[] key = headers.get(i).split("\\+");
             if (key[0].equals(uid)){
+                time.add(key[1]);
                 userHistoryKeys.add(headers.get(i));
+
             }
         }
         //System.out.println(userHistoryKeys);
@@ -70,6 +88,10 @@ public class HistoryActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public static void loadToList(String[] values) {
+        data.addAll(Arrays.asList(values));
     }
 
 }
