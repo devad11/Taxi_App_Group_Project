@@ -179,4 +179,33 @@ public class DatabaseConnector {
         ref.updateChildren(user.toMap());
         newUser = user;
     }
+
+    public static void getHistoryDataFromDatabase(String s) {
+        if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings/" + s);
+
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.child("user").getValue() != null) {
+//                    String test = dataSnapshot.child("user").getValue().toString();
+//                    System.out.println(test);
+//                }
+                String locName = dataSnapshot.child("locName").getValue().toString();
+                String destName = dataSnapshot.child("destName").getValue().toString();
+                String cost = dataSnapshot.child("cost").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        //return null;
+    }
 }

@@ -64,7 +64,12 @@ public class HistoryActivity extends AppCompatActivity {
                 userHistoryKeys.add(headers.get(i));
             }
         }
-        System.out.println(userHistoryKeys);
+        //System.out.println(userHistoryKeys);
+        for (int i = 0; i < userHistoryKeys.size(); i++) {
+            DatabaseConnector.getHistoryDataFromDatabase(userHistoryKeys.get(i));
+
+        }
+
     }
 
 }

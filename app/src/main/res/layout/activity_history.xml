@@ -10,7 +10,7 @@
     <Button
         android:id="@+id/btnRefresh"
         android:layout_width="match_parent"
-        android:layout_height="69dp"
+        android:layout_height="129dp"
         android:layout_weight="1"
         android:text="Button" />
 
