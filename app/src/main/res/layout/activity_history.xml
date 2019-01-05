@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="129dp"
         android:layout_weight="1"
-        android:text="Button" />
+        android:text="@string/show" />
 
     <ListView
         android:id="@+id/myListView"

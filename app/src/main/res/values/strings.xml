@@ -61,6 +61,7 @@
     <string name="enter_pickup_address">Enter Pickup Address</string>
     <string name="pay_now">Pay Now</string>
     <string name="history">History</string>
+    <string name="show">Show</string>
 
 
 </resources>

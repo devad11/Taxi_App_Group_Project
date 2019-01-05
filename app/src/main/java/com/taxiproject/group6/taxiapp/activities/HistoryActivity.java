@@ -48,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
                 headers = DatabaseConnector.toHistory();
                 if (data.size() > 0) {
                     for (int i = 0; i < time.size(); i++) {
-                       String[] dataAndTime = {data.get(i), time.get(i)};
+                       String dataAndTime = data.get(i) + " " + time.get(i);
                        total.addAll(Arrays.asList(dataAndTime));
                     }
                     System.out.println(total);
@@ -92,6 +92,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     public static void loadToList(String[] values) {
         data.addAll(Arrays.asList(values));
+        System.out.println("data: " + data);
     }
 
 }
