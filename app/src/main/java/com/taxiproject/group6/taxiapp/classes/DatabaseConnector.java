@@ -17,6 +17,7 @@ import com.taxiproject.group6.taxiapp.fragments.LoginFragment;
 import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
-    private static List<String> headers;
+    private static List<String> headers = new ArrayList<>();;
 
 
     public static List<String> toHistory(){
@@ -48,8 +49,11 @@ public class DatabaseConnector {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                headers.add(dataSnapshot.getValue().toString());
-                System.out.println(headers);
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    //System.out.println(child.getKey());
+                    headers.add(child.getKey());
+                }
+                //System.out.println(headers);
 
             }
 
@@ -60,6 +64,8 @@ public class DatabaseConnector {
         });
         return headers;
     }
+
+
 
     public static void sendBooking(JourneyDetails journeyDetails){
 
@@ -96,7 +102,6 @@ public class DatabaseConnector {
             usersRef.setValue(journeyDetails.getPlaceFrom());
             usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destName");
             usersRef.setValue(journeyDetails.getPlaceTo());
-
         }
     }
 

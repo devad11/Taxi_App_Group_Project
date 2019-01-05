@@ -37,8 +37,10 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 headers = DatabaseConnector.toHistory();
+                //info();
             }
         });
 
     }
+
 }
