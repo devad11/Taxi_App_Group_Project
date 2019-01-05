@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.taxiproject.group6.taxiapp.activities.HistoryActivity;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
 import com.taxiproject.group6.taxiapp.fragments.LoginFragment;
 import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
@@ -35,11 +36,12 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
-    private static List<String> headers = new ArrayList<>();;
+    private static List<String> headers;
 
 
     public static List<String> toHistory(){
 
+        headers = new ArrayList<>();
         if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
@@ -54,6 +56,8 @@ public class DatabaseConnector {
                     headers.add(child.getKey());
                 }
                 //System.out.println(headers);
+                HistoryActivity.update(headers);
+
 
             }
 
@@ -62,6 +66,7 @@ public class DatabaseConnector {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
         return headers;
     }
 
