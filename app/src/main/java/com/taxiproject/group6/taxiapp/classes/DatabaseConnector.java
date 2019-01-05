@@ -185,7 +185,7 @@ public class DatabaseConnector {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings/" + s);
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings/" + s + "/");
 
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -194,7 +194,7 @@ public class DatabaseConnector {
 //                if(dataSnapshot.child("user").getValue() != null) {
 //                    String test = dataSnapshot.child("user").getValue().toString();
 //                    System.out.println(test);
-//                }
+
                 String locName = dataSnapshot.child("locName").getValue().toString();
                 String destName = dataSnapshot.child("destName").getValue().toString();
                 String cost = dataSnapshot.child("cost").getValue().toString();
