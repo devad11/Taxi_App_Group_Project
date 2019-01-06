@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dropdown_menu1_personal_details"
+        android:title="@string/personal_details"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/dropdown_menu_logout"
+        android:title="@string/logout"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+</menu>

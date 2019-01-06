@@ -31,9 +31,6 @@ public class PayPalActivity extends AppCompatActivity {
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(ConfigPaypal.PAYPAL_CLIENT_ID);
 
-    private Button btnPayNow;
-    private TextView amountTextView;
-
     private double cost;
 
     @Override
@@ -53,8 +50,8 @@ public class PayPalActivity extends AppCompatActivity {
 
         cost = getIntent().getDoubleExtra("Cost", 0);
 
-        btnPayNow = findViewById(R.id.btnPayNow);
-        amountTextView = findViewById(R.id.edtAmount);
+        Button btnPayNow = findViewById(R.id.btnPayNow);
+        TextView amountTextView = findViewById(R.id.edtAmount);
 
         String costString = "€" + cost;
         amountTextView.setText(costString);
@@ -83,6 +80,7 @@ public class PayPalActivity extends AppCompatActivity {
                                 .putExtra("PaymentDetails", paymentDetails)
                                 .putExtra("PaymentAmount", Double.toString(cost))
                         );
+                        finish();
                     }
                     catch (JSONException e ){
                         e.printStackTrace();

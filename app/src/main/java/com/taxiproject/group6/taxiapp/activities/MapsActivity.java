@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.directions.route.AbstractRouting;
@@ -28,16 +30,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-//import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -45,10 +44,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.JourneyDetails;
+import com.taxiproject.group6.taxiapp.classes.LatLng;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
-import com.taxiproject.group6.taxiapp.classes.LatLng;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private boolean permissionsGranted = false;
-    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private MapLocationHelper mapLocationHelper;
     private static final String TAG = "MapsActivity";
@@ -72,20 +70,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new LatLngBounds(new com.google.android.gms.maps.model.LatLng(51.384959, -10.269509),
                     new com.google.android.gms.maps.model.LatLng(52.452138, -7.84153));
 
-//    private AutoCompleteTextView inputSearchEditText, pickUpEditText, destinationEditText;
     private AutoCompleteTextView pickUpEditText, destinationEditText;
     private ImageView gpsImage, personalDetailsImage;
-    private Button logoutButton, bookingButton;
+    private TextView estimatedCostTextView;
+    private Button bookingButton;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     private GoogleApiClient googleApiClient;
-    private GeoDataClient geoDataClient;
     private PlaceInfo placeInfo;
-//    private LatLng pickUpLatLng, destinationLatLng;
 
     private String position;
 
     private List<Polyline> polyLines;
-    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
+    private static final int[] COLORS = new int[]{R.color.blue};
 
     private final double MIN_FARE = 5.00;
     private JourneyDetails journeyDetails;
@@ -96,12 +92,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         bookingButton = findViewById(R.id.bookingButton);
-        logoutButton = findViewById(R.id.logoutButton);
         personalDetailsImage = findViewById(R.id.personalDetailsButton);
-//        inputSearchEditText = findViewById(R.id.inputSearchEditText);
         pickUpEditText = findViewById(R.id.pickupEditText);
         destinationEditText = findViewById(R.id.destinationEditText);
         gpsImage = findViewById(R.id.gpsImage);
+        estimatedCostTextView = findViewById(R.id.estimatedCostTextView);
         getUsersPermission();
 
         pickUpEditText.setTag("PickUp");
@@ -109,27 +104,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         journeyDetails = new JourneyDetails();
         polyLines = new ArrayList<>();
-
-        logoutButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(MapsActivity.this, MainActivity.class);
-            startActivity(i);
-        });
-
-        bookingButton.setOnClickListener(v -> {
-//            journeyDetails.setPlaceFrom(pickUpEditText.getText().toString());
-//            journeyDetails.setPlaceTo(destinationEditText.getText().toString());
-            if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null
-                    && journeyDetails.getCost() >= MIN_FARE) {
-                DatabaseConnector.sendBooking(journeyDetails);
-                Intent intent = new Intent(this, PayPalActivity.class);
-                intent.putExtra("Cost", journeyDetails.getCost());
-                startActivity(intent);
-            }else{
-                Toast.makeText(this, "Please select both the pickup and destination"
-                        , Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
@@ -173,8 +147,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void init() {
         Log.d(TAG, "init: Initialising");
 
-//        geoDataClient = Places.getGeoDataClient(this, null);
-
         googleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -188,49 +160,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeAutocompleteAdapter = new PlaceAutocompleteAdapter(
                 this, googleApiClient, LAT_LNG_BOUNDS, null);
 
-        pickUpEditText.setAdapter(placeAutocompleteAdapter);
-        pickUpEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH
-                    || actionId == EditorInfo.IME_ACTION_DONE
-                    || event.getAction() == KeyEvent.ACTION_DOWN
-                    || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                String searchString = pickUpEditText.getText().toString();
-                this.placeInfo.setPosition("PickUp");
-                position = "PickUp";
-
-                mapLocationHelper.geoLocate(this, searchString, placeInfo);
-                journeyDetails.setStart(placeInfo);
-            }
-            return false;
-        });
-
-        destinationEditText.setAdapter(placeAutocompleteAdapter);
-        destinationEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH
-                    || actionId == EditorInfo.IME_ACTION_DONE
-                    || event.getAction() == KeyEvent.ACTION_DOWN
-                    || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                String searchString = destinationEditText.getText().toString();
-                this.placeInfo.setPosition("Destination");
-                position = "Destination";
-
-                mapLocationHelper.geoLocate(this, searchString, placeInfo);
-                journeyDetails.setEnd(placeInfo);
-                getRouterToMarker();
-            }
-            return false;
-        });
-
-        gpsImage.setOnClickListener(v -> {
-            Log.d(TAG, "gpsImage: clicked gps image");
-            mapLocationHelper.getDeviceLocation(this, permissionsGranted);
-        });
         hideSoftKeyBoard();
+        gpsImageOnClick();
+        placeEditTextOnClick(this.pickUpEditText);
+        placeEditTextOnClick(this.destinationEditText);
+        menuImageViewOnClick();
+        bookingButtonOnClick();
 
-        personalDetailsImage.setOnClickListener(v -> {
-            Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
-            startActivity(i);
-        });
     }
 
     private void initMap() {
@@ -281,6 +217,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    //-----------------------------------
+    //      ONCLICK LISTENERS
+    //-----------------------------------
+    private void gpsImageOnClick(){
+        gpsImage.setOnClickListener(v -> {
+            Log.d(TAG, "gpsImage: clicked gps image");
+            mapLocationHelper.getDeviceLocation(this, permissionsGranted);
+        });
+    }
+
+    private void menuImageViewOnClick() {
+        personalDetailsImage.setOnClickListener(v -> {
+            // Creating the drop down menu
+            PopupMenu dropDownMenu = new PopupMenu(MapsActivity.this, personalDetailsImage);
+            // added the drop down menu items from an xml file
+            dropDownMenu.getMenuInflater().inflate(R.menu.drop_down_menu_items, dropDownMenu.getMenu());
+            // adding an item listener to the menu
+            dropDownMenu.setOnMenuItemClickListener(menuItem -> {
+                // assigning the selected option's text to a variable
+                String text = menuItem.getTitle().toString();
+                Toast.makeText(MapsActivity.this, "You have clicked " + text, Toast.LENGTH_LONG).show();
+                // if statement checking the which item was selected
+                if (text.equalsIgnoreCase("Personal Details")) {
+                    Intent i = new Intent(MapsActivity.this, UserDetailsActivity.class);
+                    startActivity(i);
+                } else if (text.equalsIgnoreCase("Logout")) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent i = new Intent(MapsActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                return true;
+            });
+            // display the dropdown menu
+            dropDownMenu.show();
+        });
+    }
+
+    private void bookingButtonOnClick(){
+        bookingButton.setOnClickListener(v -> {
+//            journeyDetails.setPlaceFrom(pickUpEditText.getText().toString());
+//            journeyDetails.setPlaceTo(destinationEditText.getText().toString());
+            if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null
+                    && journeyDetails.getCost() >= MIN_FARE) {
+                DatabaseConnector.sendBooking(journeyDetails);
+                Intent intent = new Intent(this, PayPalActivity.class);
+                intent.putExtra("Cost", journeyDetails.getCost());
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "Please select both the pickup and destination"
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void placeEditTextOnClick(AutoCompleteTextView autoCompleteTextView){
+        autoCompleteTextView.setAdapter(placeAutocompleteAdapter);
+        autoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || event.getAction() == KeyEvent.ACTION_DOWN
+                    || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                String searchString = destinationEditText.getText().toString();
+                this.placeInfo.setPosition(autoCompleteTextView.getTag().toString());
+                position = autoCompleteTextView.getTag().toString();
+
+                mapLocationHelper.geoLocate(this, searchString, placeInfo);
+                if(position.equalsIgnoreCase("pickup"))
+                    journeyDetails.setStart(placeInfo);
+                else if(position.equalsIgnoreCase("pickup"))
+                    journeyDetails.setEnd(placeInfo);
+                getRouterToMarker();
+            }
+            return false;
+        });
+    }
     /*
         -----------------   Routing Listener Methods -------------------------
         Draws a polyline to show the direction
@@ -346,6 +358,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             journeyDetails.setDistanceKm(route.get(i).getDistanceValue()/1000.0);
             journeyDetails.setDuration(route.get(i).getDurationValue()/60);
             journeyDetails.setCost(calculateFare());
+
+            String s = "€" + Double.toString(journeyDetails.getCost());
+            this.estimatedCostTextView.setText(s);
 
             Log.d(TAG, "Distance between points: " + journeyDetails.getDistanceKm()
                     + " Duration: " + journeyDetails.getDuration() + " Cost: " + journeyDetails.getCost());

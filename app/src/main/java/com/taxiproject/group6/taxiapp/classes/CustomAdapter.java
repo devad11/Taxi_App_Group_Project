@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends BaseAdapter {
 
-    private static final String TAG = "Custom Adapter";
+    private static final String TAG = "CustomAdapter";
 
     private Context context;
     private int layout;

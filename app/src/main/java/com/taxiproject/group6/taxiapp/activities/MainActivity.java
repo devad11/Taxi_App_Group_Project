@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         setUpViewPager(viewPager);
+
     }
 
     private void setUpViewPager(ViewPager vp){
