@@ -63,10 +63,12 @@ public class DatabaseConnector {
             databaseHeader = firebaseUser.getUid();
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/rate");
+            usersRef = ref.child(currentTime.toString() + "/rate");
             usersRef.setValue(rate);
-            usersRef = ref.child(databaseHeader + "/" + currentTime.toString() + "/review");
+            usersRef = ref.child(currentTime.toString() + "/review");
             usersRef.setValue(review);
+            usersRef = ref.child(currentTime.toString() + "/user");
+            usersRef.setValue(databaseHeader);
         }
     }
 
