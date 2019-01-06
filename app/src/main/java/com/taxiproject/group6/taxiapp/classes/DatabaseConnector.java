@@ -1,28 +1,20 @@
 package com.taxiproject.group6.taxiapp.classes;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.taxiproject.group6.taxiapp.activities.HistoryActivity;
-import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
-import com.taxiproject.group6.taxiapp.fragments.LoginFragment;
-import com.taxiproject.group6.taxiapp.fragments.RegisterFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -59,31 +51,6 @@ public class DatabaseConnector {
             newUser.addToHistory(journeyDetails);
 
             usersRef.updateChildren(journeyDetails.toMap());
-
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/time");
-//            usersRef.setValue(formatTime.format(currentTime));
-//            SimpleDateFormat formatDate = new SimpleDateFormat("MM");
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/date");
-//            usersRef.setValue(formatDate.format(currentTime));
-//            SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/year");
-//            usersRef.setValue(formatYear.format(currentTime));
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLat");
-//            usersRef.setValue(journeyDetails.getStart().getLatLng().latitude);
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLng");
-//            usersRef.setValue(journeyDetails.getStart().getLatLng().longitude);
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLat");
-//            usersRef.setValue(journeyDetails.getEnd().getLatLng().latitude);
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLng");
-//            usersRef.setValue(journeyDetails.getEnd().getLatLng().longitude);
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/cost");
-//            usersRef.setValue(journeyDetails.getCost());
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
-//            usersRef.setValue(databaseHeader);
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locName");
-//            usersRef.setValue(journeyDetails.getPlaceFrom());
-//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destName");
-//            usersRef.setValue(journeyDetails.getPlaceTo());
         }
     }
 
@@ -128,13 +95,17 @@ public class DatabaseConnector {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                newUser = dataSnapshot.getValue(User.class);
-//                ArrayList<JourneyDetails> journeyDetailsArrayList = new ArrayList<>();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Log.d(TAG, "--------------------------------------------------" + ds.getKey() + ", "+  Objects.requireNonNull(ds.getValue()).toString());
                     newUser.setByFieldTag(ds.getKey(), Objects.requireNonNull(ds.getValue()).toString());
                     if(Objects.requireNonNull(ds.getKey()).equalsIgnoreCase("history")){
+                        int i = 0;
+                        ArrayList<JourneyDetails> journeyDetailsArrayList = new ArrayList<>();
                         for(DataSnapshot dsi : ds.getChildren()){
-                            newUser.addToHistory(dsi.getValue(JourneyDetails.class));
+                            Log.d(TAG,i++ + " : " +  Objects.requireNonNull(dsi.getValue(JourneyDetails.class)).toString());
+                            journeyDetailsArrayList.add(dsi.getValue(JourneyDetails.class));
                         }
+                        newUser.setHistory(journeyDetailsArrayList);
                     }
                 }
             }

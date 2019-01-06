@@ -91,7 +91,7 @@ public class User {
     }
 
     public void setCardNo(String cardNo) {
-        this.cardNo = Encryption.decryptCardNumber(cardNo);
+        this.cardNo = cardNo;
     }
 
     public void setExpiryDate(String expiryDate) {
@@ -143,7 +143,7 @@ public class User {
                 break;
             case "dateOfBirth": this.dateOfBirth = value;
                 break;
-            case "cardNo": this.cardNo = Encryption.encryptCardNumber(value);
+            case "cardNo": this.cardNo = value;
                 break;
             case "expiryDate": this.expiryDate = value;
                 break;
