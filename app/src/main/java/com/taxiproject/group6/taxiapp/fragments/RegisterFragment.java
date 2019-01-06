@@ -29,8 +29,10 @@ import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
 import com.taxiproject.group6.taxiapp.activities.MapsActivity;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
+import com.taxiproject.group6.taxiapp.classes.JourneyDetails;
 import com.taxiproject.group6.taxiapp.classes.User;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -179,7 +181,7 @@ public class RegisterFragment extends Fragment {
 
                             final User[] newUser;
                             try {
-                                newUser = new User[]{new User(firstName, lastName, userName, dob, phoneNumber, cardNo, expiryDate)};
+                                newUser = new User[]{new User(firstName, lastName, userName, dob, phoneNumber, cardNo, expiryDate, new ArrayList<>())};
                                 DatabaseConnector.loadToDatabase(newUser[0]);
 
 

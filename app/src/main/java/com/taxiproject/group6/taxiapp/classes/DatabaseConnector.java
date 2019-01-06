@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,41 +37,6 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
-    private static List<String> headers;
-
-
-    public static List<String> toHistory(){
-
-        headers = new ArrayList<>();
-        if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings/") ;
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    //System.out.println(child.getKey());
-                    headers.add(child.getKey());
-                }
-                //System.out.println(headers);
-                HistoryActivity.update(headers);
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-        return headers;
-    }
-
-
 
     public static void sendBooking(JourneyDetails journeyDetails){
 
@@ -80,33 +46,44 @@ public class DatabaseConnector {
         {
             databaseHeader = firebaseUser.getUid();
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/bookings");
-            SimpleDateFormat formatId = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/time");
-            usersRef.setValue(formatTime.format(currentTime));
-            SimpleDateFormat formatDate = new SimpleDateFormat("MM");
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/date");
-            usersRef.setValue(formatDate.format(currentTime));
-            SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/year");
-            usersRef.setValue(formatYear.format(currentTime));
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLat");
-            usersRef.setValue(journeyDetails.getStart().getLatLng().latitude);
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLng");
-            usersRef.setValue(journeyDetails.getStart().getLatLng().longitude);
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLat");
-            usersRef.setValue(journeyDetails.getEnd().getLatLng().latitude);
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLng");
-            usersRef.setValue(journeyDetails.getEnd().getLatLng().longitude);
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/cost");
-            usersRef.setValue(journeyDetails.getCost());
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
-            usersRef.setValue(databaseHeader);
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locName");
-            usersRef.setValue(journeyDetails.getPlaceFrom());
-            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destName");
-            usersRef.setValue(journeyDetails.getPlaceTo());
+            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/users/" + databaseHeader);
+            SimpleDateFormat formatId = new SimpleDateFormat("dd-MM-yyyy", Locale.UK);
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+
+            usersRef = ref.child("/history");
+            Log.d(TAG, "Time: " + formatId.format(currentTime) + " + " + formatTime.format(currentTime));
+            usersRef = usersRef.child("/" + formatId.format(currentTime) + " + " + formatTime.format(currentTime));
+            journeyDetails.setDate(formatId.format(currentTime));
+            journeyDetails.setTime(formatTime.format(currentTime));
+
+            newUser.addToHistory(journeyDetails);
+
+            usersRef.updateChildren(journeyDetails.toMap());
+
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/time");
+//            usersRef.setValue(formatTime.format(currentTime));
+//            SimpleDateFormat formatDate = new SimpleDateFormat("MM");
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/date");
+//            usersRef.setValue(formatDate.format(currentTime));
+//            SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/year");
+//            usersRef.setValue(formatYear.format(currentTime));
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLat");
+//            usersRef.setValue(journeyDetails.getStart().getLatLng().latitude);
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locLng");
+//            usersRef.setValue(journeyDetails.getStart().getLatLng().longitude);
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLat");
+//            usersRef.setValue(journeyDetails.getEnd().getLatLng().latitude);
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destLng");
+//            usersRef.setValue(journeyDetails.getEnd().getLatLng().longitude);
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/cost");
+//            usersRef.setValue(journeyDetails.getCost());
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/user");
+//            usersRef.setValue(databaseHeader);
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/locName");
+//            usersRef.setValue(journeyDetails.getPlaceFrom());
+//            usersRef = ref.child(databaseHeader + "+" + formatId.format(currentTime) + "/destName");
+//            usersRef.setValue(journeyDetails.getPlaceTo());
         }
     }
 
@@ -150,7 +127,16 @@ public class DatabaseConnector {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                newUser = dataSnapshot.getValue(User.class);
+//                newUser = dataSnapshot.getValue(User.class);
+//                ArrayList<JourneyDetails> journeyDetailsArrayList = new ArrayList<>();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    newUser.setByFieldTag(ds.getKey(), Objects.requireNonNull(ds.getValue()).toString());
+                    if(Objects.requireNonNull(ds.getKey()).equalsIgnoreCase("history")){
+                        for(DataSnapshot dsi : ds.getChildren()){
+                            newUser.addToHistory(dsi.getValue(JourneyDetails.class));
+                        }
+                    }
+                }
             }
 
             @Override
@@ -180,42 +166,4 @@ public class DatabaseConnector {
         newUser = user;
     }
 
-    public static void getHistoryDataFromDatabase(String s) {
-        if(firebaseUser == null || !firebaseUser.equals(FirebaseAuth.getInstance().getCurrentUser()))
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        databaseHeader = Objects.requireNonNull(firebaseUser).getUid();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("bookings").child(s);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String locName = "";
-                String destName = "";
-                String cost = "";
-                if(dataSnapshot.child("locName").getValue() != null) {
-                    locName = (dataSnapshot.child("locName").getValue().toString());
-                }
-
-                if(dataSnapshot.child("destName").getValue() != null) {
-                    destName = (dataSnapshot.child("destName").getValue().toString());
-                }
-
-                if(dataSnapshot.child("cost").getValue() != null) {
-                    cost = (dataSnapshot.child("cost").getValue().toString());
-                }
-
-                String[] data = {locName, destName, cost};
-
-                HistoryActivity.loadToList(data);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-        //return null;
-    }
 }

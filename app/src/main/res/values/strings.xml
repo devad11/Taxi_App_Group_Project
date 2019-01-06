@@ -62,6 +62,11 @@
     <string name="pay_now">Pay Now</string>
     <string name="history">History</string>
     <string name="show">Show</string>
+    <string name="from">From:</string>
+    <string name="test">TEST</string>
+    <string name="to">To:</string>
+    <string name="date_and_time">Date:</string>
+    <string name="cost">Cost:</string>
 
 
 </resources>

@@ -37,7 +37,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -48,6 +48,7 @@ import com.taxiproject.group6.taxiapp.classes.JourneyDetails;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
+import com.taxiproject.group6.taxiapp.classes.LatLng;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -68,7 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 17;
     private static final LatLngBounds LAT_LNG_BOUNDS =
-            new LatLngBounds(new LatLng(51.384959, -10.269509), new LatLng(52.452138, -7.84153));
+            new LatLngBounds(new com.google.android.gms.maps.model.LatLng(51.384959, -10.269509),
+                    new com.google.android.gms.maps.model.LatLng(52.452138, -7.84153));
 
 //    private AutoCompleteTextView inputSearchEditText, pickUpEditText, destinationEditText;
     private AutoCompleteTextView pickUpEditText, destinationEditText;
@@ -115,12 +117,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         bookingButton.setOnClickListener(v -> {
-            journeyDetails.setPlaceFrom(pickUpEditText.getText().toString());
-            journeyDetails.setPlaceTo(destinationEditText.getText().toString());
+//            journeyDetails.setPlaceFrom(pickUpEditText.getText().toString());
+//            journeyDetails.setPlaceTo(destinationEditText.getText().toString());
             if(journeyDetails.getStart() != null && journeyDetails.getEnd() != null
                     && journeyDetails.getCost() >= MIN_FARE) {
                 DatabaseConnector.sendBooking(journeyDetails);
-                Intent intent = new Intent(this, PaypalActivity.class);
+                Intent intent = new Intent(this, PayPalActivity.class);
                 intent.putExtra("Cost", journeyDetails.getCost());
                 startActivity(intent);
             }else{
@@ -295,7 +297,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(false)
-                    .waypoints(journeyDetails.getStart().getLatLng(), journeyDetails.getEnd().getLatLng())
+                    .waypoints(new com.google.android.gms.maps.model.LatLng(journeyDetails.getStart().getLatLng().getLatitude(),
+                            journeyDetails.getStart().getLatLng().getLongitude()),
+                            new com.google.android.gms.maps.model.LatLng(journeyDetails.getEnd().getLatLng().getLatitude(),
+                                    journeyDetails.getEnd().getLatLng().getLongitude()))
                     .build();
             routing.execute();
         }
@@ -394,7 +399,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             placeInfo.setName(place.getName().toString());
-            placeInfo.setLatLng(place.getLatLng());
+            LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+            placeInfo.setLatLng(latLng);
             placeInfo.setRating(place.getRating());
             placeInfo.setId(place.getId());
             placeInfo.setAddress(place.getAddress().toString());
@@ -406,7 +412,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Log.d(TAG, "onResult: place details: " + placeInfo.toString());
 
-        mapLocationHelper.moveCamera(placeInfo.getLatLng(), DEFAULT_ZOOM, placeInfo);
+        mapLocationHelper.moveCamera(new com.google.android.gms.maps.model.LatLng(
+                placeInfo.getLatLng().getLatitude(), placeInfo.getLatLng().getLongitude()), DEFAULT_ZOOM, placeInfo);
 
         if(position.equalsIgnoreCase("destination"))
             journeyDetails.setEnd(placeInfo);

@@ -2,7 +2,7 @@ package com.taxiproject.group6.taxiapp.classes;
 
 import android.net.Uri;
 
-import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.LatLng;
 
 public class PlaceInfo {
 

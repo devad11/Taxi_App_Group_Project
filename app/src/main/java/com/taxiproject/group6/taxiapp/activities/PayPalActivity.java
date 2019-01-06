@@ -24,7 +24,7 @@ import org.json.JSONException;
 
 import java.math.BigDecimal;
 
-public class PaypalActivity extends AppCompatActivity {
+public class PayPalActivity extends AppCompatActivity {
 
     private static final int PAYPAL_REQUEST_CODE = 7171;
     private static PayPalConfiguration config = new PayPalConfiguration()
@@ -74,7 +74,7 @@ public class PaypalActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PAYPAL_REQUEST_CODE)
         {
-            if(requestCode == RESULT_OK){
+            if(resultCode == RESULT_OK){
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if(confirmation != null){
                     try{
@@ -89,7 +89,7 @@ public class PaypalActivity extends AppCompatActivity {
                     }
                 }
             }
-            else if (requestCode == Activity.RESULT_CANCELED){
+            else if (resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
             }
         }
