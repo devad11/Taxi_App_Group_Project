@@ -30,10 +30,10 @@ public class ReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        mySeekBar = findViewById(R.id.mySeekBar);
-        reviewEditText = findViewById(R.id.reviewEditText);
-        rateTextView = findViewById(R.id.rateTextView);
-        reviewSendButton = findViewById(R.id.reviewSendButton);
+        mySeekBar = (SeekBar) findViewById(R.id.mySeekBar);
+        reviewEditText = (EditText) findViewById(R.id.reviewEditText);
+        rateTextView = (TextView) findViewById(R.id.rateTextView);
+        reviewSendButton = (Button) findViewById(R.id.reviewSendButton);
 
         reviewSendButton.setOnClickListener(v -> {
             notificationHelper = new NotificationHelper(this);
@@ -51,8 +51,13 @@ public class ReviewActivity extends AppCompatActivity {
         mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+<<<<<<< HEAD
                 userRate = Integer.toString(progress + 1);
                 rateTextView.setText(userRate);
+=======
+                rateTextView.setText("" + (progress + 1));
+                userRate = ("" + (progress + 1));
+>>>>>>> parent of cac89f1... tidied code, removed unused variables and imports
             }
 
             @Override

@@ -1,33 +1,54 @@
 package com.taxiproject.group6.taxiapp.activities;
 
 
-import android.os.Bundle;
+import android.app.ProgressDialog;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.SectionsStatePagerAdapter;
+import com.taxiproject.group6.taxiapp.classes.User;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeEmail;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangeName;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePassword;
 import com.taxiproject.group6.taxiapp.fragments.FragmentChangePhoneNum;
 
+import java.util.Map;
+import java.util.Objects;
+
 public class PersonalDetailsActivity extends AppCompatActivity {
 
+    private SectionsStatePagerAdapter sectionsStatePagerAdapter;
     private ViewPager viewPager;
+
+    private ProgressDialog progressDialog;
+    private Button changeNameButton, changeEmailButton, changePhoneButton, changePasswordButton;
+    private static String uid;
+    private String email;
+    private String name;
+    private static FirebaseUser user;
+    private static DatabaseReference ref;
+    public static DatabaseReference usersRef;
+    public static Map<String, User> users;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_details);
 
+        sectionsStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.container);
-        Button changeNameButton = findViewById(R.id.changeNameButton);
-        Button changeEmailButton = findViewById(R.id.changeEmailButton);
-        Button changePhoneButton = findViewById(R.id.changePhoneButton);
-        Button changePasswordButton = findViewById(R.id.changePasswordButton);
+        changeNameButton = findViewById(R.id.changeNameButton);
+        changeEmailButton = findViewById(R.id.changeEmailButton);
+        changePhoneButton = findViewById(R.id.changePhoneButton);
+        changePasswordButton = findViewById(R.id.changePasswordButton);
+        progressDialog = new ProgressDialog(this);
 
         setUpViewPager(viewPager);
 
@@ -64,6 +85,12 @@ public class PersonalDetailsActivity extends AppCompatActivity {
     public void setViewPager(int fragmentNo){
         viewPager.setCurrentItem(fragmentNo);
     }
+
+    public ProgressDialog getProgressDialog() {
+        return progressDialog;
+    }
+
+
 
 }
 

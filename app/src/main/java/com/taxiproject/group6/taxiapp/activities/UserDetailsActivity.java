@@ -52,9 +52,14 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         init();
 
-        changeEmailAddressButton.setOnClickListener(v -> changeEmailButtonPressed());
-        changePasswordButton.setOnClickListener(v -> changePasswordButtonPressed());
-        historyButton.setOnClickListener(v -> toHistory());
+        changeEmailAddressButton.setOnClickListener(v ->
+            changeEmailButtonPressed());
+
+        changePasswordButton.setOnClickListener(v ->
+            changePasswordButtonPressed());
+
+        historyButton.setOnClickListener(v ->
+                toHistory());
 
     }
 

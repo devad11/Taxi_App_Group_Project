@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ public class MapLocationHelper  {
     private static final String TAG = "MapLocationHelper";
     private static final float DEFAULT_ZOOM = 15;
     private GoogleMap mMap;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker pickUpMarker, destinationMarker;
+    private LatLng pickUpLatLng, destinationLatLng;
 
     public MapLocationHelper(GoogleMap mMap) {
         this.mMap = mMap;
@@ -34,7 +37,7 @@ public class MapLocationHelper  {
 
     public void geoLocate(Activity activity, String searchString, PlaceInfo placeInfo) {
         Log.d(TAG, "geoLocate: Locating");
-
+//        String searchString = inputSearchEditText.getText().toString();
         Geocoder geocoder = new Geocoder(activity);
         List<Address> list = new ArrayList<>();
         try{
@@ -52,7 +55,7 @@ public class MapLocationHelper  {
 
     public void getDeviceLocation(Activity activity, boolean permissionsGranted) {
         Log.d(TAG,"getDeviceLocation: getting devices current location.");
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
         try{
             if(permissionsGranted){
                 Task location = fusedLocationProviderClient.getLastLocation();
@@ -85,6 +88,7 @@ public class MapLocationHelper  {
             if(placeInfo.getPosition().equalsIgnoreCase("pickup")) {
                 if(pickUpMarker != null) {
                     pickUpMarker.setPosition(latLng);
+                    pickUpLatLng = latLng;
                 }else {
                     MarkerOptions marker = new MarkerOptions()
                             .position(latLng)
@@ -97,6 +101,7 @@ public class MapLocationHelper  {
             }else if(placeInfo.getPosition().equalsIgnoreCase("destination")){
                 if(destinationMarker != null) {
                     destinationMarker.setPosition(latLng);
+                    destinationLatLng = latLng;
                 }
                 else {
                     MarkerOptions marker = new MarkerOptions()
@@ -113,4 +118,47 @@ public class MapLocationHelper  {
         }
     }
 
+    public LatLng getPickUpLatLng() {
+        return pickUpLatLng;
+    }
+
+    public void setPickUpLatLng(LatLng pickUpLatLng) {
+        this.pickUpLatLng = pickUpLatLng;
+    }
+
+    public LatLng getDestinationLatLng() {
+        return destinationLatLng;
+    }
+
+    public void setDestinationLatLng(LatLng destinationLatLng) {
+        this.destinationLatLng = destinationLatLng;
+    }
+
+    public double getDistance(LatLng from, LatLng to){
+        if(from == null || to == null)
+            return 0;
+        return SphericalUtil.computeDistanceBetween(from, to);
+    }
+
+    public String makeURL (LatLng from, LatLng to){
+        double fromLat = from.latitude;
+        double fromLog = from.longitude;
+        double toLat = to.latitude;
+        double toLog = to.longitude;
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
+        urlString.append("?origin=");// from
+        urlString.append(Double.toString(fromLat));
+        urlString.append(",");
+        urlString
+                .append(Double.toString( fromLog));
+        urlString.append("&destination=");// to
+        urlString
+                .append(Double.toString( toLat));
+        urlString.append(",");
+        urlString.append(Double.toString(toLog));
+        urlString.append("&sensor=false&mode=driving&alternatives=true");
+        urlString.append("&key=AIzaSyBGgab4P7_F83Q5NsWG2top64dmpSyBfbc");
+        return urlString.toString();
+    }
 }
