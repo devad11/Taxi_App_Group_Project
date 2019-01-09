@@ -30,10 +30,10 @@ public class ReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        mySeekBar = (SeekBar) findViewById(R.id.mySeekBar);
-        reviewEditText = (EditText) findViewById(R.id.reviewEditText);
-        rateTextView = (TextView) findViewById(R.id.rateTextView);
-        reviewSendButton = (Button) findViewById(R.id.reviewSendButton);
+        mySeekBar = findViewById(R.id.mySeekBar);
+        reviewEditText = findViewById(R.id.reviewEditText);
+        rateTextView = findViewById(R.id.rateTextView);
+        reviewSendButton = findViewById(R.id.reviewSendButton);
 
         reviewSendButton.setOnClickListener(v -> {
             notificationHelper = new NotificationHelper(this);
