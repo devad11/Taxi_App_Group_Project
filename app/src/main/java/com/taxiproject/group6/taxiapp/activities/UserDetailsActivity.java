@@ -64,8 +64,6 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void toHistory() {
-//        Intent i = new Intent(UserDetailsActivity.this, ReviewActivity.class);
-//        startActivity(i);
         Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
     }
