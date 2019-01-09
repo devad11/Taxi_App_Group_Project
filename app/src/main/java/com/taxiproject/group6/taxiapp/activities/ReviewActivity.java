@@ -51,13 +51,8 @@ public class ReviewActivity extends AppCompatActivity {
         mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-<<<<<<< HEAD
                 userRate = Integer.toString(progress + 1);
                 rateTextView.setText(userRate);
-=======
-                rateTextView.setText("" + (progress + 1));
-                userRate = ("" + (progress + 1));
->>>>>>> parent of cac89f1... tidied code, removed unused variables and imports
             }
 
             @Override
