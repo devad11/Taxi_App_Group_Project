@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.taxiproject.group6.taxiapp.R;
 
@@ -36,6 +37,9 @@ public class PaymentDetails extends AppCompatActivity {
 
     private void showDetails(JSONObject response, String paymentAmount){
         try{
+            Toast.makeText(this,("Amount payed: " + (String.format("€%s", paymentAmount))), Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, ReviewActivity.class);
+            startActivity(i);
             txtId.setText(response.getString("id"));
             txtStatus.setText(response.getString("status"));
             txtAmount.setText(response.getString(String.format("€%s", paymentAmount)));
