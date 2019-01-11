@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
+import com.taxiproject.group6.taxiapp.activities.MapsActivity;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -87,7 +88,7 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public NotificationCompat.Builder secondaryNotification(String title, String message){
-        Intent intent = new Intent(NotificationHelper.this, MainActivity.class);               //intent to change to new activity
+        Intent intent = new Intent(NotificationHelper.this, MapsActivity.class);               //intent to change to new activity
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);//make intent pendingIntent
 
         return new NotificationCompat.Builder(getApplicationContext(), SECONDARY_CHANNEL_ID)
@@ -105,4 +106,5 @@ public class NotificationHelper extends ContextWrapper {
                 .addAction(R.mipmap.ic_launcher, "OPEN", pendingIntent)                               //creates call button and calls when pressed
                 .setAutoCancel(true);
     }
+
 }

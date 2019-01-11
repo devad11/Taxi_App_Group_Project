@@ -1,16 +1,13 @@
 package com.taxiproject.group6.taxiapp.activities;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.firebase.DataCollectionDefaultChange;
-import com.google.firebase.auth.FirebaseAuth;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.NotificationHelper;
@@ -24,7 +21,6 @@ public class ReviewActivity extends AppCompatActivity {
     private String userReview, userRate;
     NotificationHelper notificationHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +32,17 @@ public class ReviewActivity extends AppCompatActivity {
         reviewSendButton = findViewById(R.id.reviewSendButton);
 
         reviewSendButton.setOnClickListener(v -> {
-            notificationHelper = new NotificationHelper(this);
             userReview = reviewEditText.getText().toString();
             DatabaseConnector.reviewToDatabase(userRate, userReview);
+
+            notificationHelper = new NotificationHelper(this);
             NotificationCompat.Builder builder = notificationHelper.secondaryNotification(userRate, userReview);
             notificationHelper.getManager().notify(2, builder.build());
-            Intent i = new Intent(ReviewActivity.this, MapsActivity.class);
-            startActivity(i);
+
+
+//            Intent i = new Intent(ReviewActivity.this, MapsActivity.class);
+//            startActivity(i);
+            finish();
         });
 
         userRate = ("" + 5);
@@ -66,4 +66,5 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
     }
+
 }
