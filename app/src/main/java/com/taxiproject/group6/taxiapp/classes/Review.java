@@ -7,22 +7,16 @@ import java.util.Map;
 
 public class Review {
 
+    static final int MAX_RATING = 5;
     private int rating;
-    private String message;
-    private String userUid;
+    private String comment;
 
     public Review() {
     }
 
     public Review(int rating, String message) {
         this.rating = rating;
-        this.message = message;
-    }
-
-    public Review(int rating, String message, String userUid) {
-        this.rating = rating;
-        this.message = message;
-        this.userUid = userUid;
+        this.comment = message;
     }
 
     public int getRating() {
@@ -33,27 +27,18 @@ public class Review {
         this.rating = rating;
     }
 
-    public String getMessage() {
-        return message;
+    public String getComment() {
+        return comment;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getUserUid() {
-        return userUid;
-    }
-
-    public void setUserUid(String userUid) {
-        this.userUid = userUid;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
         result.put("rating", this.rating);
-        result.put("message", this.message);
-        result.put("userUid", this.userUid);
+        result.put("comment", this.comment);
 
         return result;
     }
@@ -62,8 +47,8 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "rating=" + rating +
-                ", message=" + message +
-                ", userUid=" + userUid +
+                ", comment=" + comment +
                 '}';
     }
+
 }

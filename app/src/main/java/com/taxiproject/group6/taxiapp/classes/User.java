@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User {
+public class User  {
 
     private String firstName;
     private String lastName;
@@ -105,7 +105,7 @@ public class User {
     //-------------------------
     //      METHODS
     //-------------------------
-    public void addToHistory(JourneyDetails journeyDetails){
+    void addToHistory(JourneyDetails journeyDetails){
         if(this.history == null)
             this.history = new ArrayList<>();
         this.history.add(journeyDetails);
@@ -116,7 +116,7 @@ public class User {
             return String.format("USER: %s %s %s %s ", this.firstName, this.userName, this.dateOfBirth, this.phoneNumber);
     }
 
-    public Map<String, Object> toMap() {
+    Map<String, Object> toMap() {
         result = new HashMap<>();
         result.put("firstName", this.firstName);
         result.put("lastName", this.lastName);
@@ -151,5 +151,4 @@ public class User {
 //        result.put(tag, value);
         result = this.toMap();
     }
-
 }

@@ -57,7 +57,8 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 userRate = progress + 1;
-                rateTextView.setText(userRate);
+                String input = Integer.toString(userRate);
+                rateTextView.setText(input);
             }
 
             @Override

@@ -33,7 +33,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         User user = DatabaseConnector.loadFromDatabase();
         journeyDetails = user.getHistory();
-        Log.d(TAG, "-------------------------------SIZE OF ARRAY:"+ journeyDetails.size());
+        Log.d(TAG, "SIZE OF ARRAY:"+ journeyDetails.size());
         if(journeyDetails != null)
             toListView();
         btnRefresh.setOnClickListener(v -> finish());

@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/dropdown_menu_reviews"
+        android:title="@string/reviews"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/dropdown_menu_logout"
         android:title="@string/logout"
         android:visible="true"

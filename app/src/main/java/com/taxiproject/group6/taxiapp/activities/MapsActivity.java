@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.JourneyDetails;
@@ -48,6 +49,7 @@ import com.taxiproject.group6.taxiapp.classes.LatLng;
 import com.taxiproject.group6.taxiapp.classes.MapLocationHelper;
 import com.taxiproject.group6.taxiapp.classes.PlaceAutocompleteAdapter;
 import com.taxiproject.group6.taxiapp.classes.PlaceInfo;
+import com.taxiproject.group6.taxiapp.classes.Review;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -248,6 +250,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Intent i = new Intent(MapsActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
+                }else if(text.equalsIgnoreCase("Reviews")){
+                    Intent intent = new Intent(this, ViewReviewsActivity.class);
+                    startActivity(intent);
                 }
                 return true;
             });

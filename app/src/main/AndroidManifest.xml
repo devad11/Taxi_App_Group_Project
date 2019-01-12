@@ -26,10 +26,12 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".activities.MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -79,6 +81,7 @@
         <activity android:name=".activities.PayPalActivity" />
         <activity android:name=".activities.PaymentDetails" />
         <activity android:name=".activities.HistoryActivity" />
+        <activity android:name=".activities.ViewReviewsActivity"></activity>
     </application>
 
 </manifest>

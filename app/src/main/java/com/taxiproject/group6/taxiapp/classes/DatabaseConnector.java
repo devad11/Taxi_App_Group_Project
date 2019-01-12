@@ -10,14 +10,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.taxiproject.group6.taxiapp.activities.ViewReviewsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatabaseConnector {
 
@@ -29,6 +33,7 @@ public class DatabaseConnector {
     private static DatabaseReference usersRef;
     private static Map<String, Object> users;
     private static User newUser = new User();
+    private static ArrayList<Review> reviews;
 
     public static void sendBooking(JourneyDetails journeyDetails){
 
@@ -57,17 +62,41 @@ public class DatabaseConnector {
     public static void reviewToDatabase(Review review){
 
         Date currentTime = Calendar.getInstance().getTime();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null)
-        {
-            databaseHeader = firebaseUser.getUid();
-            review.setUserUid(databaseHeader);
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
 
-            usersRef = ref.child(currentTime.toString());
-            usersRef.updateChildren(review.toMap());
-        }
+        usersRef = ref.child(currentTime.toString());
+        usersRef.updateChildren(review.toMap());
+
+    }
+
+    public static ArrayList<Review> getReviewsFromDatabase(){
+        reviews = new ArrayList<>();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
+
+        Log.d(TAG, "----BEFORE----");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                    Review review = child.getValue(Review.class);
+                    reviews.add(review);
+                    Log.d(TAG, "Review: " + review);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Log.d(TAG, "Review list size: " + reviews.size());
+        return reviews;
     }
 
     public static void loadToDatabase(User user){
