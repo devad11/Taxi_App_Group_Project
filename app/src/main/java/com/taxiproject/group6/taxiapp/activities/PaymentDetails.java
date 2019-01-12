@@ -39,10 +39,12 @@ public class PaymentDetails extends AppCompatActivity {
         try{
             Toast.makeText(this,("Amount payed: " + (String.format("€%s", paymentAmount))), Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, ReviewActivity.class);
+            finish();
             startActivity(i);
             txtId.setText(response.getString("id"));
             txtStatus.setText(response.getString("status"));
             txtAmount.setText(response.getString(String.format("€%s", paymentAmount)));
+
         }
         catch (JSONException e){
             e.printStackTrace();

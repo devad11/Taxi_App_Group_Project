@@ -31,12 +31,14 @@ public class ReviewActivity extends AppCompatActivity {
         rateTextView = findViewById(R.id.rateTextView);
         reviewSendButton = findViewById(R.id.reviewSendButton);
 
+        notificationHelper = new NotificationHelper(this);
+
         reviewSendButton.setOnClickListener(v -> {
             userReview = reviewEditText.getText().toString();
             DatabaseConnector.reviewToDatabase(userRate, userReview);
 
-            notificationHelper = new NotificationHelper(this);
-            NotificationCompat.Builder builder = notificationHelper.secondaryNotification(userRate, userReview);
+
+            NotificationCompat.Builder builder = notificationHelper.getSecondaryNotification(userRate, userReview);
             notificationHelper.getManager().notify(2, builder.build());
 
 

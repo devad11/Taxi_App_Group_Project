@@ -71,7 +71,7 @@ public class NotificationHelper extends ContextWrapper {
         return this.manager;
     }
 
-    public NotificationCompat.Builder primaryNotification(String title, String message){
+    public NotificationCompat.Builder getPrimaryNotification(String title, String message){
 
         return new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)                                                   //add icon
@@ -87,24 +87,25 @@ public class NotificationHelper extends ContextWrapper {
                 .setAutoCancel(true);
     }
 
-    public NotificationCompat.Builder secondaryNotification(String title, String message){
-        Intent intent = new Intent(NotificationHelper.this, MapsActivity.class);               //intent to change to new activity
+    public NotificationCompat.Builder getSecondaryNotification(String title, String message){
+        Intent intent = new Intent(this, MapsActivity.class);               //intent to change to new activity
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);//make intent pendingIntent
 
         return new NotificationCompat.Builder(getApplicationContext(), SECONDARY_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)                                                   //add icon
-                .setContentTitle(title)                                                                    //add users title
+                .setContentTitle(title)
                 .setContentText(message)                                                                   //add users message
                 .setStyle(new NotificationCompat.BigTextStyle()                                            //makes notification expandable
-                        .bigText("BLAAA BLAAAAA BLAAAAAAAAAAAAAAAA")//adds text when expanded
-                        .setBigContentTitle("Expanded content")                                            //title of expanded notification
-                        .setSummaryText("Summery"))                                                        //adds summery
-                .setPriority(NotificationCompat.PRIORITY_MAX)                                             //set priority to high by default
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)                                          //set category message
-                .setContentIntent(pendingIntent)                                                           //calls when notification pressed
-                .setColor(Color.RED)                                                                     //set colour
-                .addAction(R.mipmap.ic_launcher, "OPEN", pendingIntent)                               //creates call button and calls when pressed
-                .setAutoCancel(true);
+                        .bigText(title)//adds text when expanded
+                        .setBigContentTitle(message)                                            //title of expanded notification
+                        .setSummaryText("Summery"))
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .addAction(R.mipmap.ic_launcher, "OPEN", pendingIntent)
+                .setColor(Color.RED)
+                .setSmallIcon(R.drawable.ic_local_taxi)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
     }
 
 }

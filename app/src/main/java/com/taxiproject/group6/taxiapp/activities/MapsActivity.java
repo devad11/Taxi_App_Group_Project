@@ -97,6 +97,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         destinationEditText = findViewById(R.id.destinationEditText);
         gpsImage = findViewById(R.id.gpsImage);
         estimatedCostTextView = findViewById(R.id.estimatedCostTextView);
+
+        googleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
         getUsersPermission();
 
         pickUpEditText.setTag("PickUp");
@@ -147,12 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void init() {
         Log.d(TAG, "init: Initialising");
 
-        googleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
+
 
         pickUpEditText.setOnItemClickListener(autoCompleteClickListener);
         destinationEditText.setOnItemClickListener(autoCompleteClickListener);
