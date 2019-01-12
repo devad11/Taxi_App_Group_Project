@@ -37,10 +37,8 @@ public class ReviewActivity extends AppCompatActivity {
             userReview = reviewEditText.getText().toString();
             DatabaseConnector.reviewToDatabase(userRate, userReview);
 
-
             NotificationCompat.Builder builder = notificationHelper.getSecondaryNotification(userRate, userReview);
             notificationHelper.getManager().notify(2, builder.build());
-
 
 //            Intent i = new Intent(ReviewActivity.this, MapsActivity.class);
 //            startActivity(i);
