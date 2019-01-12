@@ -54,21 +54,19 @@ public class DatabaseConnector {
         }
     }
 
-    public static void reviewToDatabase(String rate, String review){
+    public static void reviewToDatabase(Review review){
 
         Date currentTime = Calendar.getInstance().getTime();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null)
         {
             databaseHeader = firebaseUser.getUid();
+            review.setUserUid(databaseHeader);
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReferenceFromUrl("https://taxiapp-e3904.firebaseio.com/reviews");
-            usersRef = ref.child(currentTime.toString() + "/rate");
-            usersRef.setValue(rate);
-            usersRef = ref.child(currentTime.toString() + "/review");
-            usersRef.setValue(review);
-            usersRef = ref.child(currentTime.toString() + "/user");
-            usersRef.setValue(databaseHeader);
+
+            usersRef = ref.child(currentTime.toString());
+            usersRef.updateChildren(review.toMap());
         }
     }
 

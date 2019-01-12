@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.NotificationHelper;
+import com.taxiproject.group6.taxiapp.classes.Review;
 
 public class ReviewActivity extends AppCompatActivity {
 
@@ -18,7 +19,9 @@ public class ReviewActivity extends AppCompatActivity {
     private EditText reviewEditText;
     private TextView rateTextView;
     private Button reviewSendButton;
-    private String userReview, userRate;
+    private String userReview;
+    private int userRate;
+    private Review review;
     NotificationHelper notificationHelper;
 
     @Override
@@ -35,9 +38,11 @@ public class ReviewActivity extends AppCompatActivity {
 
         reviewSendButton.setOnClickListener(v -> {
             userReview = reviewEditText.getText().toString();
-            DatabaseConnector.reviewToDatabase(userRate, userReview);
+            review = new Review(userRate, userReview);
+            DatabaseConnector.reviewToDatabase(review);
 
-            NotificationCompat.Builder builder = notificationHelper.getSecondaryNotification(userRate, userReview);
+            NotificationCompat.Builder builder =
+                    notificationHelper.getSecondaryNotification(Integer.toString(userRate), userReview);
             notificationHelper.getManager().notify(2, builder.build());
 
 //            Intent i = new Intent(ReviewActivity.this, MapsActivity.class);
@@ -45,13 +50,13 @@ public class ReviewActivity extends AppCompatActivity {
             finish();
         });
 
-        userRate = ("" + 5);
+        userRate = 5;
         mySeekBar.setProgress(4);
 
         mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                userRate = Integer.toString(progress + 1);
+                userRate = progress + 1;
                 rateTextView.setText(userRate);
             }
 

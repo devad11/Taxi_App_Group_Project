@@ -155,8 +155,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void init() {
         Log.d(TAG, "init: Initialising");
 
-
-
         pickUpEditText.setOnItemClickListener(autoCompleteClickListener);
         destinationEditText.setOnItemClickListener(autoCompleteClickListener);
 
