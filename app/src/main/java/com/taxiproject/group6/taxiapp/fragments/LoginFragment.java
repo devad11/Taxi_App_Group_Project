@@ -44,6 +44,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.taxiproject.group6.taxiapp.R;
 import com.taxiproject.group6.taxiapp.activities.MainActivity;
 import com.taxiproject.group6.taxiapp.activities.MapsActivity;
+import com.taxiproject.group6.taxiapp.activities.ViewReviewsActivity;
 import com.taxiproject.group6.taxiapp.classes.DatabaseConnector;
 import com.taxiproject.group6.taxiapp.classes.User;
 
@@ -65,7 +66,7 @@ public class LoginFragment extends Fragment {
     private Button buttonLogIn;
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private TextView textViewLogin;
+    private TextView textViewLogin, textViewReadReviews;
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -84,9 +85,11 @@ public class LoginFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         textViewLogin = view.findViewById(R.id.textViewRegisterAcc);
+        textViewReadReviews = view.findViewById(R.id.textViewReadReviews);
 
         buttonLogIn.setOnClickListener(v -> userLogin());
         textViewLogin.setOnClickListener(v -> goToRegisterPage());
+        textViewReadReviews.setOnClickListener(v -> goToReviews());
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -129,6 +132,11 @@ public class LoginFragment extends Fragment {
 // ...
 
         return view;
+    }
+
+    private void goToReviews() {
+        Intent intent = new Intent(getContext(), ViewReviewsActivity.class);
+        startActivity(intent);
     }
 
     @Override
